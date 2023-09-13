@@ -1,4 +1,17 @@
-.header-button {
-    margin-inline: 0.5rem;
-    font-weight: 500 !important;
+.navbar {
+    background-color: var(--blue-dark) !important;
+    padding: 0 !important;
+}
+
+.nav-link {
+    color: var(--white) !important;
+    padding: 0 2rem !important;
+}
+
+.navbar-collapse {
+    flex-grow: unset;
+}
+
+.container-fluid {
+    justify-content: flex-start !important;
 }

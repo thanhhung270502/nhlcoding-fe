@@ -1,29 +1,47 @@
-import { useNavigate } from 'react-router-dom';
+import images from '~/assets/images';
 import './header.scss';
 
 function Header() {
-    const navigate = useNavigate();
-
-    const handleClickLogin = (e) => {
-        navigate('/login');
-    };
-
-    const handleClickSignUp = () => {
-        //navigate to /signup page
-    };
-
     return (
-        <div className="d-flex justify-content-between px-4 py-3">
-            <h1 className="title">MAIN HEADER</h1>
-            <div>
-                <button onClick={handleClickLogin} className="header-button btn btn-info text-white">
-                    Login
-                </button>
-                <button onClick={handleClickSignUp} className="header-button btn btn-outline-info">
-                    Sign Up
-                </button>
+        <nav class="navbar navbar-expand-lg">
+            <div className="container">
+                <div class="container-fluid d-flex">
+                    <a class="navbar-brand" href="#">
+                        <img src={images.logo} alt="" />
+                    </a>
+                    <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/problem">
+                                    Problems
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    Discussion
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    Helpers
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
+        </nav>
     );
     // return (
     //     <nav className="navbar navbar-expand-lg bg-light">
