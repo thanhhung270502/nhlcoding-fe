@@ -2,11 +2,7 @@
 import { OnlyHeader } from '~/components/Layout';
 
 // Pages
-import Home from '~/pages/Home';
-import Problem from '~/pages/Problems/Problem';
-// import Product_Index from '~/pages/Product_Index';
-import Test from '~/pages/Test';
-import Upload from '~/pages/Upload';
+import { Home, Login, Problem, Signup, Test, Upload } from '~/pages';
 
 // Không cần đăng nhập vẫn vào được
 const publicRoutes = [
@@ -30,11 +26,14 @@ const publicRoutes = [
     {
         path: '/upload',
         component: Upload,
-        layout: null,
     },
     {
-        path: '/login',
+        path: '/account/login',
         component: Login,
+    },
+    {
+        path: '/account/signup',
+        component: Signup,
     },
 ];
 

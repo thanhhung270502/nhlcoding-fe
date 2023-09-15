@@ -1,19 +1,13 @@
-import { useCallback, useState } from 'react';
-import './problem.scss';
-import CodeMirror from '@uiw/react-codemirror';
-import Split from 'react-split-grid';
-import { python } from '@codemirror/lang-python';
-import { dracula } from '@uiw/codemirror-theme-dracula';
-import { submitCode } from '~/api/api';
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-import { sublime } from '@uiw/codemirror-theme-sublime';
-import { eclipse } from '@uiw/codemirror-theme-eclipse';
 import { langs } from '@uiw/codemirror-extensions-langs';
+import { eclipse } from '@uiw/codemirror-theme-eclipse';
+import CodeMirror from '@uiw/react-codemirror';
+import { useCallback, useState } from 'react';
+import Split from 'react-split-grid';
 import Description from './description';
+import './problem.scss';
 
 function Problem() {
     const [code, setCode] = useState('print(a)');
-    const [result, setResult] = useState(3);
     const [language, setLanguage] = useState('C++');
     // const []
     const onChange = useCallback((value, viewUpdate) => {
@@ -26,12 +20,12 @@ function Problem() {
         console.log(language);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(code);
-        const res = await submitCode(code);
-        console.log(res);
-    };
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     console.log(code);
+    //     const res = await submitCode(code);
+    //     console.log(res);
+    // };
     return (
         <div className="problem-body">
             <div className="problems">

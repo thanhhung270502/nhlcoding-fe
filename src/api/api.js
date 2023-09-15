@@ -3,7 +3,7 @@ import axios from 'axios';
 const URL = 'http://localhost:3000';
 
 export const submitCode = async (code) => {
-    const res = await axios
+    await axios
         .post(`${URL}/coding`, { code: code })
         .then(function (response) {
             return response;
