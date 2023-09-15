@@ -6,7 +6,7 @@ function Header() {
         <nav class="navbar navbar-expand-lg">
             <div className="container">
                 <div class="container-fluid d-flex">
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand" href="/">
                         <img src={images.logo} alt="" />
                     </a>
                     <button
@@ -23,17 +23,17 @@ function Header() {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" href="/problem">
+                                <a class="nav-link" href="/problems">
                                     Problems
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="/">
                                     Discussion
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="/">
                                     Helpers
                                 </a>
                             </li>

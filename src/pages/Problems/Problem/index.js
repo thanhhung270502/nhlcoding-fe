@@ -1,37 +1,49 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './problem.scss';
-import CodeMirror from '@uiw/react-codemirror';
 import Split from 'react-split-grid';
-import { python } from '@codemirror/lang-python';
-import { dracula } from '@uiw/codemirror-theme-dracula';
-import { submitCode } from '~/api/api';
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-import { sublime } from '@uiw/codemirror-theme-sublime';
-import { eclipse } from '@uiw/codemirror-theme-eclipse';
 import { langs } from '@uiw/codemirror-extensions-langs';
 import Description from './description';
+import Code from './code';
+import Solution from './solutions';
+import $ from 'jquery';
+import Submission from './submission';
 
 function Problem() {
     const [code, setCode] = useState('print(a)');
-    const [result, setResult] = useState(3);
+    // const [result, setResult] = useState(3);
     const [language, setLanguage] = useState('C++');
-    // const []
-    const onChange = useCallback((value, viewUpdate) => {
-        setCode(value);
-        console.log('value:', value);
+    const [sidebar, setSidebar] = useState('Description');
+
+    useEffect(() => {
+        let split = $('.split');
+        console.log(split[0].offsetHeight);
+        console.log(split[1].offsetHeight);
+        if (split[0].offsetHeight > 867) {
+            split[0].style.height = 'calc(100vh - 59px)';
+            split[0].style.overflow = 'hidden scroll';
+        } else {
+            split[0].style.height = 'calc(100vh - 59px)';
+            split[0].style.overflow = 'unset';
+        }
     }, []);
 
-    const handleLanguageChange = (e) => {
-        setLanguage(e.target.outerText);
-        console.log(language);
+    const handleSidebar = (e) => {
+        var items = $('.problem-item');
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.remove('problem-item-active');
+        }
+        e.target.classList.add('problem-item-active');
+        setSidebar(e.target.innerText);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(code);
-        const res = await submitCode(code);
-        console.log(res);
-    };
+    // const []
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     console.log(code);
+    //     const res = await submitCode(code);
+    //     console.log(res);
+    // };
     return (
         <div className="problem-body">
             <div className="problems">
@@ -40,17 +52,29 @@ function Problem() {
                         <div className="grid" {...getGridProps()}>
                             <div className="split bg-white">
                                 <div className="d-flex h-100">
-                                    <div className="problems-header">
-                                        <div className="problems-nav">
-                                            <div className="problems-item problems-item-active">Description</div>
-                                            <div className="problems-item">Submissions</div>
-                                            <div className="problems-item">Solutions</div>
-                                            <div className="problems-item">Discussion</div>
-                                            <div className="problems-item">Editorial</div>
+                                    <div className="problem-sidebar">
+                                        <div className="problem-sidebar-items">
+                                            <div className="problem-item problem-item-active" onClick={handleSidebar}>
+                                                Description
+                                            </div>
+                                            <div className="problem-item" onClick={handleSidebar}>
+                                                Solutions
+                                            </div>
+                                            <div className="problem-item" onClick={handleSidebar}>
+                                                Submissions
+                                            </div>
+                                            <div className="problem-item" onClick={handleSidebar}>
+                                                Discussion
+                                            </div>
+                                            <div className="problem-item" onClick={handleSidebar}>
+                                                Editorial
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="problems-content">
-                                        <Description />
+                                    <div className="problem-content">
+                                        {sidebar === 'Description' && <Description />}
+                                        {sidebar === 'Solutions' && <Solution />}
+                                        {sidebar === 'Submissions' && <Submission />}
                                     </div>
                                 </div>
                             </div>
@@ -59,129 +83,34 @@ function Problem() {
                                 <Split
                                     render={({ getGridProps, getGutterProps }) => (
                                         <div className="grid-row h-100" {...getGridProps()}>
-                                            <div className="bg-white">
-                                                <div className="problem-code-header border-bottom">
-                                                    <div class="dropdown">
-                                                        <div
-                                                            class="problem-languages dropdown-toggle"
-                                                            type="button"
-                                                            data-bs-toggle="dropdown"
-                                                            aria-expanded="false"
-                                                        >
-                                                            {language}
-                                                        </div>
-                                                        <ul class="dropdown-menu">
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                C++
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                Java
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                Python
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                C
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                C#
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                JavaScript
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                PHP
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div className="mt-1">
-                                                    {language === 'C++' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.cpp()]}
-                                                            onChange={onChange}
-                                                            theme={eclipse}
-                                                        />
-                                                    )}
-                                                    {language === 'Java' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.java()]}
-                                                            onChange={onChange}
-                                                            theme={eclipse}
-                                                        />
-                                                    )}
-                                                    {language === 'Python' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.python()]}
-                                                            onChange={onChange}
-                                                            theme={eclipse}
-                                                        />
-                                                    )}
-                                                    {language === 'C' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.c()]}
-                                                            onChange={onChange}
-                                                            theme={eclipse}
-                                                        />
-                                                    )}
-                                                    {language === 'C#' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.csharp()]}
-                                                            onChange={onChange}
-                                                            theme={eclipse}
-                                                        />
-                                                    )}
-                                                    {language === 'JavaScript' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.javascript()]}
-                                                            onChange={onChange}
-                                                            theme={eclipse}
-                                                        />
-                                                    )}
-                                                    {language === 'PHP' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.php()]}
-                                                            onChange={onChange}
-                                                            theme={eclipse}
-                                                        />
-                                                    )}
-                                                </div>
-                                            </div>
+                                            <Code />
                                             <div className="gutter-row gutter-row-1" {...getGutterProps('row', 1)} />
                                             <div className="bg-white">
                                                 <div className="">
-                                                    <div className="problems-console">
-                                                        <div className="d-flex justify-content-between aligns-item-center">
-                                                            <div className="console">Console</div>
-                                                            <div className=""></div>
+                                                    <div className="problem-console">
+                                                        <div className="d-flex justify-content-between align-items-center">
+                                                            <div className="d-flex justify-content-between align-items-center">
+                                                                <div className="">Console</div>
+                                                                <div>
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="20"
+                                                                        height="20"
+                                                                        fill="currentColor"
+                                                                        class="bi bi-arrow-up-short"
+                                                                        viewBox="0 0 20 20"
+                                                                    >
+                                                                        <path
+                                                                            fill-rule="evenodd"
+                                                                            d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"
+                                                                        />
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <div className="d-flex align-items-center">
+                                                                <div className="btn-custom btn-run">Run</div>
+                                                                <div className="btn-custom btn-submit">Submit</div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

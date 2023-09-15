@@ -1,0 +1,24 @@
+.gridd {
+    display: grid;
+    grid-template-rows: 2fr 10px 0.5fr;
+}
+
+.gutter-row {
+    grid-column: 1/-1;
+    cursor: row-resize;
+}
+
+.gutter-row-1 {
+    grid-row: 2;
+}
+
+.test-body {
+    height: 100vh;
+    background-color: antiquewhite;
+}
+
+.test-a, .test-b {
+    background-color: aliceblue;
+}
+
+.test-b {}
