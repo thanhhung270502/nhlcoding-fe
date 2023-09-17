@@ -5,11 +5,28 @@
 
 // Color
 :root {
-    --red: #fe2c55;
     --black: #000;
     --black-blue: #0b1517;
     --white: #ffffff;
     --brown: #5a373f;
+
+    --blue-black: #032343;
+    --blue-dark: #1a4979;
+    --blue: #20c0f3;
+
+    --green-dark: #48bf69;
+    --green: #50f07d;
+
+    --red-dark: #bf4848;
+    --red: #f32020;
+
+    --orange: #f38120;
+    --orange-dark: #e57818;
+
+    --yellow: #f3eb20;
+
+    --gray: #d9d9d9;
+    --secondary: #bbbbbb;
 }
 
 * {
@@ -19,7 +36,70 @@
 }
 
 html {
+    font-family: 'Nunito', sans-serif;
 }
 
-body {
+.gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+
+    &:hover {
+        background-color: rgb(0, 122, 255);
+    }
+}
+
+.gutter.gutter-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor: col-resize;
+}
+
+.gutter.gutter-vertical {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    cursor: row-resize;
+}
+
+.grid {
+    display: grid;
+    // grid-template-rows: 1fr 10px 1fr;
+    grid-template-columns: 1fr 10px 1fr;
+}
+
+.grid-row {
+    display: grid;
+    grid-template-rows: 1fr 10px 1fr;
+}
+
+.gutter-row {
+    grid-column: 1/-1;
+    cursor: row-resize;
+
+    &:hover {
+        background-color: rgb(0, 122, 255);
+    }
+}
+
+.gutter-row-1 {
+    grid-row: 2;
+}
+
+.gutter-col {
+    grid-row: 1/-1;
+    cursor: col-resize;
+
+    &:hover {
+        background-color: rgb(0, 122, 255);
+    }
+}
+
+.gutter-col-1 {
+    grid-column: 2;
+}
+
+.fw-bold {
+    font-weight: bold !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

@@ -1,0 +1,100 @@
+.navbar {
+    background-color: var(--blue-dark) !important;
+    padding: 0 !important;
+}
+
+.nav-link {
+    color: var(--white) !important;
+    padding: 0 2rem !important;
+}
+
+.navbar-collapse {
+    flex-grow: unset;
+}
+
+.logo-image {
+    height: 50px;
+    user-select: none;
+    pointer-events: none;
+}
+
+.btn {
+    --bs-btn-border-radius: 10px;
+    --bs-btn-padding-y: 0.15rem;
+}
+
+.btn-signin {
+    --bs-btn-color: var(--white);
+    --bs-btn-bg: var(--orange);
+    --bs-btn-border-color: var(--orange);
+    --bs-btn-hover-color: var(--white);
+    --bs-btn-hover-bg: var(--orange-dark);
+    --bs-btn-hover-border-color: var(--orange-dark);
+    --bs-btn-focus-shadow-rgb: 233, 147, 71;
+    --bs-btn-active-color: var(--white);
+    --bs-btn-active-bg: var(--orange-dark);
+    --bs-btn-active-border-color: var(--orange-dark);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: var(--white);
+    --bs-btn-disabled-bg: var(--orange);
+    --bs-btn-disabled-border-color: var(--orange);
+}
+
+.btn-text {
+    font-weight: 600;
+    font-size: 14;
+}
+
+.header-modal {
+    --bs-modal-width: 400px;
+}
+
+.close-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-left: 0.5rem;
+    margin: 1rem;
+    color: var(--gray);
+    :hover {
+        color: var(--black);
+    }
+}
+
+.login-submit {
+    text-align: center;
+    background-color: var(--blue-dark);
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.reset-pasword-submit {
+    text-align: center;
+    background-color: var(--green-dark);
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-bottom: 3rem;
+    color: var(--white);
+}
+
+.modal-text {
+    cursor: pointer;
+    color: var(--blue-dark);
+    font-weight: 500;
+    :hover {
+        color: var(--dark-blue);
+    }
+}
+
+.login-alter-text {
+    text-align: center;
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+}
+
+.signup-alter-text {
+    color: var(--secondary);
+    margin-right: 0.5rem;
+}
