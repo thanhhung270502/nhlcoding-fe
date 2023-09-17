@@ -44,3 +44,57 @@
     font-weight: 600;
     font-size: 14;
 }
+
+.header-modal {
+    --bs-modal-width: 400px;
+}
+
+.close-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-left: 0.5rem;
+    margin: 1rem;
+    color: var(--gray);
+    :hover {
+        color: var(--black);
+    }
+}
+
+.login-submit {
+    text-align: center;
+    background-color: var(--blue-dark);
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.reset-pasword-submit {
+    text-align: center;
+    background-color: var(--green-dark);
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-bottom: 3rem;
+    color: var(--white);
+}
+
+.modal-text {
+    cursor: pointer;
+    color: var(--blue-dark);
+    font-weight: 500;
+    :hover {
+        color: var(--dark-blue);
+    }
+}
+
+.login-alter-text {
+    text-align: center;
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+}
+
+.signup-alter-text {
+    color: var(--secondary);
+    margin-right: 0.5rem;
+}

@@ -1,8 +1,9 @@
 // Layouts
+import { Contribute } from '~/components/Contribute';
 import { OnlyHeader } from '~/components/Layout';
 
 // Pages
-import { Home, Login, Problem, Signup, Test, Upload } from '~/pages';
+import { Home, Problem, Test } from '~/pages';
 
 // Không cần đăng nhập vẫn vào được
 const publicRoutes = [
@@ -24,16 +25,8 @@ const publicRoutes = [
         layout: OnlyHeader,
     },
     {
-        path: '/upload',
-        component: Upload,
-    },
-    {
-        path: '/account/login',
-        component: Login,
-    },
-    {
-        path: '/account/signup',
-        component: Signup,
+        path: '/contribute',
+        component: Contribute,
     },
 ];
 
