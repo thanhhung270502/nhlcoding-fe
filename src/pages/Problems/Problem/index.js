@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import './problem.scss';
 import Split from 'react-split-grid';
-import { langs } from '@uiw/codemirror-extensions-langs';
-import Description from './description';
-import Code from './code';
 import Solution from './solutions';
 import $ from 'jquery';
 import Submission from './submission';
+import Code from './code';
+import Description from './description';
 
 function Problem() {
     const [code, setCode] = useState('print(a)');
@@ -35,8 +34,6 @@ function Problem() {
         e.target.classList.add('problem-item-active');
         setSidebar(e.target.innerText);
     };
-
-    // const []
 
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
