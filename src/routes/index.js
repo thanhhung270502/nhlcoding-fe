@@ -1,5 +1,10 @@
 // Layouts
-import { Contribute } from '~/components/Contribute';
+import {
+    ContributeQuestion,
+    ContributeReason,
+    ContributeSolutions,
+    ContributeTestcases,
+} from '~/components/Contribute';
 import { OnlyHeader } from '~/components/Layout';
 
 // Pages
@@ -25,12 +30,28 @@ const publicRoutes = [
         layout: OnlyHeader,
     },
     {
-        path: '/contribute',
-        component: Contribute,
+        path: '/contribute/reason',
+        component: ContributeReason,
+        layout: OnlyHeader,
+    },
+    {
+        path: '/contribute/question',
+        component: ContributeQuestion,
+        layout: OnlyHeader,
+    },
+    {
+        path: '/contribute/solutions',
+        component: ContributeSolutions,
+        layout: OnlyHeader,
+    },
+    {
+        path: '/contribute/testcases',
+        component: ContributeTestcases,
+        layout: OnlyHeader,
     },
 ];
 
 // Sau khi đăng nhập với vào được
 const privateRoutes = [];
 
-export { publicRoutes, privateRoutes };
+export { privateRoutes, publicRoutes };
