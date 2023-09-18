@@ -1,6 +1,6 @@
 function Description() {
     return (
-        <div className="problems-description px-5 py-4">
+        <div className="problem-description px-5 py-4">
             <div className="title pb-4 fw-bold">1. Two Sum</div>
             <div className="level fw-bold pb-4">
                 Level: <span>Easy</span>

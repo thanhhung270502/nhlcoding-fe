@@ -30,8 +30,13 @@ function Header() {
                     <div className="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
                         <ul className="navbar-nav mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link" href="/problem">
+                                <a className="nav-link" href="/problems">
                                     Problems
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/problem">
+                                    Problem
                                 </a>
                             </li>
                             <li className="nav-item">
@@ -58,7 +63,7 @@ function Header() {
             </nav>
 
             <Modal register={loginModal} className="header-modal">
-                <div className="p-4">
+                <div className="p-5">
                     <div className="close-icon" onClick={() => loginModal.close()}>
                         <FontAwesomeIcon icon={faClose} />
                     </div>
@@ -117,7 +122,7 @@ function Header() {
             </Modal>
 
             <Modal register={signupModal} className="header-modal">
-                <div className="p-4">
+                <div className="p-5">
                     <div className="close-icon" onClick={() => signupModal.close()}>
                         <FontAwesomeIcon icon={faClose} />
                     </div>

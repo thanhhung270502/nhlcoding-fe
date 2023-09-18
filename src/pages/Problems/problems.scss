@@ -1,0 +1,83 @@
+.problems-categories {
+    width: 100%;
+    overflow: scroll hidden;
+}
+
+.problems-category {
+    background-color: var(--gray-light);
+    padding: 12px 24px;
+    margin: 0 8px;
+    min-width: fit-content;
+}
+
+.problems-dropdown {
+    position: relative;
+}
+
+.problems-dropdown-toggle {
+    background-color: var(--gray-light);
+    padding: 12px 24px;
+}
+
+.problems-dropdown-menu {
+    position: absolute;
+    background-color: aliceblue;
+    width: 200px;
+    padding: 8px;
+    top: 110%;
+}
+
+.problems-dropdown-item {
+    padding: 6px 12px;
+
+    &:hover {
+        background-color: var(--gray-light);
+    }
+}
+
+.problems-right {
+
+}
+
+.problems-head {
+    font-weight: bold;
+}
+
+.problems-status-accept {
+    color: var(--green-black);
+}
+
+.problems-status-progress {
+    color: var(--orange);
+}
+
+.problems-status-high {
+    color: var(--red-dark);
+}
+
+.pagination {
+
+}
+
+.page-item {
+    padding: 6px 12px;
+    background-color: var(--gray-light);
+    margin: 0 4px;
+    color: var(--gray-dark);
+    cursor: pointer;
+    border: none;
+
+    &:hover {
+        color: var(--black);
+    }   
+}
+
+.page-item:disabled {   
+    &:hover {
+        color: var(--gray-dark);
+    }
+}
+
+.page-item-active {
+    color: var(--black);
+}

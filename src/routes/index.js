@@ -3,7 +3,7 @@ import { Contribute } from '~/components/Contribute';
 import { OnlyHeader } from '~/components/Layout';
 
 // Pages
-import { Home, Problem, Test } from '~/pages';
+import { Home, Problem, Problems, Test } from '~/pages';
 
 // Không cần đăng nhập vẫn vào được
 const publicRoutes = [
@@ -11,6 +11,12 @@ const publicRoutes = [
     {
         path: '/',
         component: Home,
+    },
+    // http://localhost:3000/problems
+    {
+        path: '/problems',
+        component: Problems,
+        layout: OnlyHeader,
     },
     // http://localhost:3000/problem
     {
