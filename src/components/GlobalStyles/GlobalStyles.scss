@@ -11,11 +11,12 @@
     --brown: #5a373f;
 
     --blue-black: #032343;
-    --blue-dark: #1a4979;
-    --blue: #20c0f3;
-
-    --green-dark: #48bf69;
-    --green: #50f07d;
+    --blue-dark: #1A4979;
+    --blue: #20C0F3;
+    
+    --green-black: #06964e;
+    --green-dark: #48BF69;
+    --green: #50F07D;
 
     --red-dark: #bf4848;
     --red: #f32020;
@@ -25,8 +26,10 @@
 
     --yellow: #f3eb20;
 
-    --gray: #d9d9d9;
-    --secondary: #bbbbbb;
+    --gray: #D9D9D9;
+    --gray-black: #696969;
+    --gray-dark: #A4A4A4;
+    --gray-light: #F0F0F0;
 }
 
 * {
@@ -42,7 +45,7 @@ html {
 .gutter {
     background-color: #eee;
     background-repeat: no-repeat;
-    background-position: 50%;
+    background-position: 100%;
 
     &:hover {
         background-color: rgb(0, 122, 255);
@@ -67,11 +70,12 @@ html {
 
 .grid-row {
     display: grid;
-    grid-template-rows: 1fr 10px 1fr;
+    // grid-template-rows: 1fr 10px 1fr;
+    grid-template-rows: auto 10px min-content;
 }
 
 .gutter-row {
-    grid-column: 1/-1;
+    grid-column: 2/-1;
     cursor: row-resize;
 
     &:hover {
@@ -102,4 +106,7 @@ html {
 
 .cursor-pointer {
     cursor: pointer;
+}
+.text-center {
+    text-align: center;
 }
