@@ -215,7 +215,7 @@ function Header() {
                         <div
                             className="modal-text"
                             onClick={() => {
-                                signupModal.toggle();
+                                resetPasswordModal.toggle();
                                 loginModal.open();
                             }}
                         >
