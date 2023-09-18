@@ -1,109 +1,187 @@
-import React from 'react';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+import './contribute.scss';
 
-const Contribute = () => {
+const Contribute = ({ contributeStep, mainChild, rightChild }) => {
+    const routeStep = [
+        '/contribute',
+        '/contribute/reason',
+        '/contribute/question',
+        '/contribute/solutions',
+        '/contribute/testcases',
+    ];
+
     return (
-        <>
-            {/* <div className="contribute-navbar-container">
-                <div className="contribute-navbar-line">Line</div>
+        <div className="container">
+            <div className="contribute-navbar-container">
+                <div className="contribute-navbar-line">
+                    <div className="contribute-navbar-line-segment-container">
+                        <div className={`contribute-navbar-line-segment contribute-navbar-line-segment-entered`}></div>
+                    </div>
+                    <div className="contribute-navbar-line-segment-container">
+                        <div
+                            className={`contribute-navbar-line-segment ${
+                                contributeStep >= 2 ? 'contribute-navbar-line-segment-entered' : ''
+                            }`}
+                        ></div>
+                    </div>
+                    <div className="contribute-navbar-line-segment-container">
+                        <div
+                            className={`contribute-navbar-line-segment ${
+                                contributeStep >= 3 ? 'contribute-navbar-line-segment-entered' : ''
+                            }`}
+                        ></div>
+                    </div>
+                    <div className="contribute-navbar-line-segment-container">
+                        <div
+                            className={`contribute-navbar-line-segment ${
+                                contributeStep >= 4 ? 'contribute-navbar-line-segment-entered' : ''
+                            }`}
+                        ></div>
+                    </div>
+                    <div className="contribute-navbar-line-segment-container">
+                        <div
+                            className={`contribute-navbar-line-segment ${
+                                contributeStep >= 5 ? 'contribute-navbar-line-segment-entered' : ''
+                            }`}
+                        ></div>
+                    </div>
+                </div>
                 <div className="contribute-navbar-steps">
-                    <a href="/contribute/reason">
-                        <div class="contribute-navbar-step">
-                            <div class="contribute-navbar-step-label contribute-navbar-step-label-active">Reason</div>
-                            <div class="contribute-navbar-step-circle contribute-navbar-step-circle-active">
+                    <Link to="/contribute/reason">
+                        <div className="contribute-navbar-step">
+                            <div
+                                className={`contribute-navbar-step-label ${
+                                    contributeStep === 1 ? 'contribute-navbar-step-label-active' : ''
+                                }`}
+                            >
+                                Reason
+                            </div>
+                            <div
+                                className={`contribute-navbar-step-circle ${
+                                    contributeStep >= 1 ? 'contribute-navbar-step-circle-entered' : ''
+                                }`}
+                            >
                                 <svg
                                     height="36"
                                     width="36"
-                                    class="contribute-navbar-step-svg contribute-navbar-step-svg-entered"
+                                    className={`contribute-navbar-step-svg ${
+                                        contributeStep >= 1 ? 'contribute-navbar-step-svg-entered' : ''
+                                    }`}
                                 >
                                     <circle cx="18" cy="18" r="12.5"></circle>
                                 </svg>
                             </div>
                         </div>
-                    </a>
-                </div>
-            </div> */}
-            <div className="contribute-layout-body">
-                <div class="contribute-layout-body-main">
-                    <div class="contribute-layout-body-main-content">
-                        <div class="contribute-form">
-                            <div class="title">Before you start...</div>
-                            <div class="desc">
-                                We would like to understand the background of this question and your reasons for
-                                contributing this question.
+                    </Link>
+                    <Link to="/contribute/question">
+                        <div className="contribute-navbar-step">
+                            <div
+                                className={`contribute-navbar-step-label ${
+                                    contributeStep === 2 ? 'contribute-navbar-step-label-active' : ''
+                                }`}
+                            >
+                                Question
                             </div>
-                            <div class="subtitle">
-                                <span>
-                                    Why are you contributing this question?
-                                    <span class="css-1sguh2d">
-                                        <span
-                                            class=""
-                                            data-toggle="tooltip"
-                                            data-placement="top"
-                                            data-original-title="required"
-                                            aria-hidden="true"
-                                        >
-                                            *
-                                        </span>
-                                    </span>
-                                </span>
+                            <div
+                                className={`contribute-navbar-step-circle ${
+                                    contributeStep >= 2 ? 'contribute-navbar-step-circle-entered' : ''
+                                }`}
+                            >
+                                <svg
+                                    height="36"
+                                    width="36"
+                                    className={`contribute-navbar-step-svg ${
+                                        contributeStep >= 2 ? 'contribute-navbar-step-svg-entered' : ''
+                                    }`}
+                                >
+                                    <circle cx="18" cy="18" r="12.5"></circle>
+                                </svg>
                             </div>
-                            {/* <textarea class="textarea" placeholder="hehe" rows="15">
-                                I contribute this question 4fun
-                            </textarea>
-                            <div class="char-counter">
-                                <div class="css-9aj96k-CharContainer">31/5000</div>
-                            </div>
-                            <label class="checkbox-wrapper">
-                                Check this box if you wish to remain anonymous as the contributor of this question.
-                                <input type="checkbox" />
-                                <span class="checkmark"></span>
-                            </label>
-                            <div class="subtitle">Add company tags and topic tags</div>
-                            <div class="contribute-select-wrapper">
-                                <div class="Select contribute-select has-value is-clearable is-searchable Select--multi">
-                                    <div class="Select-control">
-                                        <span class="Select-multi-value-wrapper" id="react-select-13--value">
-                                            <div class="Select-value">
-                                                <span class="Select-value-icon" aria-hidden="true">
-                                                    x
-                                                </span>
-                                                <span
-                                                    class="Select-value-label"
-                                                    role="option"
-                                                    aria-selected="true"
-                                                    id="react-select-13--value-0"
-                                                >
-                                                    Binary Search Tree
-                                                    <span class="Select-aria-only">&nbsp;</span>
-                                                </span>
-                                            </div>
-                                            <div class="Select-input" style="display: inline-block;">
-                                                <input
-                                                    aria-activedescendant="react-select-13--value"
-                                                    aria-expanded="false"
-                                                    aria-haspopup="false"
-                                                    aria-owns=""
-                                                    role="combobox"
-                                                    value=""
-                                                    style="box-sizing: content-box; width: 5px;"
-                                                />
-                                            </div>
-                                        </span>
-                                        <span aria-label="Clear all" class="Select-clear-zone" title="Clear all">
-                                            <span class="Select-clear">X</span>
-                                        </span>
-                                        <span class="Select-arrow-zone">
-                                            <span class="Select-arrow"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div> */}
                         </div>
-                    </div>
+                    </Link>
+                    <Link to="/contribute/solutions">
+                        <div className="contribute-navbar-step">
+                            <div
+                                className={`contribute-navbar-step-label ${
+                                    contributeStep === 3 ? 'contribute-navbar-step-label-active' : ''
+                                }`}
+                            >
+                                Solutions
+                            </div>
+                            <div
+                                className={`contribute-navbar-step-circle ${
+                                    contributeStep >= 3 ? 'contribute-navbar-step-circle-entered' : ''
+                                }`}
+                            >
+                                <svg
+                                    height="36"
+                                    width="36"
+                                    className={`contribute-navbar-step-svg ${
+                                        contributeStep >= 3 ? 'contribute-navbar-step-svg-entered' : ''
+                                    }`}
+                                >
+                                    <circle cx="18" cy="18" r="12.5"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </Link>
+                    <Link to="/contribute/testcases">
+                        <div className="contribute-navbar-step">
+                            <div
+                                className={`contribute-navbar-step-label ${
+                                    contributeStep === 4 ? 'contribute-navbar-step-label-active' : ''
+                                }`}
+                            >
+                                Testcases
+                            </div>
+                            <div
+                                className={`contribute-navbar-step-circle ${
+                                    contributeStep >= 4 ? 'contribute-navbar-step-circle-entered' : ''
+                                }`}
+                            >
+                                <svg
+                                    height="36"
+                                    width="36"
+                                    className={`contribute-navbar-step-svg ${
+                                        contributeStep >= 4 ? 'contribute-navbar-step-svg-entered' : ''
+                                    }`}
+                                >
+                                    <circle cx="18" cy="18" r="12.5"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </Link>
                 </div>
             </div>
-            {/* <div className="contribute-layout-footer"></div> */}
-        </>
+            <div className="row">
+                <div className="contribute-body-main col-md-7">{mainChild}</div>
+                <div className="contribute-body-right col-md-5">{rightChild}</div>
+            </div>
+            <div className="contribute-footer-container">
+                <div className="contribute-footer">
+                    {contributeStep !== 1 ? (
+                        <Link to={routeStep[contributeStep - 1]} className="contribute-nav-btn">
+                            <FontAwesomeIcon icon={faArrowLeft} />
+                        </Link>
+                    ) : (
+                        <div></div>
+                    )}
+                    {contributeStep !== 4 ? (
+                        <Link to={routeStep[contributeStep + 1]} className="contribute-nav-btn">
+                            <FontAwesomeIcon icon={faArrowRight} />
+                        </Link>
+                    ) : (
+                        <form method="" action="">
+                            <div className="btn btn-submit-contribute" type="submit">
+                                Submit
+                            </div>
+                        </form>
+                    )}
+                </div>
+            </div>
+        </div>
     );
 };
 
