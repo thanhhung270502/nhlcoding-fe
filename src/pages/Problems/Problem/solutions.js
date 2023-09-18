@@ -26,7 +26,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -43,7 +43,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -60,7 +60,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -77,7 +77,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -94,7 +94,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -111,7 +111,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -128,7 +128,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -145,7 +145,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -162,7 +162,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -179,7 +179,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -196,7 +196,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -213,7 +213,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -230,7 +230,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
@@ -247,7 +247,7 @@ function Solution() {
                     <div className="d-flex align-items-center info">
                         <div className="d-flex align-items-center py-2">
                             <div className="avatar">
-                                <img className="img-fluid" src={images.avt} alt="" />
+                                <img className="img-fluid" src="/images/avt.png" alt="" />
                             </div>
                             <div className="ps-2 name">kane-ly</div>
                             <div className="px-4">Jun 10, 2023</div>
