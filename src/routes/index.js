@@ -8,7 +8,7 @@ import {
 import { OnlyHeader } from '~/components/Layout';
 
 // Pages
-import { Home, Problem, Test } from '~/pages';
+import { Home, NotFound, Problem, Test } from '~/pages';
 
 // Không cần đăng nhập vẫn vào được
 const publicRoutes = [
@@ -47,6 +47,11 @@ const publicRoutes = [
     {
         path: '/contribute/testcases',
         component: ContributeTestcases,
+        layout: OnlyHeader,
+    },
+    {
+        path: '*',
+        component: NotFound,
         layout: OnlyHeader,
     },
 ];
