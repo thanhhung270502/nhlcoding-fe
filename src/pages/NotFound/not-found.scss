@@ -1,0 +1,26 @@
+.not-found-info {
+    display: flex;
+    margin-top: 8rem;
+    margin-bottom: 1rem;
+}
+
+.btn-back-home {
+    --bs-btn-color: var(--black);
+    --bs-btn-bg: var(--white);
+    --bs-btn-border-color: var(--secondary);
+    --bs-btn-hover-color: var(--black);
+    --bs-btn-hover-bg: var(--secondary);
+    --bs-btn-hover-border-color: var(--secondary);
+    --bs-btn-active-color: var(--black);
+    --bs-btn-active-bg: var(--secondary);
+    --bs-btn-active-border-color: var(--secondary);
+    border-radius: 5px;
+    padding: 0.5rem;
+    width: fit-content;
+}
+
+a {
+    text-decoration: none;
+    --bs-link-color: var(--black);
+    --bs-link-hover-color: var(--black);
+}
