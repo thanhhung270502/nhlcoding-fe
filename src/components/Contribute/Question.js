@@ -3,8 +3,7 @@ import Contribute from './Contribute';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import ReactSelect from 'react-select';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import CustomEditor from '../CKEditor';
 
 const MainChild = () => {
     const [titleText, setTitleText] = useState('');
@@ -51,21 +50,7 @@ const MainChild = () => {
                 </div>
             </div>
             <div className="subtitle">Description *</div>
-            <CKEditor
-                editor={ClassicEditor}
-                data={descriptionData}
-                onReady={(editor) => {
-                    // You can store the "editor" and use when it is needed.
-                    console.log('Editor is ready to use!', editor);
-                }}
-                onChange={handleChangeDescription}
-                onBlur={(event, editor) => {
-                    console.log('Blur.', editor);
-                }}
-                onFocus={(event, editor) => {
-                    console.log('Focus.', editor);
-                }}
-            />
+            <CustomEditor data={descriptionData} handleChange={handleChangeDescription} />
             <div className="char-counter">{descriptionData.length}/5000</div>
         </div>
     );
