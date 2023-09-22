@@ -21,7 +21,6 @@ const publicRoutes = [
     {
         path: '/problems',
         component: Problems,
-        layout: OnlyHeader,
     },
     // http://localhost:3000/problem
     {
@@ -58,7 +57,6 @@ const publicRoutes = [
     {
         path: '*',
         component: NotFound,
-        layout: OnlyHeader,
     },
 ];
 
