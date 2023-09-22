@@ -7,13 +7,13 @@
 .btn-back-home {
     --bs-btn-color: var(--black);
     --bs-btn-bg: var(--white);
-    --bs-btn-border-color: var(--secondary);
+    --bs-btn-border-color: var(--gray-dark);
     --bs-btn-hover-color: var(--black);
-    --bs-btn-hover-bg: var(--secondary);
-    --bs-btn-hover-border-color: var(--secondary);
+    --bs-btn-hover-bg: var(--gray-dark);
+    --bs-btn-hover-border-color: var(--gray-dark);
     --bs-btn-active-color: var(--black);
-    --bs-btn-active-bg: var(--secondary);
-    --bs-btn-active-border-color: var(--secondary);
+    --bs-btn-active-bg: var(--gray-dark);
+    --bs-btn-active-border-color: var(--gray-dark);
     border-radius: 5px;
     padding: 0.5rem;
     width: fit-content;
