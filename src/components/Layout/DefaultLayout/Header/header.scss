@@ -1,4 +1,4 @@
-    .navbar {
+.navbar {
     background-color: var(--blue-dark) !important;
     padding: 0 !important;
 }
@@ -88,11 +88,11 @@
 
 .login-alter-text {
     text-align: center;
-    color: var(--secondary);
+    color: var(--gray-dark);
     margin-bottom: 0.5rem;
 }
 
 .signup-alter-text {
-    color: var(--secondary);
+    color: var(--gray-dark);
     margin-right: 0.25rem;
 }
