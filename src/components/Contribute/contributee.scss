@@ -6,15 +6,14 @@
         width: 100%;
         display: flex;
         height: 5px;
-        background-color: #dddddd;
+        background-color: var(--gray-light);
         border-radius: 5px;
     }
 
     .contribute-navbar-steps {
         display: flex;
         justify-content: space-evenly;
-        position: absolute;
-        width: 85%;
+        width: 100%;
         z-index: 2;
 
         a {
@@ -30,7 +29,7 @@
     -ms-flex: 1;
     flex: 1;
     height: 5px;
-    background-color: #dddddd;
+    background-color: var(--gray-light);
     border-radius: 5px;
 
     .contribute-navbar-line-segment {
@@ -57,7 +56,7 @@
 
     .contribute-navbar-step-label {
         font-weight: 500;
-        color: #bdc3c7;
+        color: var(--gray-dark);
         margin-bottom: 10px;
         white-space: nowrap;
     }
@@ -82,8 +81,8 @@
 
 .contribute-navbar-step-svg {
     position: absolute;
-    top: -20px;
-    fill: #dddddd;
+    top: 122px;
+    fill: var(--gray-light);
     stroke: var(--orange-light);
     stroke-width: 5;
     stroke-dasharray: 78.53981634px 78.53981634px;
@@ -103,7 +102,7 @@
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    border-right: 1px solid #ecf0f1;
+    border-right: 1px solid var(--gray-light);
     padding-inline: 2rem;
 
     .contribute-body-main-content {
@@ -115,7 +114,7 @@
         .subtitle {
             font-size: 18px;
             font-weight: 500;
-            color: #888;
+            color: var(--gray-dark-2);
             margin-bottom: 10px;
         }
         .textarea {
@@ -123,7 +122,7 @@
             overflow-wrap: break-word;
             height: 320px !important;
             width: 100%;
-            border: 2px solid #ddd;
+            border: 2px solid var(--gray-light);
             padding: 10px 15px;
             border-radius: 4px;
             transition: 0.2s all;
@@ -138,12 +137,12 @@
             -ms-flex-pack: end;
             justify-content: flex-end;
             margin: 4px;
-            color: #bdbdbd;
+            color: var(--gray-dark-3);
         }
         .checkbox-wrapper {
             line-height: 1.5;
             font-weight: 400;
-            color: #888;
+            color: var(--gray-dark-2);
             display: block;
             position: relative;
             padding-left: 25px;
@@ -176,7 +175,7 @@
     margin: 1rem;
     padding: 1rem;
     border-radius: 5px;
-    background: #f0f0f0;
+    background: var(--gray-light);
 
     .lightbulb {
         color: var(--orange-light);
@@ -184,7 +183,7 @@
     }
 
     .hint {
-        color: #888;
+        color: var(--gray-dark-2);
         font-size: 14px;
 
         strong: {
@@ -211,7 +210,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-top: 1px solid #ecf0f1;
+        border-top: 1px solid var(--gray-light);
 
         a {
             color: var(--white);
@@ -295,7 +294,7 @@
     margin-bottom: 2rem;
     padding: 1rem;
     border-radius: 5px;
-    background: #f0f0f0;
+    background: var(--gray-light);
     height: 280px;
     overflow-y: auto;
 }
