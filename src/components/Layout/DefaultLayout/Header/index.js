@@ -3,11 +3,26 @@ import { Modal, useModal } from '~/components/Modals';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
+import { useEffect } from 'react';
+import { getUser } from '~/api/api';
 
 function Header() {
     const loginModal = useModal();
     const signupModal = useModal();
     const resetPasswordModal = useModal();
+
+    const getAccount = async () => {
+        const res = await getUser();
+        console.log(res);
+    };
+
+    const googleAuth = () => {
+        window.open(`http://localhost:3000/auth/google`, '_self');
+    };
+
+    useEffect(() => {
+        getAccount();
+    }, []);
     return (
         <>
             <nav className="navbar navbar-expand-lg">
@@ -114,7 +129,12 @@ function Header() {
                     </div>
                     <div className="login-alter-text">hoặc có thể đăng nhập với</div>
                     <div className="d-flex justify-content-center gap-2 mb-4">
-                        <ImageChangeOnHover defaultSrc={'/images/google.svg'} hoverSrc={'/images/google-hover.svg'} />
+                        <button onClick={googleAuth}>
+                            <ImageChangeOnHover
+                                defaultSrc={'/images/google.svg'}
+                                hoverSrc={'/images/google-hover.svg'}
+                            />
+                        </button>
                         <ImageChangeOnHover defaultSrc={'/images/github.svg'} hoverSrc={'/images/github-hover.svg'} />
                     </div>
                 </div>

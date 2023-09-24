@@ -1,7 +1,7 @@
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import './contribute.scss';
+import './Contribute.scss';
 
 const Contribute = ({ contributeStep, mainChild, rightChild }) => {
     const routeStep = [
