@@ -1,7 +1,7 @@
 .footer-container {
-    border-top: solid 1px var(--gray-light);
+    border-top: solid 1px var(--gray);
     padding-block: 16px;
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .copy-right {
@@ -10,5 +10,5 @@
 
 .footer-nav {
     padding: 0 2rem;
-    border-inline: solid 1px var(--gray-light);
+    border-inline-start: solid 1px var(--gray);
 }

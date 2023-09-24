@@ -13,6 +13,7 @@
     --blue-dark-3: #0b1517;
     --blue-dark-2: #032343;
     --blue-dark: #1a4979;
+    --blue-dark-4: #207bf3;
     --blue: #20c0f3;
 
     --green-dark-2: #157347;
@@ -110,6 +111,26 @@ html {
 .cursor-pointer {
     cursor: pointer;
 }
+
 .text-center {
     text-align: center;
+}
+
+.btn-custom {
+    cursor: pointer;
+    display: inline-block;
+    min-width: 200px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.5;
+    border-radius: 8px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
 }
