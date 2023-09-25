@@ -1,14 +1,31 @@
 .footer-container {
     border-top: solid 1px var(--gray);
-    padding-block: 16px;
     font-size: 16px;
+    display: flex;
+    justify-content: space-between;
 }
 
-.copy-right {
+.footer-navbar {
+    display: flex;
+    align-items: center;
+}
+
+.footer-secondary {
     color: var(--gray-dark);
 }
 
 .footer-nav {
-    padding: 0 2rem;
+    padding-inline: 1rem;
+    margin-block: 1rem;
     border-inline-start: solid 1px var(--gray);
+}
+
+.footer-contacts {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.footer-contact {
+    height: 32px;
 }
