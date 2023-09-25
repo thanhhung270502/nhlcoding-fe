@@ -3,9 +3,16 @@
     padding: 0 !important;
 }
 
+.nav-item {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
 .nav-link {
     color: var(--white) !important;
-    padding: 0 2rem !important;
+    margin: 0 2rem !important;
+    font-size: 18px;
 }
 
 .navbar-collapse {
@@ -19,7 +26,7 @@
 }
 
 .btn {
-    --bs-btn-border-radius: 10px;
+    --bs-btn-border-radius: 0.5rem;
     --bs-btn-padding-y: 0.25rem;
     --bs-btn-padding-x: 1.25rem;
 }
@@ -44,55 +51,4 @@
 .btn-text {
     font-weight: 600;
     font-size: 16px;
-}
-
-.header-modal {
-    --bs-modal-width: 500px;
-}
-
-.close-icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding-left: 0.5rem;
-    margin: 1rem;
-    color: var(--gray);
-    :hover {
-        color: var(--black);
-    }
-}
-
-.login-submit {
-    text-align: center;
-    background-color: var(--blue-dark);
-    border-radius: 5px;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    color: var(--white);
-}
-
-.reset-pasword-submit {
-    text-align: center;
-    background-color: var(--green-dark);
-    border-radius: 5px;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    color: var(--white);
-}
-
-.modal-text {
-    cursor: pointer;
-    color: var(--blue-dark);
-    font-weight: 500;
-}
-
-.login-alter-text {
-    text-align: center;
-    color: var(--gray-dark);
-    margin-bottom: 0.5rem;
-}
-
-.signup-alter-text {
-    color: var(--gray-dark);
-    margin-right: 0.25rem;
 }

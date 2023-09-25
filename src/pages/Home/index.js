@@ -1,8 +1,14 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './home.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { Link } from 'react-router-dom';
+import { SignupModalTrigger } from '~/components/Modals/Auth';
 
 function Home() {
+    const handleClickStart = () => {
+        SignupModalTrigger.open();
+    };
+
     return (
         <div className="container-fluid p-0 m-0">
             <div className="intro-container">
@@ -15,9 +21,11 @@ function Home() {
                         Solve programming questions, unlock your potential, contribute to the coding community, and
                         achieve your programming goals.
                     </div>
-                    <div className="intro-btn btn-custom">Start now</div>
+                    <div className="intro-btn btn-custom" onClick={handleClickStart}>
+                        Get started
+                    </div>
                 </div>
-                <img src="/images/home-intro.png" alt="" className="home-intro-img" />
+                <img src="/images/home-intro.png" className="intro-img skeleton" />
             </div>
             <div className="wwd-container">
                 <div className="wwd-title">What We Do</div>
@@ -32,12 +40,14 @@ function Home() {
                             levels. Sharpen your coding prowess, overcome obstacles, and be well-prepared for the coding
                             challenges you'll face in your career.
                         </div>
-                        <div className="wwd-content-btn btn-custom">Try a question now</div>
+                        <Link className="wwd-content-btn btn-custom" to="/problems">
+                            Try a question now
+                        </Link>
                     </div>
-                    <img src="/images/question-solve.png" alt="" className="wwd-img" />
+                    <img src="/images/question-solve.png" alt="" className="wwd-img skeleton" />
                 </div>
                 <div className="wwd-subcontainer">
-                    <img src="/images/question-contribute.png" alt="" className="wwd-img" />
+                    <img src="/images/question-contribute.png" alt="" className="wwd-img skeleton" />
                     <div className="wwd-content">
                         <div className="wwd-content-title">Contribute your own questions</div>
                         <div className="wwd-content-info">
@@ -48,7 +58,9 @@ function Home() {
                             your coding questions today and be a part of shaping the coding landscape with your
                             expertise.
                         </div>
-                        <div className="wwd-content-btn btn-custom">Contribute a question now</div>
+                        <Link to="/contribute" className="wwd-content-btn btn-custom">
+                            Contribute a question now
+                        </Link>
                     </div>
                 </div>
             </div>

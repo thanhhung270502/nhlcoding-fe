@@ -1,8 +1,7 @@
 .intro-container {
     display: flex;
-    justify-content: center;
-    margin: 4rem 16rem;
-    gap: 2rem;
+    justify-content: space-evenly;
+    margin: 4rem;
 }
 
 .intro-content {
@@ -10,13 +9,14 @@
     flex-direction: column;
     gap: 1.5rem;
     justify-content: center;
+    width: 550px;
 
     .intro-subtitle {
         font-size: 24px;
     }
 
     .intro-title {
-        font-size: 32px;
+        font-size: 40px;
     }
 
     .intro-info {
@@ -28,12 +28,18 @@
         width: fit-content;
         color: var(--white);
         background-color: var(--green-dark);
+        font-weight: 500;
     }
 
     .intro-btn:hover {
         color: var(--white);
         background-color: var(--green-dark-2);
     }
+}
+
+.intro-img {
+    width: 400px;
+    height: 400px;
 }
 
 .wwd-container {

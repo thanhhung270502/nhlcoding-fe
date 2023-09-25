@@ -9,6 +9,7 @@ import { OnlyHeader } from '~/components/Layout';
 
 // Pages
 import { Home, NotFound, Problem, Problems, Test } from '~/pages';
+import ContributeRedirect from '~/pages/Contribute';
 
 // Không cần đăng nhập vẫn vào được
 const publicRoutes = [
@@ -53,6 +54,10 @@ const publicRoutes = [
         path: '/contribute/testcases',
         component: ContributeTestcases,
         layout: OnlyHeader,
+    },
+    {
+        path: '/contribute',
+        component: ContributeRedirect,
     },
     {
         path: '*',
