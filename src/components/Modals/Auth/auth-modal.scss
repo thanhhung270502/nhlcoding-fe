@@ -1,0 +1,52 @@
+.header-modal {
+    --bs-modal-width: 500px;
+}
+
+.close-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-left: 0.5rem;
+    margin-top: 1rem;
+    margin-right: 48px;
+    color: var(--gray);
+    :hover {
+        color: var(--black);
+    }
+    font-size: 24px;
+}
+
+.login-submit {
+    text-align: center;
+    background-color: var(--blue-dark);
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.reset-pasword-submit {
+    text-align: center;
+    background-color: var(--green-dark);
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.modal-text {
+    cursor: pointer;
+    color: var(--blue-dark);
+    font-weight: 500;
+}
+
+.login-alter-text {
+    text-align: center;
+    color: var(--gray-dark);
+    margin-bottom: 0.5rem;
+}
+
+.signup-alter-text {
+    color: var(--gray-dark);
+    margin-right: 0.25rem;
+}

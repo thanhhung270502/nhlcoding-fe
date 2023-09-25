@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const NotFound = () => {
     return (
-        <div className="d-flex flex-column justify-content-center align-items-center h-100">
+        <div className="not-found-container">
             <div className="not-found-info">
                 <img src="/images/404.png" alt="404" height={300} />
                 <div className="ms-4 mt-4">
