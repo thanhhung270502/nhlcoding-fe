@@ -1,10 +1,11 @@
 import './header.scss';
 import { Modal, useModal } from '~/components/Modals';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { faClose, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
-import { useEffect } from 'react';
-import { getUser } from '~/api/api';
+import { useEffect, useState } from 'react';
+import { getUser, getUserByID, login, loginWithGoogle, logout } from '~/api/api';
+import { getCookie, setCookie } from '~/api/cookie';
 
 function Header() {
     const loginModal = useModal();
@@ -14,15 +15,65 @@ function Header() {
     const getAccount = async () => {
         const res = await getUser();
         console.log(res);
+        // if (parseInt(res.response.status) === 200) {
+        //     // setCookie('user_id', res)
+        //     console.log(res);
+        // } else {
+        //     // console.log(res);
+        //     console.log(res.response.status);
+        // }
     };
 
     const googleAuth = () => {
-        window.open(`http://localhost:3000/auth/google`, '_self');
+        window.open(`http://localhost:3000/auth/google/callback`, '_self');
     };
 
     useEffect(() => {
         getAccount();
     }, []);
+
+    const [data, setData] = useState({
+        email: null,
+        password: null,
+    });
+
+    const [currentUser, setCurrentUser] = useState();
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const res = await login(data);
+        // console.log(res);
+        window.location.href = '../';
+    };
+
+    const handleLogout = () => {
+        logout();
+        window.location.href = './';
+    };
+
+    useEffect(() => {
+        (async () => {
+            const user_id = getCookie('user_id');
+            if (user_id) {
+                await getUserByID(user_id).then((data) => {
+                    console.log(data.data.body.user);
+                    setCurrentUser(data.data.body.user);
+                });
+            } else {
+                console.log('Not');
+                setCurrentUser(null);
+            }
+        })();
+    }, []);
+
     return (
         <>
             <nav className="navbar navbar-expand-lg">
@@ -65,14 +116,58 @@ function Header() {
                             </li>
                         </ul>
                     </div>
-                    <div className="d-flex gap-3">
-                        <div className="btn btn-signin btn-text" onClick={() => loginModal.open()}>
-                            Đăng nhập
+                    {currentUser && (
+                        <div className="d-flex gap-3">
+                            <div class="dropdown">
+                                <div
+                                    class="d-flex align-items-center dropdown-toggle"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <div className="top-header__username">{currentUser.name}</div>
+                                    <div className="top-header__avatar">
+                                        <img
+                                            src="https://vcdn1-giaitri.vnecdn.net/2023/02/19/vuong-so-nhien-1676783101.jpg?w=460&h=0&q=100&dpr=2&fit=crop&s=03HL3Ezg-Q1yyVJPb5Xn9A"
+                                            alt="avt"
+                                        ></img>
+                                    </div>
+                                </div>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="d-flex align-items-center dropdown-item" href="/user">
+                                            <div className="top-header__icon col-2">
+                                                <FontAwesomeIcon icon={faUser} />
+                                            </div>
+                                            <div className="col-10">My Profile</div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+                                    <li>
+                                        <button class="d-flex align-items-center dropdown-item" onClick={handleLogout}>
+                                            <div className="top-header__icon col-2">
+                                                <FontAwesomeIcon icon={faRightFromBracket} />
+                                            </div>
+                                            <div className="col-10">Log out</div>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div className="btn btn-success btn-text" onClick={() => signupModal.open()}>
-                            Đăng ký
+                    )}
+                    {!currentUser && (
+                        <div className="d-flex gap-3">
+                            <div className="btn btn-signin btn-text" onClick={() => loginModal.open()}>
+                                Đăng nhập
+                            </div>
+                            <div className="btn btn-success btn-text" onClick={() => signupModal.open()}>
+                                Đăng ký
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </nav>
 
@@ -84,7 +179,7 @@ function Header() {
                     <div className="d-flex justify-content-center mb-4">
                         <img src="/images/logo_v2.png" alt="" height={75} />
                     </div>
-                    <form method="POST" action="">
+                    <form method="POST" action="" onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <input
                                 type="email"
@@ -92,6 +187,7 @@ function Header() {
                                 id="email"
                                 name="email"
                                 placeholder="Địa chỉ email"
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="mb-3">
@@ -101,10 +197,13 @@ function Header() {
                                 id="password"
                                 name="password"
                                 placeholder="Mật khẩu"
+                                onChange={handleChange}
                             />
                         </div>
-                        <div className="login-submit" type="submit">
-                            Đăng nhập
+                        <div className="d-flex justify-content-center">
+                            <button className="login-submit" type="submit">
+                                Đăng nhập
+                            </button>
                         </div>
                     </form>
                     <div className="d-flex justify-content-between mb-3">
@@ -129,7 +228,7 @@ function Header() {
                     </div>
                     <div className="login-alter-text">hoặc có thể đăng nhập với</div>
                     <div className="d-flex justify-content-center gap-2 mb-4">
-                        <button onClick={googleAuth}>
+                        <button onClick={googleAuth} className="border-none">
                             <ImageChangeOnHover
                                 defaultSrc={'/images/google.svg'}
                                 hoverSrc={'/images/google-hover.svg'}
