@@ -15,6 +15,40 @@ export const submitCode = async (code) => {
         });
 };
 
+export const loginGoogle = async () => {
+    return await axios
+        .get(`${URL}/auth/google`)
+        .then(function (res) {
+            return res;
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+};
+
+export const getUsers = async () => {
+    return await axios
+        .get(`${URL}/users`)
+        .then(function (res) {
+            return res;
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+};
+
+export const getUser = async () => {
+    return await axios
+        .get(`${URL}/auth/login/success`, { withCredentials: true })
+        .then(function (response) {
+            return response;
+        })
+        .catch(function (err) {
+            console.log(err);
+            return err;
+        });
+};
+
 export const login = async (info) => {
     const res = await axios
         .post(`${URL}/sessions/login`, info)
@@ -37,4 +71,8 @@ export const getUserByID = async (user_id) => {
 
 export const logout = () => {
     setCookie('user_id', '', 0);
+};
+
+export const loginWithGoogle = () => {
+    window.open(`${URL}/auth/google/callback`, '_self');
 };

@@ -4,17 +4,39 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
 import { useEffect, useState } from 'react';
-import { getUserByID, login, logout } from '~/api/api';
-import { getCookie } from '~/api/cookie';
+import { getUser, getUserByID, login, loginWithGoogle, logout } from '~/api/api';
+import { getCookie, setCookie } from '~/api/cookie';
 
 function Header() {
     const loginModal = useModal();
     const signupModal = useModal();
     const resetPasswordModal = useModal();
+
+    const getAccount = async () => {
+        const res = await getUser();
+        console.log(res);
+        // if (parseInt(res.response.status) === 200) {
+        //     // setCookie('user_id', res)
+        //     console.log(res);
+        // } else {
+        //     // console.log(res);
+        //     console.log(res.response.status);
+        // }
+    };
+
+    const googleAuth = () => {
+        window.open(`http://localhost:3000/auth/google/callback`, '_self');
+    };
+
+    useEffect(() => {
+        getAccount();
+    }, []);
+
     const [data, setData] = useState({
         email: null,
         password: null,
     });
+
     const [currentUser, setCurrentUser] = useState();
 
     const handleChange = (event) => {
@@ -178,9 +200,11 @@ function Header() {
                                 onChange={handleChange}
                             />
                         </div>
-                        <button className="login-submit" type="submit">
-                            Đăng nhập
-                        </button>
+                        <div className="d-flex justify-content-center">
+                            <button className="login-submit" type="submit">
+                                Đăng nhập
+                            </button>
+                        </div>
                     </form>
                     <div className="d-flex justify-content-between mb-3">
                         <div
@@ -204,7 +228,12 @@ function Header() {
                     </div>
                     <div className="login-alter-text">hoặc có thể đăng nhập với</div>
                     <div className="d-flex justify-content-center gap-2 mb-4">
-                        <ImageChangeOnHover defaultSrc={'/images/google.svg'} hoverSrc={'/images/google-hover.svg'} />
+                        <button onClick={googleAuth} className="border-none">
+                            <ImageChangeOnHover
+                                defaultSrc={'/images/google.svg'}
+                                hoverSrc={'/images/google-hover.svg'}
+                            />
+                        </button>
                         <ImageChangeOnHover defaultSrc={'/images/github.svg'} hoverSrc={'/images/github-hover.svg'} />
                     </div>
                 </div>

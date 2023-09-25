@@ -69,6 +69,7 @@
     padding: 0.5rem;
     margin-bottom: 1rem;
     color: var(--white);
+    width: 100%;
 }
 
 .reset-pasword-submit {
@@ -130,4 +131,8 @@
     .top-header__username {
         color: var(--white);
     }
+}
+
+.border-none {
+    border: none;
 }

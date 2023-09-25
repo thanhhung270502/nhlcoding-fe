@@ -8,9 +8,6 @@ import Code from './code';
 import Description from './description';
 
 function Problem() {
-    const [code, setCode] = useState('print(a)');
-    // const [result, setResult] = useState(3);
-    const [language, setLanguage] = useState('C++');
     const [sidebar, setSidebar] = useState('Description');
 
     useEffect(() => {
@@ -33,6 +30,10 @@ function Problem() {
         }
         e.target.classList.add('problem-item-active');
         setSidebar(e.target.innerText);
+    };
+
+    const handleConsole = () => {
+        var gridRow = $('.grid-row');
     };
 
     // const handleSubmit = async (e) => {
