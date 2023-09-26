@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
 import { useEffect, useState } from 'react';
-import { getUserGoogle, getUserByID, login, loginWithGoogle, logout, signup, logoutGoogle } from '~/api/api';
+import { getUserGoogle, getUserByID, login, logout, signup, logoutGoogle } from '~/api/api';
 import { getCookie, setCookie } from '~/api/cookie';
 
 function Header() {
@@ -12,17 +12,9 @@ function Header() {
     const signupModal = useModal();
     const resetPasswordModal = useModal();
 
-    const getAccount = async () => {
-        const res = await getUserGoogle();
-    };
-
     const googleAuth = () => {
         window.open(`http://localhost:3000/auth/google/callback`, '_self');
     };
-
-    // useEffect(() => {
-    //     getAccount();
-    // }, []);
 
     const [dataLogin, setDataLogin] = useState({
         email: null,
