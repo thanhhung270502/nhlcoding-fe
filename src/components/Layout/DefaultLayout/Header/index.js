@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
 import { useEffect, useState } from 'react';
-import { getUser, getUserByID, login, loginWithGoogle, logout } from '~/api/api';
+import { getUserGoogle, getUserByID, login, loginWithGoogle, logout, signup, logoutGoogle } from '~/api/api';
 import { getCookie, setCookie } from '~/api/cookie';
 
 function Header() {
@@ -13,46 +13,61 @@ function Header() {
     const resetPasswordModal = useModal();
 
     const getAccount = async () => {
-        const res = await getUser();
-        console.log(res);
-        // if (parseInt(res.response.status) === 200) {
-        //     // setCookie('user_id', res)
-        //     console.log(res);
-        // } else {
-        //     // console.log(res);
-        //     console.log(res.response.status);
-        // }
+        const res = await getUserGoogle();
     };
 
     const googleAuth = () => {
         window.open(`http://localhost:3000/auth/google/callback`, '_self');
     };
 
-    useEffect(() => {
-        getAccount();
-    }, []);
+    // useEffect(() => {
+    //     getAccount();
+    // }, []);
 
-    const [data, setData] = useState({
+    const [dataLogin, setDataLogin] = useState({
         email: null,
         password: null,
     });
 
-    const [currentUser, setCurrentUser] = useState();
-
-    const handleChange = (event) => {
+    const handleDataLoginChange = (event) => {
         const { name, value } = event.target;
-        setData((prev) => ({
+        setDataLogin((prev) => ({
             ...prev,
             [name]: value,
         }));
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmitLogin = async (event) => {
         event.preventDefault();
-        const res = await login(data);
+        const res = await login(dataLogin);
         // console.log(res);
         window.location.href = '../';
     };
+
+    const [dataSignUp, setDataSignUp] = useState({
+        email: null,
+        password: null,
+        name: null,
+        provider: 'manual',
+        avatar: 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg',
+        role: 0,
+    });
+
+    const handleDataSignUpChange = (event) => {
+        const { name, value } = event.target;
+        setDataSignUp((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmitSignUp = async (event) => {
+        event.preventDefault();
+        const res = await signup(dataSignUp);
+        window.location.href = '../';
+    };
+
+    const [currentUser, setCurrentUser] = useState();
 
     const handleLogout = () => {
         logout();
@@ -68,8 +83,18 @@ function Header() {
                     setCurrentUser(data.data.body.user);
                 });
             } else {
-                console.log('Not');
-                setCurrentUser(null);
+                const res = await getUserGoogle();
+                if (res.code === 200) {
+                    await getUserByID(res.body.data.body.user.user_id).then(async (data) => {
+                        await logoutGoogle();
+                        console.log(data.data.body.user);
+                        setCookie('user_id', data.data.body.user.user_id);
+                        setCurrentUser(data.data.body.user);
+                    });
+                } else {
+                    console.log('Not');
+                    setCurrentUser(null);
+                }
             }
         })();
     }, []);
@@ -127,10 +152,13 @@ function Header() {
                                 >
                                     <div className="top-header__username">{currentUser.name}</div>
                                     <div className="top-header__avatar">
-                                        <img
-                                            src="https://vcdn1-giaitri.vnecdn.net/2023/02/19/vuong-so-nhien-1676783101.jpg?w=460&h=0&q=100&dpr=2&fit=crop&s=03HL3Ezg-Q1yyVJPb5Xn9A"
-                                            alt="avt"
-                                        ></img>
+                                        {currentUser.avatar && <img src={currentUser.avatar} alt="avt"></img>}
+                                        {!currentUser.avatar && (
+                                            <img
+                                                src="https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg"
+                                                alt="avt"
+                                            ></img>
+                                        )}
                                     </div>
                                 </div>
 
@@ -179,7 +207,7 @@ function Header() {
                     <div className="d-flex justify-content-center mb-4">
                         <img src="/images/logo_v2.png" alt="" height={75} />
                     </div>
-                    <form method="POST" action="" onSubmit={handleSubmit}>
+                    <form method="POST" action="" onSubmit={handleSubmitLogin}>
                         <div className="mb-3">
                             <input
                                 type="email"
@@ -187,7 +215,7 @@ function Header() {
                                 id="email"
                                 name="email"
                                 placeholder="Địa chỉ email"
-                                onChange={handleChange}
+                                onChange={handleDataLoginChange}
                             />
                         </div>
                         <div className="mb-3">
@@ -197,7 +225,7 @@ function Header() {
                                 id="password"
                                 name="password"
                                 placeholder="Mật khẩu"
-                                onChange={handleChange}
+                                onChange={handleDataLoginChange}
                             />
                         </div>
                         <div className="d-flex justify-content-center">
@@ -247,7 +275,7 @@ function Header() {
                     <div className="d-flex justify-content-center mb-4">
                         <img src="/images/logo_v2.png" alt="" height={75}></img>
                     </div>
-                    <form method="POST" action="">
+                    <form method="POST" action="" onSubmit={handleSubmitSignUp}>
                         <div className="mb-3">
                             <input
                                 type="text"
@@ -255,15 +283,27 @@ function Header() {
                                 id="name"
                                 name="name"
                                 placeholder="Tên người dùng"
+                                onChange={handleDataSignUpChange}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <input
+                                type="email"
+                                className="form-control"
+                                id="email"
+                                name="email"
+                                placeholder="Địa chỉ email"
+                                onChange={handleDataSignUpChange}
                             />
                         </div>
                         <div className="mb-3">
                             <input
                                 type="password"
                                 className="form-control"
-                                id="pasword"
-                                name="pasword"
+                                id="password"
+                                name="password"
                                 placeholder="Mật khẩu"
+                                onChange={handleDataSignUpChange}
                             />
                         </div>
                         <div className="mb-3">
@@ -275,18 +315,9 @@ function Header() {
                                 placeholder="Xác nhận mật khẩu"
                             />
                         </div>
-                        <div className="mb-3">
-                            <input
-                                type="email"
-                                className="form-control"
-                                id="email"
-                                name="email"
-                                placeholder="Địa chỉ email"
-                            />
-                        </div>
-                        <div className="login-submit" type="submit">
+                        <button className="login-submit" type="submit">
                             Đăng ký
-                        </div>
+                        </button>
                     </form>
                     <div className="d-flex justify-content-center align-items-center mb-3">
                         <div className="signup-alter-text">Đã có tài khoản?</div>
