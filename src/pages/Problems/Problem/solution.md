@@ -4,7 +4,7 @@ The brute force approach is simple. Loop through each element $x$ and find if th
 
 # Implementation
 
-```c++ []
+```cpp
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
@@ -21,7 +21,7 @@ public:
 };
 ```
 
-```python []
+```python
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         for i in range(len(nums)):
