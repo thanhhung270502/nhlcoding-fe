@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
-import './problem.scss';
-import Split from 'react-split-grid';
-import Solution from './solutions';
 import $ from 'jquery';
-import Submission from './submission';
+import { useEffect, useState } from 'react';
+import Split from 'react-split-grid';
 import Code from './code';
 import Description from './description';
+import Editorial from './editorial';
+import './problem.scss';
+import Solution from './solutions';
+import Submission from './submission';
 
 function Problem() {
     const [code, setCode] = useState('print(a)');
@@ -35,12 +36,15 @@ function Problem() {
         setSidebar(e.target.innerText);
     };
 
+    const openConsole = () => {};
+
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
     //     console.log(code);
     //     const res = await submitCode(code);
     //     console.log(res);
     // };
+
     return (
         <div className="problem-body">
             <div className="problems">
@@ -48,7 +52,7 @@ function Problem() {
                     render={({ getGridProps, getGutterProps }) => (
                         <div className="grid" {...getGridProps()}>
                             <div className="split bg-white">
-                                <div className="d-flex h-100">
+                                <div className="w-100 h-100">
                                     <div className="problem-sidebar">
                                         <div className="problem-sidebar-items">
                                             <div className="problem-item problem-item-active" onClick={handleSidebar}>
@@ -72,6 +76,7 @@ function Problem() {
                                         {sidebar === 'Description' && <Description />}
                                         {sidebar === 'Solutions' && <Solution />}
                                         {sidebar === 'Submissions' && <Submission />}
+                                        {sidebar === 'Editorial' && <Editorial />}
                                     </div>
                                 </div>
                             </div>
@@ -87,26 +92,26 @@ function Problem() {
                                                     <div className="problem-console">
                                                         <div className="d-flex justify-content-between align-items-center">
                                                             <div className="d-flex justify-content-between align-items-center">
-                                                                <div className="">Console</div>
-                                                                <div>
+                                                                <span>Console</span>
+                                                                <div onClick={openConsole}>
                                                                     <svg
                                                                         xmlns="http://www.w3.org/2000/svg"
-                                                                        width="20"
-                                                                        height="20"
+                                                                        width="32"
+                                                                        height="32"
                                                                         fill="currentColor"
                                                                         class="bi bi-arrow-up-short"
                                                                         viewBox="0 0 20 20"
                                                                     >
                                                                         <path
-                                                                            fill-rule="evenodd"
+                                                                            fillRule="evenodd"
                                                                             d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"
                                                                         />
                                                                     </svg>
                                                                 </div>
                                                             </div>
                                                             <div className="d-flex align-items-center">
-                                                                <div className="btn-custom btn-run">Run</div>
-                                                                <div className="btn-custom btn-submit">Submit</div>
+                                                                <div className="problem-btn btn-run">Run</div>
+                                                                <div className="problem-btn btn-submit">Submit</div>
                                                             </div>
                                                         </div>
                                                     </div>
