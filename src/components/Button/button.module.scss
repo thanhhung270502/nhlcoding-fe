@@ -1,0 +1,15 @@
+.buttonSmall {
+    padding: 6px 32px;
+    border-radius: 5px;
+    margin-left: 0.75rem;
+    border: none;
+}
+
+.primary {
+    background-color: var(--blue);
+    color: var(--white);
+}
+
+.secondary {
+    background-color: var(--gray-light);
+}

@@ -1,0 +1,72 @@
+.problemConsole {
+    font-size: 14px;
+    background-color: var(--white);
+}
+
+.problemConsoleNav {
+    margin: 8px 0;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.problemConsoleFooter {
+    padding: 8px 20px;
+    border-top: 1px solid var(--gray-light);
+}
+
+// Nav
+.problemConsoleNavItem {
+    padding-top: 0.25rem;
+    padding-bottom: 0.5rem;
+}
+
+.problemConsoleNavItemActive {
+    border-bottom: 3px solid var(--black);
+}
+
+// Body
+.problemConsoleBody {
+    padding: 16px 20px;
+    flex-grow: 1;
+}
+
+.problemConsoleCaseNum {
+    padding: 4px 16px;
+    border-radius: 5px;
+}
+
+.problemConsoleCaseNumActive {
+    background-color: var(--gray-light);
+}
+
+.problemConsoleCaseBodyContent {
+    background-color: var(--gray-light);
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+// Footer
+
+.iconConsole {
+    margin-left: 0.25rem;
+    margin-bottom: 0.1rem;
+    font-size: 10px;
+}
+
+.btnCustom {
+    padding: 4px 32px;
+    border-radius: 5px;
+    margin-left: 0.75rem;
+    border: none;
+}
+
+.btnSubmit {
+    background-color: var(--green-dark);
+    color: var(--white);
+}
+
+.hide {
+    display: none !important;
+}

@@ -75,7 +75,14 @@ html {
 .grid-row {
     display: grid;
     // grid-template-rows: 1fr 10px 1fr;
-    grid-template-rows: auto 10px min-content;
+}
+
+.closeConsole {
+    grid-template-rows: auto 10px min-content !important;
+}
+
+.openConsole {
+    grid-template-rows: 1fr 10px 1fr;
 }
 
 .gutter-row {
