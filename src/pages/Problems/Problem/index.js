@@ -78,6 +78,7 @@ if __name__ == "__main__":
     const [currentCaseTest, setCurrentCaseTest] = useState(0);
     const [currentCaseResult, setCurrentCaseResult] = useState(0);
     const [currentConsoleNav, setCurrentConsoleNav] = useState(0);
+    const [currentResult, setCurrentResult] = useState('not');
 
     const handleToggleConsole = () => {
         var gridRow = $('.grid-row');
@@ -163,7 +164,12 @@ if __name__ == "__main__":
         e.preventDefault();
         console.log(code);
         const res = await submitCode(code);
+        console.log(res);
+        setCurrentResult(res);
+        console.log(currentResult);
     };
+
+    useEffect(() => {}, []);
 
     return (
         <div className="problem-body">
@@ -382,9 +388,41 @@ if __name__ == "__main__":
                                                         </div>
                                                     )}
 
-                                                    {currentConsoleNav === 1 && (
+                                                    {currentConsoleNav === 1 && currentResult === 'not' && (
+                                                        <div
+                                                            className={clsx(
+                                                                'd-flex',
+                                                                'align-items-center',
+                                                                'justify-content-center',
+                                                                'h-100',
+                                                            )}
+                                                        >
+                                                            You must run your code
+                                                        </div>
+                                                    )}
+
+                                                    {currentConsoleNav === 1 && currentResult !== 'not' && (
                                                         <div>
-                                                            <div className={clsx('problemConsoleResult')}>Accepted</div>
+                                                            {currentResult === 'True' && (
+                                                                <div
+                                                                    className={clsx(
+                                                                        'problemConsoleResult',
+                                                                        'problemConsoleResultSuccess',
+                                                                    )}
+                                                                >
+                                                                    Accepted
+                                                                </div>
+                                                            )}
+                                                            {currentResult === 'False' && (
+                                                                <div
+                                                                    className={clsx(
+                                                                        'problemConsoleResult',
+                                                                        'problemConsoleResultFailure',
+                                                                    )}
+                                                                >
+                                                                    Wrong Answer
+                                                                </div>
+                                                            )}
                                                             <div
                                                                 className={clsx(
                                                                     'd-flex',

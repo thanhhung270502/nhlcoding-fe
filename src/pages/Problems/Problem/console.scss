@@ -38,6 +38,13 @@
 // Console
 .problemConsoleResult {
     font-size: 1.25rem;
-    color: var(--green-dark);
     padding-bottom: 1rem;
+}
+
+.problemConsoleResultSuccess {
+    color: var(--green-dark);
+}
+
+.problemConsoleResultFailure {
+    color: var(--red-dark);
 }
