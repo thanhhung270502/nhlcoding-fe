@@ -9,6 +9,16 @@ import Solution from './solutions';
 import Submission from './submission';
 
 function Problem() {
+    useEffect(() => {
+        // Disable scrolling when the component is mounted
+        document.body.style.overflowY = 'hidden';
+
+        return () => {
+            // Re-enable scrolling when the component is unmounted
+            document.body.style.overflowY = 'auto';
+        };
+    }, []);
+
     const [code, setCode] = useState('print(a)');
     // const [result, setResult] = useState(3);
     const [language, setLanguage] = useState('C++');
@@ -64,9 +74,9 @@ function Problem() {
                                             <div className="problem-item" onClick={handleSidebar}>
                                                 Submissions
                                             </div>
-                                            <div className="problem-item" onClick={handleSidebar}>
+                                            {/* <div className="problem-item" onClick={handleSidebar}>
                                                 Discussion
-                                            </div>
+                                            </div> */}
                                             <div className="problem-item" onClick={handleSidebar}>
                                                 Editorial
                                             </div>

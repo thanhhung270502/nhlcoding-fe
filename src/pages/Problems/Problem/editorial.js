@@ -9,7 +9,7 @@ const Editorial = () => {
     const [markdown, setMarkdown] = useState('');
 
     useEffect(() => {
-        import('./code_example.txt').then((res) => {
+        import('./solution.md').then((res) => {
             fetch(res.default)
                 .then((res) => res.text())
                 .then((res) => setMarkdown(res))
@@ -20,7 +20,7 @@ const Editorial = () => {
     return (
         <div className={style.container}>
             <div className={style.title}>Solution Article</div>
-            <div className={style.approach}>
+            {/* <div className={style.approach}>
                 <div className={style.subtitle}>Algorithm</div>
                 <div className={style.normal_text}>
                     The brute force approach is simple. Loop through each element x and find if there is another value
@@ -43,8 +43,8 @@ const Editorial = () => {
                         only constant space is used.
                     </li>
                 </ul>
-            </div>
-            {/* <div className={style.approach}>
+            </div> */}
+            <div className={style.approach}>
                 <ReactMarkdown
                     children={markdown}
                     remarkPlugins={[remarkMath]}
@@ -53,21 +53,31 @@ const Editorial = () => {
                         code({ node, inline, className, children, ...props }) {
                             const match = /language-(\w+)/.exec(className || '');
                             return match ? (
-                                <SyntaxHighlighter
-                                    {...props}
-                                    children={String(children).replace(/\n$/, '')}
-                                    language={match[1]}
-                                    PreTag="div"
-                                />
+                                <div style={{ overflowY: 'auto' }}>
+                                    <div className={style.subtitle}>{match[1]}</div>
+                                    <SyntaxHighlighter
+                                        {...props}
+                                        children={String(children).replace(/\n$/, '')}
+                                        language={match[1]}
+                                        className={`${style.code_block} ${className}`}
+                                        PreTag="div"
+                                    />
+                                </div>
                             ) : (
                                 <code {...props} className={className}>
                                     {children}
                                 </code>
                             );
                         },
+                        h1({ node, children }) {
+                            return <h1 className={style.subtitle}>{children}</h1>;
+                        },
+                        p({ node, children }) {
+                            return <p className={style.normal_text}>{children}</p>;
+                        },
                     }}
                 />
-            </div> */}
+            </div>
         </div>
     );
 };
