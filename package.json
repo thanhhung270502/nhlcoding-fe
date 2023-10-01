@@ -37,7 +37,6 @@
         "react-split-grid": "^1.0.4",
         "react-syntax-highlighter": "^15.5.0",
         "rehype-katex": "^7.0.0",
-        "remark-gfm": "^4.0.0",
         "remark-math": "^6.0.0",
         "web-vitals": "^2.1.4"
     },
