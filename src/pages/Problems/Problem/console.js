@@ -7,13 +7,16 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import testcases from './testcase.json';
 import { useContext, useEffect, useState } from 'react';
 import { CodeContext } from './code';
+import { submitCode } from '~/api/api';
 
 function Console() {
     const [currentCaseTest, setCurrentCaseTest] = useState(0);
     const [currentCaseResult, setCurrentCaseResult] = useState(0);
     const [currentConsoleNav, setCurrentConsoleNav] = useState(0);
 
-    const { code, setCode } = useContext(CodeContext);
+    // const { code, setCode } = useContext(CodeContext);
+    const code = useContext(CodeContext);
+
     useEffect(() => {
         console.log(code);
     }, [code]);
@@ -98,6 +101,13 @@ function Console() {
         });
     }, []);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(code);
+        const res = await submitCode(code);
+        console.log(res);
+    };
+
     return (
         <div className={clsx('d-flex', 'flex-column', styles.problemConsole)}>
             <div className="d-flex align-items-center problemConsoleNav hide">
@@ -146,7 +156,11 @@ function Console() {
                     <FontAwesomeIcon icon={faChevronDown} className={clsx(styles.iconConsole)} />
                 </div>
                 <div className={clsx('d-flex', 'align-items-center')}>
-                    <button className={clsx(styles.btnCustom, styles.btnRun)}>Run</button>
+                    <form onSubmit={handleSubmit}>
+                        <button type="submit" className={clsx(styles.btnCustom, styles.btnRun)}>
+                            Run
+                        </button>
+                    </form>
                     <button className={clsx(styles.btnCustom, styles.btnSubmit)}>Submit</button>
                 </div>
             </div>

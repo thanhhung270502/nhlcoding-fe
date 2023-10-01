@@ -5,7 +5,7 @@ const URL = 'http://localhost:3000';
 
 export const submitCode = async (code) => {
     await axios
-        .post(`${URL}/coding`, { code: code })
+        .post(`${URL}/submissions/python/code`, { code: code })
         .then(function (response) {
             return response;
         })

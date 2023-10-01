@@ -17,10 +17,11 @@ const initialCode = `int main() {
 }
 `;
 
-export const CodeContext = createContext({
-    code: '',
-    setCode: () => {},
-});
+// export const CodeContext = createContext({
+//     code: '',
+//     setCode: () => {},
+// });
+export const CodeContext = createContext();
 
 function Code() {
     const [code, setCode] = useState(initialCode);
@@ -28,16 +29,19 @@ function Code() {
 
     const onChange = useCallback((value, viewUpdate) => {
         setCode(value);
-        console.log('value:', value);
+        // console.log('value:', value);
     }, []);
 
     const handleLanguageChange = (e) => {
         setLanguage(e.target.outerText);
-        console.log(language);
+        // console.log(language);
     };
 
+    // useEffect(() => {
+    //     console.log(code);
+    // }, [code]);
     return (
-        <CodeContext.Provider value={{ code, setCode }}>
+        <CodeContext.Provider value={code}>
             <div className="bg-white">
                 <div className="d-flex justify-content-between align-items-center problem-code-header border-bottom">
                     <div class="dropdown">
