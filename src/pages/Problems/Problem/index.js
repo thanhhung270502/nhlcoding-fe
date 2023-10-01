@@ -7,8 +7,19 @@ import Editorial from './editorial';
 import './problem.scss';
 import Solution from './solutions';
 import Submission from './submission';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 function Problem() {
+    const navigate = useNavigate();
+    const [tabParams, setTabParams] = useSearchParams();
+    const tab = typeof tabParams.get('tab') === 'string' ? tabParams.get('tab') : undefined;
+
+    useEffect(() => {
+        if (!tab) {
+            navigate('/problem?tab=description');
+        }
+    }, [tab]);
+
     useEffect(() => {
         // Disable scrolling when the component is mounted
         document.body.style.overflowY = 'hidden';
@@ -20,9 +31,9 @@ function Problem() {
     }, []);
 
     const [code, setCode] = useState('print(a)');
-    // const [result, setResult] = useState(3);
     const [language, setLanguage] = useState('C++');
-    const [sidebar, setSidebar] = useState('Description');
+    // const [result, setResult] = useState(3);
+    // const [sidebar, setSidebar] = useState('Description');
 
     useEffect(() => {
         let split = $('.split');
@@ -37,14 +48,14 @@ function Problem() {
         }
     }, []);
 
-    const handleSidebar = (e) => {
-        var items = $('.problem-item');
-        for (var i = 0; i < items.length; i++) {
-            items[i].classList.remove('problem-item-active');
-        }
-        e.target.classList.add('problem-item-active');
-        setSidebar(e.target.innerText);
-    };
+    // const handleSidebar = (e) => {
+    //     var items = $('.problem-item');
+    //     for (var i = 0; i < items.length; i++) {
+    //         items[i].classList.remove('problem-item-active');
+    //     }
+    //     e.target.classList.add('problem-item-active');
+    //     setSidebar(e.target.innerText);
+    // };
 
     const openConsole = () => {};
 
@@ -65,28 +76,56 @@ function Problem() {
                                 <div className="w-100 h-100">
                                     <div className="problem-sidebar">
                                         <div className="problem-sidebar-items">
-                                            <div className="problem-item problem-item-active" onClick={handleSidebar}>
+                                            <div
+                                                className={`problem-item ${
+                                                    tab === 'description' ? 'problem-item-active' : ''
+                                                }`}
+                                                onClick={() => {
+                                                    navigate('/problem?tab=description');
+                                                }}
+                                            >
                                                 Description
                                             </div>
-                                            <div className="problem-item" onClick={handleSidebar}>
+                                            <div
+                                                className={`problem-item ${
+                                                    tab === 'solutions' ? 'problem-item-active' : ''
+                                                }`}
+                                                onClick={() => {
+                                                    navigate('/problem?tab=solutions');
+                                                }}
+                                            >
                                                 Solutions
                                             </div>
-                                            <div className="problem-item" onClick={handleSidebar}>
+                                            <div
+                                                className={`problem-item ${
+                                                    tab === 'submissions' ? 'problem-item-active' : ''
+                                                }`}
+                                                onClick={() => {
+                                                    navigate('/problem?tab=submissions');
+                                                }}
+                                            >
                                                 Submissions
                                             </div>
                                             {/* <div className="problem-item" onClick={handleSidebar}>
                                                 Discussion
                                             </div> */}
-                                            <div className="problem-item" onClick={handleSidebar}>
+                                            <div
+                                                className={`problem-item ${
+                                                    tab === 'editorial' ? 'problem-item-active' : ''
+                                                }`}
+                                                onClick={() => {
+                                                    navigate('/problem?tab=editorial');
+                                                }}
+                                            >
                                                 Editorial
                                             </div>
                                         </div>
                                     </div>
                                     <div className="problem-content">
-                                        {sidebar === 'Description' && <Description />}
-                                        {sidebar === 'Solutions' && <Solution />}
-                                        {sidebar === 'Submissions' && <Submission />}
-                                        {sidebar === 'Editorial' && <Editorial />}
+                                        {tab === 'description' && <Description />}
+                                        {tab === 'solutions' && <Solution />}
+                                        {tab === 'submissions' && <Submission />}
+                                        {tab === 'editorial' && <Editorial />}
                                     </div>
                                 </div>
                             </div>
