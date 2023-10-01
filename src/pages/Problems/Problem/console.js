@@ -13,7 +13,7 @@ function Console() {
     const [currentCaseResult, setCurrentCaseResult] = useState(0);
     const [currentConsoleNav, setCurrentConsoleNav] = useState(0);
 
-    const code = useContext(CodeContext);
+    const { code, setCode } = useContext(CodeContext);
     useEffect(() => {
         console.log(code);
     }, [code]);

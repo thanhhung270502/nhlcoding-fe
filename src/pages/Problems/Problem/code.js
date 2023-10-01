@@ -17,7 +17,10 @@ const initialCode = `int main() {
 }
 `;
 
-export const CodeContext = createContext();
+export const CodeContext = createContext({
+    code: '',
+    setCode: () => {},
+});
 
 function Code() {
     const [code, setCode] = useState(initialCode);
@@ -32,8 +35,9 @@ function Code() {
         setLanguage(e.target.outerText);
         console.log(language);
     };
+
     return (
-        <CodeContext.Provider value={code}>
+        <CodeContext.Provider value={{ code, setCode }}>
             <div className="bg-white">
                 <div className="d-flex justify-content-between align-items-center problem-code-header border-bottom">
                     <div class="dropdown">
