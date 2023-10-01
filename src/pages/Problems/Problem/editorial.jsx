@@ -30,7 +30,7 @@ const Editorial = () => {
                 </div>
                 <div className={style.subtitle}>Implementation</div>
                 <div className={style.code_block}>
-                    <SyntaxHighlighter children={markdown} language="cpp" />
+                    <SyntaxHighlighter children={markdown} language="cpp" style={{}} />
                 </div>
                 <div className={style.subtitle}>Complexity Analysis</div>
                 <ul className={style.normal_text}>
