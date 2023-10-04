@@ -20,8 +20,11 @@ import { faGear, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 import styles from './console.module.scss';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import testcases from './testcase.json';
+// import testcases from './testcase.json';
 import { submitCode } from '~/api/api';
+import { getTestcaseByProblemID } from '~/api/testcases';
+import { problemRunCode } from '~/api/problems';
+import { useParams } from 'react-router-dom';
 
 function Problem() {
     const [sidebar, setSidebar] = useState('Description');
@@ -52,25 +55,33 @@ function Problem() {
     // File: code.js
     const initialCode = `import sys
 def add(a, b):
-	return a + b
+    return a + b
 
 if __name__ == "__main__":
-	a = int(sys.argv[1])
-	b = int(sys.argv[2])
-	result = int(sys.argv[3])
-	print(add(a,b) == result)
+    a = int(sys.argv[1])
+    b = int(sys.argv[2])
+    print(add(a,b))
 `;
+    // const initialCode = `def twoSum(nums, target):
+    //     """
+    // :type nums: List[int]
+    // :type target: int
+    // :rtype: List[int]
+    // """
+    // # return [0,1]
+    // for i in range(len(nums)):
+    //     for j in range(i+1, len(nums)):
+    //         if nums[i] + nums[j] == target:
+    //             return [i,j]`;
     const [code, setCode] = useState(initialCode);
     const [language, setLanguage] = useState('Python');
 
     const onChange = useCallback((value, viewUpdate) => {
         setCode(value);
-        // console.log('value:', value);
     }, []);
 
     const handleLanguageChange = (e) => {
         setLanguage(e.target.outerText);
-        // console.log(language);
     };
 
     // ---------------------------------------------------------------- //
@@ -78,7 +89,19 @@ if __name__ == "__main__":
     const [currentCaseTest, setCurrentCaseTest] = useState(0);
     const [currentCaseResult, setCurrentCaseResult] = useState(0);
     const [currentConsoleNav, setCurrentConsoleNav] = useState(0);
-    const [currentResult, setCurrentResult] = useState('not');
+    const [currentResult, setCurrentResult] = useState({
+        body: [
+            {
+                result: 'not',
+            },
+        ],
+    });
+    const [testcases, setTestcases] = useState([
+        {
+            input: '',
+            output: '',
+        },
+    ]);
 
     const handleToggleConsole = () => {
         var gridRow = $('.grid-row');
@@ -162,14 +185,21 @@ if __name__ == "__main__":
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(code);
-        const res = await submitCode(code);
-        console.log(res);
+        const res = await problemRunCode(1, code);
         setCurrentResult(res);
-        console.log(currentResult);
+        console.log(res.body[0].result);
     };
 
-    useEffect(() => {}, []);
+    const { id } = useParams();
+    useEffect(() => {
+        async function fetchTestcaseByProblemID(problem_id) {
+            const res = await getTestcaseByProblemID(problem_id);
+            console.log(res.body.testcases);
+            res.body.testcases[0].input.split(' ').map((input) => console.log(input));
+            setTestcases(res.body.testcases);
+        }
+        fetchTestcaseByProblemID(id);
+    }, [id]);
 
     return (
         <div className="problem-body">
@@ -349,7 +379,7 @@ if __name__ == "__main__":
                                                     </div>
                                                     <div className={clsx('problemConsoleNavItem', 'ms-4')}>Result</div>
                                                 </div>
-                                                <div className="problemConsoleBody hide">
+                                                <div className={clsx('problemConsoleBody', 'hide')}>
                                                     {currentConsoleNav === 0 && (
                                                         <div>
                                                             <div
@@ -372,92 +402,151 @@ if __name__ == "__main__":
                                                             <div
                                                                 className={clsx(styles.problemConsoleCaseBody, 'pt-3')}
                                                             >
-                                                                <div
-                                                                    className={clsx(styles.problemConsoleCaseBodyTitle)}
-                                                                >
-                                                                    Input:
-                                                                </div>
+                                                                <div className={clsx(styles.smallText)}>Input:</div>
                                                                 <div
                                                                     className={clsx(
                                                                         styles.problemConsoleCaseBodyContent,
                                                                     )}
                                                                 >
-                                                                    {testcases[currentCaseTest].input}
+                                                                    {testcases[currentCaseTest].input
+                                                                        .split(' ')
+                                                                        .map((input, index) => (
+                                                                            <div>{input}</div>
+                                                                        ))}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     )}
 
-                                                    {currentConsoleNav === 1 && currentResult === 'not' && (
-                                                        <div
-                                                            className={clsx(
-                                                                'd-flex',
-                                                                'align-items-center',
-                                                                'justify-content-center',
-                                                                'h-100',
-                                                            )}
-                                                        >
-                                                            You must run your code
-                                                        </div>
-                                                    )}
-
-                                                    {currentConsoleNav === 1 && currentResult !== 'not' && (
-                                                        <div>
-                                                            {currentResult === 'True' && (
-                                                                <div
-                                                                    className={clsx(
-                                                                        'problemConsoleResult',
-                                                                        'problemConsoleResultSuccess',
-                                                                    )}
-                                                                >
-                                                                    Accepted
-                                                                </div>
-                                                            )}
-                                                            {currentResult === 'False' && (
-                                                                <div
-                                                                    className={clsx(
-                                                                        'problemConsoleResult',
-                                                                        'problemConsoleResultFailure',
-                                                                    )}
-                                                                >
-                                                                    Wrong Answer
-                                                                </div>
-                                                            )}
+                                                    {currentConsoleNav === 1 &&
+                                                        currentResult.body[0].result === 'not' && (
                                                             <div
                                                                 className={clsx(
                                                                     'd-flex',
                                                                     'align-items-center',
-                                                                    styles.problemConsoleCaseHeader,
+                                                                    'justify-content-center',
+                                                                    'h-100',
                                                                 )}
                                                             >
-                                                                <div className={clsx('problemConsoleCaseNum')}>
-                                                                    Case 1
-                                                                </div>
-                                                                <div className={clsx('problemConsoleCaseNum', 'mx-2')}>
-                                                                    Case 2
-                                                                </div>
-                                                                <div className={clsx('problemConsoleCaseNum')}>
-                                                                    Case 3
-                                                                </div>
+                                                                You must run your code
                                                             </div>
-                                                            <div
-                                                                className={clsx(styles.problemConsoleCaseBody, 'pt-3')}
-                                                            >
+                                                        )}
+
+                                                    {currentConsoleNav === 1 &&
+                                                        currentResult.body[0].result !== 'not' && (
+                                                            <div>
+                                                                {currentResult.body[currentCaseResult].result ===
+                                                                    true && (
+                                                                    <div
+                                                                        className={clsx(
+                                                                            'problemConsoleResult',
+                                                                            'problemConsoleResultSuccess',
+                                                                        )}
+                                                                    >
+                                                                        Accepted
+                                                                    </div>
+                                                                )}
+                                                                {currentResult.body[currentCaseResult].result ===
+                                                                    false && (
+                                                                    <div
+                                                                        className={clsx(
+                                                                            'problemConsoleResult',
+                                                                            'problemConsoleResultFailure',
+                                                                        )}
+                                                                    >
+                                                                        Wrong Answer
+                                                                    </div>
+                                                                )}
                                                                 <div
-                                                                    className={clsx(styles.problemConsoleCaseBodyTitle)}
+                                                                    className={clsx(
+                                                                        'd-flex',
+                                                                        'align-items-center',
+                                                                        'pt-2',
+                                                                        'pb-4',
+                                                                    )}
                                                                 >
-                                                                    Input:
+                                                                    <div className={clsx(styles.smallText)}>
+                                                                        Runtime:{' '}
+                                                                        {currentResult.body[0].runtime.toFixed(2)} ms
+                                                                    </div>
+                                                                    <div className={clsx(styles.smallText, 'ps-3')}>
+                                                                        Memory:{' '}
+                                                                        {currentResult.body[0].memory.toFixed(2)} MB
+                                                                    </div>
                                                                 </div>
                                                                 <div
                                                                     className={clsx(
-                                                                        styles.problemConsoleCaseBodyContent,
+                                                                        'd-flex',
+                                                                        'align-items-center',
+                                                                        styles.problemConsoleCaseHeader,
                                                                     )}
                                                                 >
-                                                                    {testcases[currentCaseResult].input}
+                                                                    <div className={clsx('problemConsoleCaseNum')}>
+                                                                        Case 1
+                                                                    </div>
+                                                                    <div
+                                                                        className={clsx(
+                                                                            'problemConsoleCaseNum',
+                                                                            'mx-2',
+                                                                        )}
+                                                                    >
+                                                                        Case 2
+                                                                    </div>
+                                                                    <div className={clsx('problemConsoleCaseNum')}>
+                                                                        Case 3
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    className={clsx(
+                                                                        styles.problemConsoleCaseBody,
+                                                                        'pt-3',
+                                                                    )}
+                                                                >
+                                                                    <div className={clsx(styles.smallText)}>Input:</div>
+                                                                    <div
+                                                                        className={clsx(
+                                                                            styles.problemConsoleCaseBodyContent,
+                                                                        )}
+                                                                    >
+                                                                        {testcases[currentCaseResult].input}
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    className={clsx(
+                                                                        styles.problemConsoleCaseBody,
+                                                                        'pt-3',
+                                                                    )}
+                                                                >
+                                                                    <div className={clsx(styles.smallText)}>
+                                                                        Output:
+                                                                    </div>
+                                                                    <div
+                                                                        className={clsx(
+                                                                            styles.problemConsoleCaseBodyContent,
+                                                                        )}
+                                                                    >
+                                                                        {currentResult.body[currentCaseResult].output}
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    className={clsx(
+                                                                        styles.problemConsoleCaseBody,
+                                                                        'pt-3',
+                                                                    )}
+                                                                >
+                                                                    <div className={clsx(styles.smallText)}>
+                                                                        Expected:
+                                                                    </div>
+                                                                    <div
+                                                                        className={clsx(
+                                                                            styles.problemConsoleCaseBodyContent,
+                                                                        )}
+                                                                    >
+                                                                        {testcases[currentCaseResult].output}
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )}
+                                                        )}
                                                 </div>
                                                 <div
                                                     className={clsx(

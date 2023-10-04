@@ -7,6 +7,8 @@
 .problemConsoleBody {
     padding: 16px 20px;
     flex-grow: 1;
+    overflow: hidden scroll;
+    height: 0px;
 }
 
 .hide {
@@ -38,7 +40,6 @@
 // Console
 .problemConsoleResult {
     font-size: 1.25rem;
-    padding-bottom: 1rem;
 }
 
 .problemConsoleResultSuccess {
