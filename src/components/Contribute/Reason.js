@@ -1,6 +1,6 @@
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Contribute from './Contribute';
 
 const MainChild = () => {
@@ -17,14 +17,23 @@ const MainChild = () => {
         const inputValue = event.target.value;
         if (inputValue.length <= 5000) {
             setText(inputValue);
+            localStorage.setItem('reason', inputValue);
         }
     };
+
+    useEffect(() => {
+        const savedValue = localStorage.getItem('reason');
+        if (savedValue) {
+            setText(savedValue);
+        }
+    }, []);
+
     return (
         <div className="contribute-body-main-content">
             <div className="title">Before you start...</div>
 
             <div className="subtitle">Why are you contributing this question? *</div>
-            <form method="" action="">
+            <form method="POST" action="/contribute/store">
                 <textarea
                     className="textarea"
                     placeholder={placeholder}
@@ -34,11 +43,6 @@ const MainChild = () => {
                 />
             </form>
             <div className="char-counter">{text.length}/5000</div>
-
-            {/* <label className="checkbox-wrapper">
-                Check this box if you wish to remain anonymous as the contributor of this question.
-                <input type="checkbox" className="checkmark" />
-            </label> */}
         </div>
     );
 };

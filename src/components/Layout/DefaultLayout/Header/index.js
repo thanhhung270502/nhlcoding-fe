@@ -1,25 +1,19 @@
-// import {
-//     LoginModal,
-//     LoginModalTrigger,
-//     ResetPasswordModal,
-//     SignupModal,
-//     SignupModalTrigger,
-// } from '~/components/Modals/Auth';
-import './header.scss';
-import { Link } from 'react-router-dom';
-import { Modal, useModal } from '~/components/Modals';
+import { faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
-import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
 import { useEffect, useState } from 'react';
-import { getUserGoogle, getUserByID, login, logout, signup, logoutGoogle } from '~/api/api';
+import { Link } from 'react-router-dom';
+import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
 import { getCookie, setCookie } from '~/api/cookie';
+import {
+    LoginModal,
+    LoginModalTrigger,
+    ResetPasswordModal,
+    SignupModal,
+    SignupModalTrigger,
+} from '~/components/Modals/Auth';
+import './header.scss';
 
 function Header() {
-    const loginModal = useModal();
-    const signupModal = useModal();
-    const resetPasswordModal = useModal();
-
     const googleAuth = () => {
         window.open(`http://localhost:3000/auth/google/callback`, '_self');
     };
@@ -134,11 +128,11 @@ function Header() {
                                     Contribute
                                 </Link>
                             </li>
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <Link className="nav-link" to="/discuss">
                                     Discuss
                                 </Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                     {currentUser && (
@@ -188,10 +182,10 @@ function Header() {
                     )}
                     {!currentUser && (
                         <div className="d-flex gap-3">
-                            <div className="btn btn-signin btn-text" onClick={() => loginModal.open()}>
+                            <div className="btn btn-signin btn-text" onClick={() => LoginModalTrigger.open()}>
                                 Đăng nhập
                             </div>
-                            <div className="btn btn-success btn-text" onClick={() => signupModal.open()}>
+                            <div className="btn btn-success btn-text" onClick={() => SignupModalTrigger.open()}>
                                 Đăng ký
                             </div>
                         </div>
@@ -199,186 +193,9 @@ function Header() {
                 </div>
             </nav>
 
-            <Modal register={loginModal} className="header-modal">
-                <div className="p-5">
-                    <div className="close-icon" onClick={() => loginModal.close()}>
-                        <FontAwesomeIcon icon={faClose} />
-                    </div>
-                    <div className="d-flex justify-content-center mb-4">
-                        <img src="/images/logo_v2.png" alt="" height={75} />
-                    </div>
-                    <form method="POST" action="" onSubmit={handleSubmitLogin}>
-                        <div className="mb-3">
-                            <input
-                                type="email"
-                                className="form-control"
-                                id="email"
-                                name="email"
-                                placeholder="Địa chỉ email"
-                                onChange={handleDataLoginChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="password"
-                                name="password"
-                                placeholder="Mật khẩu"
-                                onChange={handleDataLoginChange}
-                            />
-                        </div>
-                        <div className="d-flex justify-content-center">
-                            <button className="login-submit" type="submit">
-                                Đăng nhập
-                            </button>
-                        </div>
-                    </form>
-                    <div className="d-flex justify-content-between mb-3">
-                        <div
-                            className="modal-text"
-                            onClick={() => {
-                                loginModal.toggle();
-                                resetPasswordModal.open();
-                            }}
-                        >
-                            Quên mật khẩu?
-                        </div>
-                        <div
-                            className="modal-text"
-                            onClick={() => {
-                                loginModal.toggle();
-                                signupModal.open();
-                            }}
-                        >
-                            Đăng ký
-                        </div>
-                    </div>
-                    <div className="login-alter-text">hoặc có thể đăng nhập với</div>
-                    <div className="d-flex justify-content-center gap-2 mb-4">
-                        <button onClick={googleAuth} className="border-none">
-                            <ImageChangeOnHover
-                                defaultSrc={'/images/google.svg'}
-                                hoverSrc={'/images/google-hover.svg'}
-                            />
-                        </button>
-                        <ImageChangeOnHover defaultSrc={'/images/github.svg'} hoverSrc={'/images/github-hover.svg'} />
-                    </div>
-                </div>
-            </Modal>
-
-            <Modal register={signupModal} className="header-modal">
-                <div className="p-5">
-                    <div className="close-icon" onClick={() => signupModal.close()}>
-                        <FontAwesomeIcon icon={faClose} />
-                    </div>
-                    <div className="d-flex justify-content-center mb-4">
-                        <img src="/images/logo_v2.png" alt="" height={75}></img>
-                    </div>
-                    <form method="POST" action="" onSubmit={handleSubmitSignUp}>
-                        <div className="mb-3">
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="name"
-                                name="name"
-                                placeholder="Tên người dùng"
-                                onChange={handleDataSignUpChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <input
-                                type="email"
-                                className="form-control"
-                                id="email"
-                                name="email"
-                                placeholder="Địa chỉ email"
-                                onChange={handleDataSignUpChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="password"
-                                name="password"
-                                placeholder="Mật khẩu"
-                                onChange={handleDataSignUpChange}
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="confirm-password"
-                                name="confirm-password"
-                                placeholder="Xác nhận mật khẩu"
-                            />
-                        </div>
-                        <button className="login-submit" type="submit">
-                            Đăng ký
-                        </button>
-                    </form>
-                    <div className="d-flex justify-content-center align-items-center mb-3">
-                        <div className="signup-alter-text">Đã có tài khoản?</div>
-                        <div
-                            className="modal-text"
-                            onClick={() => {
-                                signupModal.toggle();
-                                loginModal.open();
-                            }}
-                        >
-                            Đăng nhập
-                        </div>
-                    </div>
-                    <div className="login-alter-text">hoặc có thể đăng nhập với</div>
-                    <div className="d-flex justify-content-center gap-2 mb-4">
-                        <ImageChangeOnHover defaultSrc={'/images/google.svg'} hoverSrc={'/images/google-hover.svg'} />
-                        <ImageChangeOnHover defaultSrc={'/images/github.svg'} hoverSrc={'/images/github-hover.svg'} />
-                    </div>
-                </div>
-            </Modal>
-
-            <Modal register={resetPasswordModal} className="header-modal">
-                <div className="p-5">
-                    <div className="close-icon" onClick={() => resetPasswordModal.close()}>
-                        <FontAwesomeIcon icon={faClose} />
-                    </div>
-                    <div className="d-flex justify-content-center mb-4">
-                        <img src="/images/logo_v2.png" alt="" height={75}></img>
-                    </div>
-                    <div className="login-alter-text">
-                        Quên mật khẩu? Nhập địa chỉ email của bạn bên dưới, chúng tôi sẽ gửi cho bạn một email cho phép
-                        bạn đặt lại mật khẩu.
-                    </div>
-                    <form method="POST" action="">
-                        <div className="mb-3 mt-4">
-                            <input
-                                type="email"
-                                className="form-control"
-                                id="email"
-                                name="email"
-                                placeholder="Địa chỉ email"
-                            />
-                        </div>
-                        <div className="reset-pasword-submit" type="submit">
-                            Đặt lại mật khẩu
-                        </div>
-                    </form>
-                    <div className="d-flex justify-content-center align-items-center mb-3">
-                        <div className="signup-alter-text">Quay lại?</div>
-                        <div
-                            className="modal-text"
-                            onClick={() => {
-                                resetPasswordModal.toggle();
-                                loginModal.open();
-                            }}
-                        >
-                            Đăng nhập
-                        </div>
-                    </div>
-                </div>
-            </Modal>
+            <LoginModal />
+            <SignupModal />
+            <ResetPasswordModal />
         </>
     );
 }

@@ -37,15 +37,15 @@ function Problem() {
 
     useEffect(() => {
         let split = $('.split');
-        console.log(split[0].offsetHeight);
-        console.log(split[1].offsetHeight);
-        if (split[0].offsetHeight > 867) {
-            split[0].style.height = 'calc(100vh - 59px)';
-            split[0].style.overflow = 'hidden scroll';
-        } else {
-            split[0].style.height = 'calc(100vh - 59px)';
-            split[0].style.overflow = 'unset';
-        }
+        // console.log(split[0].offsetHeight);
+        // console.log(split[1].offsetHeight);
+        // if (split[0].offsetHeight > 867) {
+        split[0].style.height = 'calc(100vh - 59px)';
+        split[0].style.overflow = 'hidden auto';
+        // } else {
+        // split[0].style.height = 'calc(100vh - 59px)';
+        // split[0].style.overflow = 'unset';
+        // }
     }, []);
 
     // const handleSidebar = (e) => {
