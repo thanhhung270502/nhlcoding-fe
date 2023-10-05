@@ -1,6 +1,6 @@
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './contribute.scss';
 
 const Contribute = ({ contributeStep, mainChild, rightChild }) => {
@@ -10,7 +10,36 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
         '/contribute/question',
         '/contribute/solutions',
         '/contribute/testcases',
+        '/contribute/success',
     ];
+
+    const navigate = useNavigate();
+
+    const handleSubmit = () => {
+        // validate form data
+
+        const submitData = {
+            code: localStorage.code ? localStorage.code : '',
+            desc: localStorage.desc ? localStorage.desc : '',
+            reason: localStorage.reason ? localStorage.reason : '',
+            selectedOption: localStorage.selectedOption ? JSON.parse(localStorage.selectedOption) : null,
+            solutions: localStorage.solutions ? localStorage.solutions : '',
+            testcases: localStorage.testcases ? JSON.parse(localStorage.testcases) : [],
+            title: localStorage.title ? localStorage.title : '',
+            validate: localStorage.validate ? true : false,
+        };
+
+        // run code if "validate" is "true"
+
+        console.log(submitData);
+
+        // send data to back-end server
+
+        // clear localStorage() - actually used after response is successful
+        localStorage.clear();
+
+        navigate('/contribute/success');
+    };
 
     return (
         <div className="container">
@@ -161,28 +190,28 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                 <div className="contribute-body-main col-md-7">{mainChild}</div>
                 <div className="contribute-body-right col-md-5">{rightChild}</div>
             </div>
-            <div className="contribute-footer-container">
-                <div className="contribute-footer">
-                    {contributeStep !== 1 ? (
-                        <Link to={routeStep[contributeStep - 1]} className="contribute-nav-btn">
-                            <FontAwesomeIcon icon={faArrowLeft} />
-                        </Link>
-                    ) : (
-                        <div></div>
-                    )}
-                    {contributeStep !== 4 ? (
-                        <Link to={routeStep[contributeStep + 1]} className="contribute-nav-btn">
-                            <FontAwesomeIcon icon={faArrowRight} />
-                        </Link>
-                    ) : (
-                        <form method="" action="">
-                            <div className="btn btn-submit-contribute" type="submit">
+            {contributeStep < 5 && (
+                <div className="contribute-footer-container">
+                    <div className="contribute-footer">
+                        {contributeStep !== 1 ? (
+                            <Link to={routeStep[contributeStep - 1]} className="contribute-nav-btn">
+                                <FontAwesomeIcon icon={faArrowLeft} />
+                            </Link>
+                        ) : (
+                            <div></div>
+                        )}
+                        {contributeStep !== 4 ? (
+                            <Link to={routeStep[contributeStep + 1]} className="contribute-nav-btn">
+                                <FontAwesomeIcon icon={faArrowRight} />
+                            </Link>
+                        ) : (
+                            <div className="btn btn-submit-contribute" type="submit" onClick={handleSubmit}>
                                 Submit
                             </div>
-                        </form>
-                    )}
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

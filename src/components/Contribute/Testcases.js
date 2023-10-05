@@ -1,102 +1,165 @@
-import React, { useState } from 'react';
+import { langs } from '@uiw/codemirror-extensions-langs';
+import { xcodeLight } from '@uiw/codemirror-theme-xcode';
+import ReactCodeMirror from '@uiw/react-codemirror';
+import { useCallback, useEffect, useState } from 'react';
+import { Table } from 'react-bootstrap';
+import Help from '../Help';
 import Contribute from './Contribute';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
-const MainChild = () => {
+const MainChild = ({ testcases, setTestcases }) => {
+    const [testcode, setTestcode] = useState('');
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
 
-    const [testcases, setTestcases] = useState([]);
+    const handleChangeInput = (e) => {
+        const val = e.target.value;
+        if (val.length <= 500) {
+            setInput(val);
+            localStorage.setItem('testcase-input', val);
+        }
+    };
+
+    const handleChangeOutput = (e) => {
+        const val = e.target.value;
+        if (val.length <= 500) {
+            setOutput(val);
+            localStorage.setItem('testcase-output', val);
+        }
+    };
+
+    const handleChangeCode = useCallback((val, viewUpdate) => {
+        setTestcode(val);
+        localStorage.setItem('testcase-code', val);
+    }, []);
 
     const handleAddTestcase = () => {
-        if (!input || !output) return;
+        if (!input || !output || !testcode) return;
 
-        setTestcases([...testcases, { input: input, output: output }]);
+        if (!testcases) {
+            testcases = [];
+        }
+
+        const newTestcases = [...testcases, { input: input, output: output, testcode: testcode }];
+        setTestcases(newTestcases);
+        localStorage.setItem('testcases', JSON.stringify(newTestcases));
+
         setInput('');
         setOutput('');
+        setTestcode('');
     };
+
+    useEffect(() => {
+        const savedTestcode = localStorage.getItem('testcase-code');
+        savedTestcode && setTestcode(savedTestcode);
+
+        const savedInput = localStorage.getItem('testcase-input');
+        savedInput && setInput(savedInput);
+
+        const savedOutput = localStorage.getItem('testcase-output');
+        savedOutput && setOutput(savedOutput);
+    }, []);
 
     return (
         <div className="contribute-body-main-content">
-            <div className="title">Create test cases *</div>
-
-            <form method="" action="" />
+            <div className="d-flex gap-1">
+                <div className="title">Create test case</div>
+                <Help content="Provide test case with code used for running and validating" />
+            </div>
 
             <div className="subtitle">Input *</div>
-            <input
-                type="text"
-                className="form-control w-100 mb-3"
-                id="tc-input"
-                name="tc-input"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-            />
+            <textarea className="form-control w-10" value={input} onChange={handleChangeInput}></textarea>
+            <div className="char-counter">{input.length}/500</div>
 
             <div className="subtitle">Output *</div>
-            <input
-                type="text"
-                className="form-control w-100 mb-3"
-                id="tc-output"
-                name="tc-output"
-                value={output}
-                onChange={(e) => setOutput(e.target.value)}
-            />
+            <textarea className="form-control w-100" value={output} onChange={handleChangeOutput}></textarea>
+            <div className="char-counter">{output.length}/500</div>
+
+            <div className="subtitle">Test Code *</div>
+            <div className="code-block">
+                <ReactCodeMirror
+                    value={testcode}
+                    extensions={[langs.cpp()]}
+                    onChange={handleChangeCode}
+                    theme={xcodeLight}
+                    height="240px"
+                />
+            </div>
+
             <div className="d-flex justify-content-end">
                 <div className="btn btn-add" onClick={handleAddTestcase}>
                     Add +
                 </div>
             </div>
-            <div className="testcases-box">
-                <div>
-                    <b>Added test cases here</b>
-                </div>
-                {testcases &&
-                    testcases.map((testcase, index) => {
-                        return (
-                            <div key={index}>
-                                <br />
-                                Input: {testcase.input}
-                                <br />
-                                Ouput: {testcase.output}
-                            </div>
-                        );
-                    })}
-            </div>
         </div>
     );
 };
 
-const RightChild = () => {
+const RightChild = ({ testcases, setTestcases }) => {
+    useEffect(() => {
+        const savedTestcases = JSON.parse(localStorage.getItem('testcases'));
+        savedTestcases && setTestcases(savedTestcases);
+    }, [setTestcases]);
+
     return (
-        <div className="contribute-border-box">
-            <FontAwesomeIcon icon={faLightbulb} fontSize={32} className="lightbulb" />
-            <div className="hint">
-                <p>
-                    <strong>
-                        In order to better understand the question, we would love to see thorough explanations about the
-                        context of the question.
-                    </strong>
-                </p>
-                <p>
-                    <b className="hint-title">Sample</b>
-                </p>
-                <p>
-                    I received this problem at an on-site at Google for a SWE new grad position. We spent about half an
-                    hour on this problem.
-                </p>
-                <p>
-                    I want to contribute this Solutions because there are multiple solutions using different techniques
-                    (i.e. DP, recursion, math) that perform better than the brute force solution. I think this question
-                    would be a LeetCode Medium.
-                </p>
+        <div className="contribute-body-main-content">
+            <div className="d-flex gap-1">
+                <form method="POST" action="/contribute/store" />
+                <div className="title">Added test cases</div>
             </div>
+            {!testcases.length && <div className="no-testcases-text">Your test cases will be displayed here.</div>}
+            {!!testcases.length && (
+                <div className="testcases-container">
+                    <Table bordered hover>
+                        <thead>
+                            <tr className="testcase-header">
+                                <th>#</th>
+                                <th>Input</th>
+                                <th>Output</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {testcases.map((testcase, index) => (
+                                <tr key={index} className="testcase-data">
+                                    <td>{index + 1}</td>
+                                    <td>
+                                        <pre>{testcase.input}</pre>
+                                    </td>
+                                    <td>
+                                        <pre>{testcase.output}</pre>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </div>
+
+                // testcases.map((testcase, index) => {
+                //     return (
+                //         <div key={index} className="testcase-container">
+                //             <div className="testcase-input">
+                //                 {/* <h4>Input</h4> */}
+                //                 <code>{testcase.input}</code>
+                //             </div>
+                //             <div className="testcase-output">
+                //                 {/* <h4>Output</h4>/+ */}
+                //                 <pre>{testcase.output}</pre>
+                //             </div>
+                //         </div>
+                //     );
+            )}
         </div>
     );
 };
 
 const Testcases = () => {
-    return <Contribute contributeStep={4} mainChild={<MainChild />} rightChild={<RightChild />} />;
+    const [testcases, setTestcases] = useState([]);
+    return (
+        <Contribute
+            contributeStep={4}
+            mainChild={<MainChild testcases={testcases} setTestcases={setTestcases} />}
+            rightChild={<RightChild testcases={testcases} setTestcases={setTestcases} />}
+        />
+    );
 };
 
 export default Testcases;

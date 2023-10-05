@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { langs } from '@uiw/codemirror-extensions-langs';
+import { xcodeLight } from '@uiw/codemirror-theme-xcode';
+import CodeMirror from '@uiw/react-codemirror';
+import { useCallback, useEffect, useState } from 'react';
+import Help from '../Help';
 import Contribute from './Contribute';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
 const MainChild = () => {
     const placeholder = `Describe your thoughts and possible solutions`;
@@ -10,58 +12,101 @@ const MainChild = () => {
 
     const handleChange = (event) => {
         const inputValue = event.target.value;
-        if (inputValue.length <= 10000) {
+        if (inputValue.length <= 5000) {
             setText(inputValue);
+            localStorage.setItem('solutions', inputValue);
         }
     };
+
+    useEffect(() => {
+        const savedValue = localStorage.getItem('solutions');
+        if (savedValue) {
+            setText(savedValue);
+        }
+    }, []);
+
     return (
         <div className="contribute-body-main-content">
             <div className="title">Share your solution *</div>
-
-            <form method="" action="">
-                <textarea
-                    className="textarea"
-                    placeholder={placeholder}
-                    value={text}
-                    onChange={handleChange}
-                    name="solutions"
-                />
-            </form>
-            <div className="char-counter">{text.length}/10000</div>
+            <textarea
+                className="textarea"
+                placeholder={placeholder}
+                value={text}
+                onChange={handleChange}
+                name="solutions"
+            />
+            <div className="char-counter">{text.length}/5000</div>
         </div>
     );
 };
 
 const RightChild = () => {
+    const [code, setCode] = useState('');
+
+    const handleChangeCode = useCallback((val, viewUpdate) => {
+        setCode(val);
+        localStorage.setItem('code', val);
+    }, []);
+
+    useEffect(() => {
+        const savedValue = localStorage.getItem('code');
+        if (savedValue) {
+            setCode(savedValue);
+        }
+    }, []);
+
+    const [isChecked, setIsChecked] = useState(false);
+
+    useEffect(() => {
+        const savedCheckedState = localStorage.getItem('validate');
+        if (savedCheckedState !== null) {
+            setIsChecked(savedCheckedState === 'true');
+        }
+    }, []);
+
+    const handleCheckboxChange = () => {
+        const updatedCheckedState = !isChecked;
+        setIsChecked(updatedCheckedState);
+        localStorage.setItem('validate', updatedCheckedState.toString());
+    };
+
     return (
-        <div className="contribute-border-box">
-            <FontAwesomeIcon icon={faLightbulb} fontSize={32} className="lightbulb" />
-            <div className="hint">
-                <p>
-                    <strong>
-                        In order to better understand the question, we would love to see thorough explanations about the
-                        context of the question.
-                    </strong>
-                </p>
-                <p>
-                    <b className="hint-title">Sample</b>
-                </p>
-                <p>
-                    I received this problem at an on-site at Google for a SWE new grad position. We spent about half an
-                    hour on this problem.
-                </p>
-                <p>
-                    I want to contribute this Solutions because there are multiple solutions using different techniques
-                    (i.e. DP, recursion, math) that perform better than the brute force solution. I think this question
-                    would be a LeetCode Medium.
-                </p>
+        <div className="contribute-body-main-content">
+            <div className="d-flex gap-1">
+                <div className="title">Share your code</div>
+                <Help
+                    content="A sample answer can be entered here and used for checking by the question author and
+                            optionally shown to students during review. It is also used by the bulk tester script. The
+                            correctness of a non-empty answer is checked when saving unless 'Validate on save' is
+                            unchecked"
+                />
             </div>
+            <div className="code-block">
+                <input type="hidden" value={code} name="code" />
+                <CodeMirror
+                    value={code}
+                    extensions={[langs.cpp()]}
+                    onChange={handleChangeCode}
+                    theme={xcodeLight}
+                    height="320px"
+                />
+            </div>
+
+            <label className="d-flex gap-2 align-items-center">
+                <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} className="checkbox" />
+                <div>Validate on submit</div>
+            </label>
         </div>
     );
 };
 
 const Solutions = () => {
-    return <Contribute contributeStep={3} mainChild={<MainChild />} rightChild={<RightChild />} />;
+    return (
+        <>
+            <form method="POST" action="/contribute/store" />
+            <Contribute contributeStep={3} mainChild={<MainChild />} rightChild={<RightChild />} />;
+        </>
+    );
 };
 
 export default Solutions;

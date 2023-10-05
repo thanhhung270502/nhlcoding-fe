@@ -1,32 +1,52 @@
-import React, { useState } from 'react';
-import Contribute from './Contribute';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
 import ReactSelect from 'react-select';
-import CustomEditor from '../CKEditor';
+import Contribute from './Contribute';
+// import CustomEditor from '../CKEditor';
+import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import 'katex/dist/katex.min.css';
+import ReactMarkdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 
-const MainChild = () => {
+const MainChild = ({ descriptionData, setDescriptionData }) => {
     const [titleText, setTitleText] = useState('');
     const handleChangeTitle = (event) => {
         const inputValue = event.target.value;
         if (inputValue.length <= 150) {
             setTitleText(inputValue);
+            localStorage.setItem('title', inputValue);
         }
     };
 
     const options = [
-        { value: 'chocolate', label: 'Chocolate' },
-        { value: 'strawberry', label: 'Strawberry' },
-        { value: 'vanilla', label: 'Vanilla' },
+        { value: 'cpp_function', label: 'Cpp Function' },
+        { value: 'cpp_program', label: 'Cpp Program' },
+        { value: 'python3', label: 'Python3 Program' },
     ];
+    const [selectedOption, setSelectedOption] = useState(null);
+    const handleSelectChange = (option) => {
+        setSelectedOption(option);
+        localStorage.setItem('selectedOption', JSON.stringify(option));
+    };
 
-    const [descriptionData, setDescriptionData] = useState('');
-    const handleChangeDescription = (_, editor) => {
-        const inputValue = editor.getData();
+    const handleChangeDescription = (e) => {
+        const inputValue = e.target.value;
         if (inputValue.length <= 5000) {
             setDescriptionData(inputValue);
+            localStorage.setItem('desc', inputValue);
         }
     };
+
+    useEffect(() => {
+        const savedTitle = localStorage.getItem('title');
+        const savedOption = localStorage.getItem('selectedOption');
+        const savedDesc = localStorage.getItem('desc');
+
+        savedTitle && setTitleText(savedTitle);
+        savedOption && setSelectedOption(JSON.parse(savedOption));
+        savedDesc && setDescriptionData(savedDesc);
+    }, [setDescriptionData]);
 
     return (
         <div className="contribute-body-main-content">
@@ -46,46 +66,73 @@ const MainChild = () => {
                 </div>
                 <div className="question-category">
                     <div className="subtitle">Category *</div>
-                    <ReactSelect options={options} />
+                    <ReactSelect value={selectedOption} onChange={handleSelectChange} options={options} />
                 </div>
             </div>
             <div className="subtitle">Description *</div>
-            <CustomEditor data={descriptionData} handleChange={handleChangeDescription} />
+            {/* <CustomEditor data={descriptionData} handleChange={handleChangeDescription} /> */}
+            <textarea
+                className="textarea"
+                value={descriptionData}
+                onChange={handleChangeDescription}
+                name="description"
+                placeholder="Type your decription about the question here."
+            ></textarea>
             <div className="char-counter">{descriptionData.length}/5000</div>
+            <form method="POST" action="/contribute/store" />
         </div>
     );
 };
 
-const RightChild = () => {
+const RightChild = ({ descriptionData }) => {
     return (
-        <div className="contribute-border-box">
-            <FontAwesomeIcon icon={faLightbulb} fontSize={32} className="lightbulb" />
+        <div className="contribute-border-box preview-description">
             <div className="hint">
-                <p>
+                <p className="d-flex gap-2">
+                    <FontAwesomeIcon icon={faLightbulb} fontSize={32} className="lightbulb" />
                     <strong>
-                        In order to better understand the question, we would love to see thorough explanations about the
-                        context of the question.
+                        Clearly describe your question, and check our question set to make sure your problem isn't
+                        already there.
                     </strong>
                 </p>
                 <p>
-                    <b className="hint-title">Sample</b>
-                </p>
-                <p>
-                    I received this problem at an on-site at Google for a SWE new grad position. We spent about half an
-                    hour on this problem.
-                </p>
-                <p>
-                    I want to contribute this question because there are multiple solutions using different techniques
-                    (i.e. DP, recursion, math) that perform better than the brute force solution. I think this question
-                    would be a LeetCode Medium.
+                    <b className="hint-title">Displayed decription</b>
                 </p>
             </div>
+            <ReactMarkdown
+                children={descriptionData}
+                remarkPlugins={[remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+                components={{
+                    code({ node, inline, children, ...rest }) {
+                        return (
+                            <code {...rest} className="preview-code">
+                                {children}
+                            </code>
+                        );
+                    },
+                }}
+            />
         </div>
     );
 };
 
 const Question = () => {
-    return <Contribute contributeStep={2} mainChild={<MainChild />} rightChild={<RightChild />} />;
+    const [descriptionData, setDescriptionData] = useState('');
+    // const setDescriptionDataCallback = useCallback(
+    //     (inputValue) => {
+    //         setDescriptionData(inputValue);
+    //     },
+    //     [setDescriptionData],
+    // );
+
+    return (
+        <Contribute
+            contributeStep={2}
+            mainChild={<MainChild descriptionData={descriptionData} setDescriptionData={setDescriptionData} />}
+            rightChild={<RightChild descriptionData={descriptionData} />}
+        />
+    );
 };
 
 export default Question;
