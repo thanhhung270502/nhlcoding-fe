@@ -43,7 +43,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
 
     return (
         <div className="container">
-            <div className="contribute-navbar-container">
+            <div className={`contribute-navbar-container ${contributeStep === 5 ? 'disabled-div' : ''}`}>
                 <div className="contribute-navbar-line">
                     <div className="contribute-navbar-line-segment-container">
                         <div className={`contribute-navbar-line-segment contribute-navbar-line-segment-entered`}></div>

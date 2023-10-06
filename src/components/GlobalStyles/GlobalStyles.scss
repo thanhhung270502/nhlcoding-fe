@@ -148,3 +148,8 @@ html {
         background-color: hsl(200, 20%, 95%);
     }
 }
+
+.disabled-div {
+    pointer-events: none;
+    user-select: none;
+}
