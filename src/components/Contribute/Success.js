@@ -1,15 +1,25 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Contribute from './Contribute';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 const MainChild = () => {
     return (
-        <div className="contribute-body-main-content" style={{ height: '90vh' }}>
+        <div className="contribute-body-main-content contribute-main-success no-testcases-text">
             Congratulation! You have contributed a question successfully.
         </div>
     );
 };
 
 const RightChild = () => {
-    return <div>Go to Home</div>;
+    return (
+        <div className="d-flex btn btn-back-home" style={{ marginTop: '200px' }}>
+            <div className="me-2">
+                <FontAwesomeIcon fontSize={18} icon={faHome} />
+            </div>
+            <Link to="/">Back to home</Link>
+        </div>
+    );
 };
 
 const Success = () => {
