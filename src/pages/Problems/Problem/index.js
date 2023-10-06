@@ -20,19 +20,16 @@ import { faGear, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 import styles from './console.module.scss';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-// import testcases from './testcase.json';
-import { submitCode } from '~/api/api';
 import { getTestcaseByProblemID } from '~/api/testcases';
-import { problemRunCode } from '~/api/problems';
+import { getLanguageByID, problemRunCode } from '~/api/problems';
 import { useParams } from 'react-router-dom';
+import { getProblemLanguagesByProblemID } from '~/api/problem_languages';
 
 function Problem() {
     const [sidebar, setSidebar] = useState('Description');
 
     useEffect(() => {
         let split = $('.split');
-        console.log(split[0].offsetHeight);
-        console.log(split[1].offsetHeight);
         if (split[0].offsetHeight > 867) {
             split[0].style.height = 'calc(100vh - 59px)';
             split[0].style.overflow = 'hidden scroll';
@@ -53,36 +50,55 @@ function Problem() {
 
     // ---------------------------------------------------------------- //
     // File: code.js
-    const initialCode = `import sys
-def add(a, b):
-    return a + b
+    // const initialCode = `def add(a, b):
+    // return a + b
+    //     `;
+    const initialCode = `def twoSum(nums, target):
+    """
+    :type nums: List[int]
+    :type target: int
+    :rtype: List[int]
+    """
+    # return [0,1]
+    for i in range(len(nums)):
+        for j in range(i+1, len(nums)):
+            if nums[i] + nums[j] == target:
+                return [i,j]`;
 
-if __name__ == "__main__":
-    a = int(sys.argv[1])
-    b = int(sys.argv[2])
-    print(add(a,b))
-`;
-    // const initialCode = `def twoSum(nums, target):
-    //     """
-    // :type nums: List[int]
-    // :type target: int
-    // :rtype: List[int]
-    // """
-    // # return [0,1]
-    // for i in range(len(nums)):
-    //     for j in range(i+1, len(nums)):
-    //         if nums[i] + nums[j] == target:
-    //             return [i,j]`;
     const [code, setCode] = useState(initialCode);
-    const [language, setLanguage] = useState('Python');
+    const [languages, setLanguages] = useState([
+        {
+            name: 'python',
+            initialcode: '',
+        },
+        {
+            name: 'cpp',
+            initialcode: '',
+        },
+    ]);
+    const [language, setLanguage] = useState(1);
 
     const onChange = useCallback((value, viewUpdate) => {
         setCode(value);
     }, []);
 
     const handleLanguageChange = (e) => {
-        setLanguage(e.target.outerText);
+        if (e.target.outerText === 'python') {
+            console.log(e.target.outerText);
+            setLanguage(0);
+        } else if (e.target.outerText === 'cpp') {
+            console.log(e.target.outerText);
+            setLanguage(1);
+        }
     };
+
+    useEffect(() => {
+        const fetchLanguageByID = async (language_id) => {
+            const res = await getLanguageByID(language_id);
+            console.log(res);
+        };
+        fetchLanguageByID(1);
+    }, []);
 
     // ---------------------------------------------------------------- //
     // File: console.js
@@ -102,12 +118,12 @@ if __name__ == "__main__":
             output: '',
         },
     ]);
+    const { id } = useParams();
 
     const handleToggleConsole = () => {
         var gridRow = $('.grid-row');
         var problemConsoleNav = $('.problemConsoleNav');
         var problemConsoleBody = $('.problemConsoleBody');
-        console.log(problemConsoleNav);
 
         if (gridRow[0].classList.contains('openConsole')) {
             gridRow[0].style.gridTemplateRows = null;
@@ -185,21 +201,55 @@ if __name__ == "__main__":
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await problemRunCode(1, code);
-        setCurrentResult(res);
+        const res = await problemRunCode(id, code, languages[language].name);
+        console.log(res.message);
+        if (res.message === 'Successfully') {
+            setCurrentResult(res);
+        } else {
+            alert('Try again!');
+        }
         console.log(res.body[0].result);
     };
 
-    const { id } = useParams();
     useEffect(() => {
         async function fetchTestcaseByProblemID(problem_id) {
             const res = await getTestcaseByProblemID(problem_id);
-            console.log(res.body.testcases);
-            res.body.testcases[0].input.split(' ').map((input) => console.log(input));
             setTestcases(res.body.testcases);
         }
         fetchTestcaseByProblemID(id);
     }, [id]);
+
+    const averageRunTime = (arr) => {
+        var length = arr.length;
+        var sum = 0;
+        for (var i = 0; i < length; i++) {
+            sum += arr[i].runtime;
+        }
+        return sum / length;
+    };
+
+    const convertCode = (code) => {
+        code = code.replaceAll('\\n', '\n');
+        code = code.replaceAll('\\t', '\t');
+        return code;
+    };
+
+    // Handle problem_languages
+    useEffect(() => {
+        async function fetchProblemLanguagesByProblemID(problem_id) {
+            const res = await getProblemLanguagesByProblemID(problem_id);
+            console.log(res);
+            setLanguages(res.body);
+            setLanguage(parseInt(res.body[0].language_id) - 1);
+            setCode(convertCode(res.body[0].initialcode));
+        }
+        fetchProblemLanguagesByProblemID(id);
+    }, [id]);
+
+    useEffect(() => {
+        console.log(languages[language].initialcode);
+        setCode(convertCode(languages[language].initialcode));
+    }, [language, languages]);
 
     return (
         <div className="problem-body">
@@ -250,51 +300,19 @@ if __name__ == "__main__":
                                                             data-bs-toggle="dropdown"
                                                             aria-expanded="false"
                                                         >
-                                                            {language}
+                                                            {languages[language].name}
                                                         </div>
                                                         <ul class="dropdown-menu">
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                C++
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                Java
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                Python
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                C
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                C#
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                JavaScript
-                                                            </li>
-                                                            <li
-                                                                className="dropdown-item"
-                                                                onClick={handleLanguageChange}
-                                                            >
-                                                                PHP
-                                                            </li>
+                                                            {languages.map((value) => {
+                                                                return (
+                                                                    <li
+                                                                        className="dropdown-item"
+                                                                        onClick={handleLanguageChange}
+                                                                    >
+                                                                        {value.name}
+                                                                    </li>
+                                                                );
+                                                            })}
                                                         </ul>
                                                     </div>
                                                     <div className="d-flex align-items-center pe-4">
@@ -307,7 +325,7 @@ if __name__ == "__main__":
                                                     </div>
                                                 </div>
                                                 <div className="mt-1">
-                                                    {language === 'C++' && (
+                                                    {language === 1 && (
                                                         <CodeMirror
                                                             value={code}
                                                             extensions={[langs.cpp()]}
@@ -323,7 +341,7 @@ if __name__ == "__main__":
                                                             theme={xcodeLight}
                                                         />
                                                     )}
-                                                    {language === 'Python' && (
+                                                    {language === 0 && (
                                                         <CodeMirror
                                                             value={code}
                                                             extensions={[langs.python()]}
@@ -467,7 +485,8 @@ if __name__ == "__main__":
                                                                 >
                                                                     <div className={clsx(styles.smallText)}>
                                                                         Runtime:{' '}
-                                                                        {currentResult.body[0].runtime.toFixed(2)} ms
+                                                                        {averageRunTime(currentResult.body).toFixed(2)}{' '}
+                                                                        ms
                                                                     </div>
                                                                     <div className={clsx(styles.smallText, 'ps-3')}>
                                                                         Memory:{' '}
@@ -508,7 +527,11 @@ if __name__ == "__main__":
                                                                             styles.problemConsoleCaseBodyContent,
                                                                         )}
                                                                     >
-                                                                        {testcases[currentCaseResult].input}
+                                                                        {testcases[currentCaseResult].input
+                                                                            .split(' ')
+                                                                            .map((input, index) => (
+                                                                                <div>{input}</div>
+                                                                            ))}
                                                                     </div>
                                                                 </div>
                                                                 <div

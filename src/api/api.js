@@ -3,9 +3,9 @@ import { getCookie, setCookie } from './cookie';
 
 const URL = 'http://localhost:3000';
 
-export const submitCode = async (problem_id, code) => {
+export const submitCode = async (problem_id, code, language) => {
     return await axios
-        .post(`${URL}/problems/1/python/code`, { code: code })
+        .post(`${URL}/problems/${problem_id}/${language}/code`, { code: code })
         .then(function (response) {
             console.log(response.data);
             return response.data;
