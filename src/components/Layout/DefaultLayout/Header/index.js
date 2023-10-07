@@ -118,11 +118,11 @@ function Header() {
                                     Problems
                                 </Link>
                             </li>
-                            <li className="nav-item">
+                            {/*<li className="nav-item">
                                 <Link className="nav-link" to="/problem">
                                     Problem
                                 </Link>
-                            </li>
+    </li>*/}
                             <li className="nav-item">
                                 <Link className="nav-link" to="/contribute">
                                     Contribute
