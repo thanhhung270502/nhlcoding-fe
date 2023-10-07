@@ -1,11 +1,11 @@
 // import { createContext, useCallback, useEffect, useState } from 'react';
 import './problem.scss';
 import Split from 'react-split-grid';
-import Solution from './solutions';
 import $ from 'jquery';
-import Submission from './submission';
+// import { useEffect, useState } from 'react';
 import Code from './code';
 import Description from './description';
+
 import Console from './console';
 
 // File: code.js
@@ -24,29 +24,57 @@ import { getTestcaseByProblemID } from '~/api/testcases';
 import { getLanguageByID, problemRunCode } from '~/api/problems';
 import { useParams } from 'react-router-dom';
 import { getProblemLanguagesByProblemID } from '~/api/problem_languages';
+import Editorial from './editorial';
+import './problem.scss';
+import Solution from './solutions';
+import Submission from './submission';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 function Problem() {
-    const [sidebar, setSidebar] = useState('Description');
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [tabParams, setTabParams] = useSearchParams();
+    const tab = typeof tabParams.get('tab') === 'string' ? tabParams.get('tab') : undefined;
+
+    useEffect(() => {
+        if (!tab) {
+            navigate(`/problem/${id}?tab=description`);
+        }
+    }, [tab]);
+
+    useEffect(() => {
+        // Disable scrolling when the component is mounted
+        document.body.style.overflowY = 'hidden';
+
+        return () => {
+            // Re-enable scrolling when the component is unmounted
+            document.body.style.overflowY = 'auto';
+        };
+    }, []);
 
     useEffect(() => {
         let split = $('.split');
-        if (split[0].offsetHeight > 867) {
-            split[0].style.height = 'calc(100vh - 59px)';
-            split[0].style.overflow = 'hidden scroll';
-        } else {
-            split[0].style.height = 'calc(100vh - 59px)';
-            split[0].style.overflow = 'unset';
-        }
+        // console.log(split[0].offsetHeight);
+        // console.log(split[1].offsetHeight);
+        // if (split[0].offsetHeight > 867) {
+        split[0].style.height = 'calc(100vh - 59px)';
+        split[0].style.overflow = 'hidden auto';
+        // } else {
+        // split[0].style.height = 'calc(100vh - 59px)';
+        // split[0].style.overflow = 'unset';
+        // }
     }, []);
 
-    const handleSidebar = (e) => {
-        var items = $('.problem-item');
-        for (var i = 0; i < items.length; i++) {
-            items[i].classList.remove('problem-item-active');
-        }
-        e.target.classList.add('problem-item-active');
-        setSidebar(e.target.innerText);
-    };
+    // const handleSidebar = (e) => {
+    //     var items = $('.problem-item');
+    //     for (var i = 0; i < items.length; i++) {
+    //         items[i].classList.remove('problem-item-active');
+    //     }
+    //     e.target.classList.add('problem-item-active');
+    //     setSidebar(e.target.innerText);
+    // };
+
+    const openConsole = () => {};
 
     // ---------------------------------------------------------------- //
     // File: code.js
@@ -118,7 +146,6 @@ function Problem() {
             output: '',
         },
     ]);
-    const { id } = useParams();
 
     const handleToggleConsole = () => {
         var gridRow = $('.grid-row');
@@ -179,7 +206,7 @@ function Problem() {
                 });
             });
         });
-    }, [currentCaseResult, currentCaseTest, currentConsoleNav]);
+    }, [currentCaseResult, currentCaseTest, currentConsoleNav, currentResult]);
 
     useEffect(() => {
         const problemConsoleNavItem = $('.problemConsoleNavItem');
@@ -241,15 +268,27 @@ function Problem() {
             console.log(res);
             setLanguages(res.body);
             setLanguage(parseInt(res.body[0].language_id) - 1);
-            setCode(convertCode(res.body[0].initialcode));
+            if (localStorage.getItem(`${id}_${languages[language].name}`)) {
+                setCode(convertCode(localStorage.getItem(`${id}_${languages[language].name}`)));
+            } else {
+                setCode(convertCode(res.body[0].initialcode));
+            }
         }
         fetchProblemLanguagesByProblemID(id);
     }, [id]);
 
     useEffect(() => {
         console.log(languages[language].initialcode);
-        setCode(convertCode(languages[language].initialcode));
+        if (localStorage.getItem(`${id}_${languages[language].name}`)) {
+            setCode(convertCode(localStorage.getItem(`${id}_${languages[language].name}`)));
+        } else {
+            setCode(convertCode(languages[language].initialcode));
+        }
     }, [language, languages]);
+
+    useEffect(() => {
+        localStorage.setItem(`${id}_${languages[language].name}`, code);
+    }, [code, id, language, languages]);
 
     return (
         <div className="problem-body">
@@ -258,30 +297,59 @@ function Problem() {
                     render={({ getGridProps, getGutterProps }) => (
                         <div className="grid" {...getGridProps()}>
                             <div className="split bg-white">
-                                <div className="d-flex h-100">
+                                <div className="w-100 h-100">
                                     <div className="problem-sidebar">
                                         <div className="problem-sidebar-items">
-                                            <div className="problem-item problem-item-active" onClick={handleSidebar}>
+                                            <div
+                                                className={`problem-item ${
+                                                    tab === 'description' ? 'problem-item-active' : ''
+                                                }`}
+                                                onClick={() => {
+                                                    navigate(`/problem/${id}?tab=description`);
+                                                }}
+                                            >
                                                 Description
                                             </div>
-                                            <div className="problem-item" onClick={handleSidebar}>
+                                            <div
+                                                className={`problem-item ${
+                                                    tab === 'solutions' ? 'problem-item-active' : ''
+                                                }`}
+                                                onClick={() => {
+                                                    navigate(`/problem/${id}?tab=solutions`);
+                                                }}
+                                            >
                                                 Solutions
                                             </div>
-                                            <div className="problem-item" onClick={handleSidebar}>
+                                            <div
+                                                className={`problem-item ${
+                                                    tab === 'submissions' ? 'problem-item-active' : ''
+                                                }`}
+                                                onClick={() => {
+                                                    navigate(`/problem/${id}?tab=submissions`);
+                                                }}
+                                            >
                                                 Submissions
                                             </div>
-                                            <div className="problem-item" onClick={handleSidebar}>
+                                            {/* <div className="problem-item" onClick={handleSidebar}>
                                                 Discussion
-                                            </div>
-                                            <div className="problem-item" onClick={handleSidebar}>
+                                            </div> */}
+                                            <div
+                                                className={`problem-item ${
+                                                    tab === 'editorial' ? 'problem-item-active' : ''
+                                                }`}
+                                                onClick={() => {
+                                                    navigate(`/problem/${id}?tab=editorial`);
+                                                }}
+                                            >
                                                 Editorial
                                             </div>
                                         </div>
                                     </div>
                                     <div className="problem-content">
-                                        {sidebar === 'Description' && <Description />}
-                                        {sidebar === 'Solutions' && <Solution />}
-                                        {sidebar === 'Submissions' && <Submission />}
+                                        {tab === 'description' && <Description />}
+                                        {tab === 'solutions' && <Solution />}
+                                        {tab === 'submissions' && <Submission />}
+                                        {tab === 'editorial' && <Editorial />}
                                     </div>
                                 </div>
                             </div>
@@ -459,6 +527,7 @@ function Problem() {
                                                                         className={clsx(
                                                                             'problemConsoleResult',
                                                                             'problemConsoleResultSuccess',
+                                                                            'pb-4',
                                                                         )}
                                                                     >
                                                                         Accepted
@@ -470,12 +539,13 @@ function Problem() {
                                                                         className={clsx(
                                                                             'problemConsoleResult',
                                                                             'problemConsoleResultFailure',
+                                                                            'pb-4',
                                                                         )}
                                                                     >
                                                                         Wrong Answer
                                                                     </div>
                                                                 )}
-                                                                <div
+                                                                {/*<div
                                                                     className={clsx(
                                                                         'd-flex',
                                                                         'align-items-center',
@@ -492,7 +562,7 @@ function Problem() {
                                                                         Memory:{' '}
                                                                         {currentResult.body[0].memory.toFixed(2)} MB
                                                                     </div>
-                                                                </div>
+                                                                    </div>*/}
                                                                 <div
                                                                     className={clsx(
                                                                         'd-flex',

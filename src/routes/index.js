@@ -3,6 +3,7 @@ import {
     ContributeQuestion,
     ContributeReason,
     ContributeSolutions,
+    ContributeSuccess,
     ContributeTestcases,
 } from '~/components/Contribute';
 import { OnlyHeader } from '~/components/Layout';
@@ -54,6 +55,10 @@ const publicRoutes = [
         path: '/contribute/testcases',
         component: ContributeTestcases,
         layout: OnlyHeader,
+    },
+    {
+        path: '/contribute/success',
+        component: ContributeSuccess,
     },
     {
         path: '/contribute',

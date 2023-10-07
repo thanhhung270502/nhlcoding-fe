@@ -176,7 +176,7 @@
 // Console
 .problem-console {
     margin: 6px 1rem;
-    font-size: 14px;
+    font-size: 18px;
     color: var(--gray-dark-2);
 }
 
@@ -184,6 +184,15 @@
     padding: 6px 32px;
     border-radius: 5px;
     margin-left: 0.75rem;
+    font-size: 18px;
+    font-weight: 500;
+}
+.problem-btn {
+    padding: 6px 20px;
+    border-radius: 5px;
+    margin-left: 0.75rem;
+    font-size: 18px;
+    font-weight: 500;
 }
 
 .btn-submit {
