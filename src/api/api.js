@@ -64,7 +64,7 @@ export const login = async (info) => {
         .post(`${URL}/sessions/login`, info)
         .then(function (response) {
             console.log(response);
-            setCookie('user_id', response.data.body.user.user_id);
+            setCookie('user_id', response.data.body.user.id);
             return response.data.body.user;
         })
         .catch(function (error) {
@@ -92,7 +92,7 @@ export const signup = async (info) => {
         .post(`${URL}/users`, info)
         .then(function (response) {
             console.log(response);
-            setCookie('user_id', response.data.body.user.user_id);
+            setCookie('user_id', response.data.body.user.id);
             return response.data.body.user;
         })
         .catch(function (error) {

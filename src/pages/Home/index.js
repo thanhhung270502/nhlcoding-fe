@@ -20,10 +20,10 @@ function Home() {
             } else {
                 const res = await getUserGoogle();
                 if (res.code === 200) {
-                    await getUserByID(res.body.data.body.user.user_id).then(async (data) => {
+                    await getUserByID(res.body.data.body.user.id).then(async (data) => {
                         await logoutGoogle();
                         console.log(data.data.body.user);
-                        setCookie('user_id', data.data.body.user.user_id);
+                        setCookie('user_id', data.data.body.user.id);
                         setCurrentUser(data.data.body.user);
                     });
                 } else {

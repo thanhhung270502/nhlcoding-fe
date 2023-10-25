@@ -501,6 +501,18 @@ function Problem() {
                                                                         ))}
                                                                 </div>
                                                             </div>
+                                                            <div
+                                                                className={clsx(styles.problemConsoleCaseBody, 'pt-3')}
+                                                            >
+                                                                <div className={clsx(styles.smallText)}>Output:</div>
+                                                                <div
+                                                                    className={clsx(
+                                                                        styles.problemConsoleCaseBodyContent,
+                                                                    )}
+                                                                >
+                                                                    {testcases[currentCaseTest].output}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     )}
 
