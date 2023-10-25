@@ -1,12 +1,45 @@
 import './home.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { SignupModalTrigger } from '~/components/Modals/Auth';
+import { getCookie, setCookie } from '~/api/cookie';
+import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
+import { useEffect, useState } from 'react';
 
 function Home() {
+    const [currentUser, setCurrentUser] = useState();
+    useEffect(() => {
+        (async () => {
+            const user_id = getCookie('user_id');
+            if (user_id) {
+                await getUserByID(user_id).then((data) => {
+                    console.log(data.data.body.user);
+                    setCurrentUser(data.data.body.user);
+                });
+            } else {
+                const res = await getUserGoogle();
+                if (res.code === 200) {
+                    await getUserByID(res.body.data.body.user.id).then(async (data) => {
+                        await logoutGoogle();
+                        console.log(data.data.body.user);
+                        setCookie('user_id', data.data.body.user.id);
+                        setCurrentUser(data.data.body.user);
+                    });
+                } else {
+                    console.log('Not');
+                    setCurrentUser(null);
+                }
+            }
+        })();
+    }, []);
+    const navigate = useNavigate();
     const handleClickStart = () => {
-        SignupModalTrigger.open();
+        if (currentUser) {
+            navigate('/problem/2');
+        } else {
+            SignupModalTrigger.open();
+        }
     };
 
     return (

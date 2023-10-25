@@ -3,11 +3,12 @@ import { getCookie, setCookie } from './cookie';
 
 const URL = 'http://localhost:3000';
 
-export const submitCode = async (code) => {
-    await axios
-        .post(`${URL}/coding`, { code: code })
+export const submitCode = async (problem_id, code, language) => {
+    return await axios
+        .post(`${URL}/problems/${problem_id}/${language}/code`, { code: code })
         .then(function (response) {
-            return response;
+            console.log(response.data);
+            return response.data;
         })
         .catch(function (error) {
             console.log(error);
@@ -63,7 +64,7 @@ export const login = async (info) => {
         .post(`${URL}/sessions/login`, info)
         .then(function (response) {
             console.log(response);
-            setCookie('user_id', response.data.body.user.user_id);
+            setCookie('user_id', response.data.body.user.id);
             return response.data.body.user;
         })
         .catch(function (error) {
@@ -91,7 +92,7 @@ export const signup = async (info) => {
         .post(`${URL}/users`, info)
         .then(function (response) {
             console.log(response);
-            setCookie('user_id', response.data.body.user.user_id);
+            setCookie('user_id', response.data.body.user.id);
             return response.data.body.user;
         })
         .catch(function (error) {
