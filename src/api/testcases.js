@@ -1,9 +1,8 @@
 import axios from 'axios';
-const URL = 'http://localhost:3000';
 
 export const getTestcaseByProblemID = async (problem_id) => {
     return await axios
-        .get(`${URL}/testcases/${problem_id}`)
+        .get(`${process.env.LOCAL_API_URL}/testcases/${problem_id}`)
         .then(function (res) {
             return res.data;
         })
