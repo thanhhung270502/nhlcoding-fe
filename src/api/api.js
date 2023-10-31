@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { getCookie, setCookie } from './cookie';
 
-const URL = 'http://localhost:3000';
-
 export const submitCode = async (problem_id, code, language) => {
     return await axios
-        .post(`${URL}/problems/${problem_id}/${language}/code`, { code: code })
+        .post(`${process.env.LOCAL_API_URL}/problems/${problem_id}/${language}/code`, { code: code })
         .then(function (response) {
             console.log(response.data);
             return response.data;
@@ -18,7 +16,7 @@ export const submitCode = async (problem_id, code, language) => {
 
 export const getUsers = async () => {
     return await axios
-        .get(`${URL}/users`)
+        .get(`${process.env.LOCAL_API_URL}/users`)
         .then(function (res) {
             return res;
         })
@@ -29,7 +27,7 @@ export const getUsers = async () => {
 
 export const getUserGoogle = async () => {
     return await axios
-        .get(`${URL}/auth/login/success`, { withCredentials: true })
+        .get(`${process.env.LOCAL_API_URL}/auth/login/success`, { withCredentials: true })
         .then(function (response) {
             console.log({
                 code: 200,
@@ -54,14 +52,14 @@ export const getUserGoogle = async () => {
 
 export const logoutGoogle = async () => {
     return await axios
-        .get(`${URL}/auth/logout`, { withCredentials: true })
-        .then(function (response) {})
-        .catch(function (err) {});
+        .get(`${process.env.LOCAL_API_URL}/auth/logout`, { withCredentials: true })
+        .then(function (response) { })
+        .catch(function (err) { });
 };
 
 export const login = async (info) => {
     const res = await axios
-        .post(`${URL}/sessions/login`, info)
+        .post(`${process.env.LOCAL_API_URL}/sessions/login`, info)
         .then(function (response) {
             console.log(response);
             setCookie('user_id', response.data.body.user.id);
@@ -75,7 +73,7 @@ export const login = async (info) => {
 };
 
 export const getUserByID = async (user_id) => {
-    const response = await axios.get(`${URL}/users/${user_id}`);
+    const response = await axios.get(`${process.env.LOCAL_API_URL}/users/${user_id}`);
     return response;
 };
 
@@ -84,12 +82,12 @@ export const logout = () => {
 };
 
 export const loginWithGoogle = () => {
-    window.open(`${URL}/auth/google/callback`, '_self');
+    window.open(`${process.env.LOCAL_API_URL}/auth/google/callback`, '_self');
 };
 
 export const signup = async (info) => {
     const res = await axios
-        .post(`${URL}/users`, info)
+        .post(`${process.env.LOCAL_API_URL}/users`, info)
         .then(function (response) {
             console.log(response);
             setCookie('user_id', response.data.body.user.id);

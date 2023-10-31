@@ -9,12 +9,12 @@ function Test() {
     };
 
     const googleAuth = () => {
-        window.open(`http://localhost:3000/auth/google`, '_self');
+        window.open(`${process.env.LOCAL_API_URL}/auth/google`, '_self');
     };
 
     const loginWithGoogle = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/auth/google');
+            const response = await axios.get(`${process.env.LOCAL_API_URL}/auth/google`);
             // window.location.href = response.data;
             console.log(response);
         } catch (error) {
@@ -25,7 +25,7 @@ function Test() {
     return (
         <div className="container">
             <h2 className="pb-5">Test Page</h2>
-            <a href="http://localhost:3000/auth/google" className="btn btn-success">
+            <a href={`${process.env.LOCAL_API_URL}/auth/google`} className="btn btn-success">
                 Login google
             </a>
             <button className="btn btn-info" onClick={googleAuth}>

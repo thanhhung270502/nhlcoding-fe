@@ -14,23 +14,23 @@ import ContributeRedirect from '~/pages/Contribute';
 
 // Không cần đăng nhập vẫn vào được
 const publicRoutes = [
-    // http://localhost:3000
+    // http://localhost:4000
     {
         path: '/',
         component: Home,
     },
-    // http://localhost:3000/problems
+    // http://localhost:4000/problems
     {
         path: '/problems',
         component: Problems,
     },
-    // http://localhost:3000/problem
+    // http://localhost:4000/problem
     {
         path: '/problem/:id',
         component: Problem,
         layout: OnlyHeader,
     },
-    // http://localhost:3000/test
+    // http://localhost:4000/test
     {
         path: '/test',
         component: Test,

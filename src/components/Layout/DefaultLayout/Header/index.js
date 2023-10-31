@@ -15,7 +15,7 @@ import './header.scss';
 
 function Header() {
     const googleAuth = () => {
-        window.open(`http://localhost:3000/auth/google/callback`, '_self');
+        window.open(`${process.env.LOCAL_API_URL}/auth/google/callback`, '_self');
     };
 
     const [dataLogin, setDataLogin] = useState({
