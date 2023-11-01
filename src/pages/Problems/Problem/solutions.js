@@ -12,7 +12,7 @@ function Solution() {
             <div className="d-flex align-items-center">
                 <div className="d-flex align-items-center problem-solution-search">
                     <div className="problem-solution-search-icon">
-                        <i class="uil uil-search"></i>
+                        <i className="uil uil-search"></i>
                     </div>
                     <div className="problem-solution-search-input">
                         <input type="text" placeholder="Search for solution" className="form-control" />

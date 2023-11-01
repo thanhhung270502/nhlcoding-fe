@@ -66,15 +66,12 @@
         }
     }
 
-    .description {
-    }
+    .description {}
 }
 
-.examples {
-}
+.examples {}
 
-.example {
-}
+.example {}
 
 .example-title {
     font-weight: bold;
@@ -91,6 +88,7 @@
 .problem-code-header {
     font-size: 14px;
     color: var(--gray-dark-2);
+
     .dropdown {
         padding: 0rem 1.25rem;
         // width: 125px;
@@ -115,6 +113,7 @@
 
     .icon {
         padding: 0 0.5rem;
+        cursor: pointer;
     }
 }
 
@@ -187,6 +186,7 @@
     font-size: 18px;
     font-weight: 500;
 }
+
 .problem-btn {
     padding: 6px 20px;
     border-radius: 5px;

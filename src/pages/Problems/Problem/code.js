@@ -44,16 +44,16 @@ function Code() {
         <CodeContext.Provider value={code}>
             <div className="bg-white">
                 <div className="d-flex justify-content-between align-items-center problem-code-header border-bottom">
-                    <div class="dropdown">
+                    <div className="dropdown">
                         <div
-                            class="problem-languages dropdown-toggle"
+                            className="problem-languages dropdown-toggle"
                             type="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
                         >
                             {language}
                         </div>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <li className="dropdown-item" onClick={handleLanguageChange}>
                                 C++
                             </li>

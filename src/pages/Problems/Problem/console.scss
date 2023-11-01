@@ -16,6 +16,8 @@
 }
 
 .problemConsoleCaseNum {
+    display: flex;
+    align-items: center;
     padding: 4px 16px;
     border-radius: 5px;
     cursor: pointer;
@@ -48,4 +50,22 @@
 
 .problemConsoleResultFailure {
     color: var(--red-dark);
+}
+
+.round-result {
+    display: inline-block;
+    border-radius: 9999px;
+    width: .25rem;
+    height: .25rem;
+    border-style: solid;
+    box-sizing: border-box;
+    margin-right: 0.5rem;
+}
+
+.result-success {
+    border-color: var(--green-dark);
+}
+
+.result-failure {
+    border-color: var(--red-dark);
 }

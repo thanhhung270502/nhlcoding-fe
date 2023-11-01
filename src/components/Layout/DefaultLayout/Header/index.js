@@ -15,7 +15,7 @@ import './header.scss';
 
 function Header() {
     const googleAuth = () => {
-        window.open(`${process.env.LOCAL_API_URL}/auth/google/callback`, '_self');
+        window.open(`${process.env.REACT_APP_LOCAL_API_URL}/auth/google/callback`, '_self');
     };
 
     const [dataLogin, setDataLogin] = useState({
@@ -137,9 +137,9 @@ function Header() {
                     </div>
                     {currentUser && (
                         <div className="d-flex gap-3">
-                            <div class="dropdown">
+                            <div className="dropdown">
                                 <div
-                                    class="d-flex align-items-center dropdown-toggle"
+                                    className="d-flex align-items-center dropdown-toggle"
                                     role="button"
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
@@ -156,9 +156,9 @@ function Header() {
                                     </div>
                                 </div>
 
-                                <ul class="dropdown-menu">
+                                <ul className="dropdown-menu">
                                     <li>
-                                        <a class="d-flex align-items-center dropdown-item" href="/user">
+                                        <a className="d-flex align-items-center dropdown-item" href="/user">
                                             <div className="top-header__icon col-2">
                                                 <FontAwesomeIcon icon={faUser} />
                                             </div>
@@ -166,10 +166,10 @@ function Header() {
                                         </a>
                                     </li>
                                     <li>
-                                        <hr class="dropdown-divider" />
+                                        <hr className="dropdown-divider" />
                                     </li>
                                     <li>
-                                        <button class="d-flex align-items-center dropdown-item" onClick={handleLogout}>
+                                        <button className="d-flex align-items-center dropdown-item" onClick={handleLogout}>
                                             <div className="top-header__icon col-2">
                                                 <FontAwesomeIcon icon={faRightFromBracket} />
                                             </div>

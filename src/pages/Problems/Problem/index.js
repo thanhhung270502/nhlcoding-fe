@@ -43,26 +43,17 @@ function Problem() {
     }, [tab]);
 
     useEffect(() => {
-        // Disable scrolling when the component is mounted
         document.body.style.overflowY = 'hidden';
 
         return () => {
-            // Re-enable scrolling when the component is unmounted
             document.body.style.overflowY = 'auto';
         };
     }, []);
 
     useEffect(() => {
         let split = $('.split');
-        // console.log(split[0].offsetHeight);
-        // console.log(split[1].offsetHeight);
-        // if (split[0].offsetHeight > 867) {
         split[0].style.height = 'calc(100vh - 59px)';
         split[0].style.overflow = 'hidden auto';
-        // } else {
-        // split[0].style.height = 'calc(100vh - 59px)';
-        // split[0].style.overflow = 'unset';
-        // }
     }, []);
 
     // const handleSidebar = (e) => {
@@ -74,58 +65,105 @@ function Problem() {
     //     setSidebar(e.target.innerText);
     // };
 
-    const openConsole = () => {};
-
     // ---------------------------------------------------------------- //
     // File: code.js
     // const initialCode = `def add(a, b):
     // return a + b
     //     `;
-    const initialCode = `def twoSum(nums, target):
-    """
-    :type nums: List[int]
-    :type target: int
-    :rtype: List[int]
-    """
-    # return [0,1]
-    for i in range(len(nums)):
-        for j in range(i+1, len(nums)):
-            if nums[i] + nums[j] == target:
-                return [i,j]`;
+    // const initialCode = `def twoSum(nums, target):
+    // """
+    // :type nums: List[int]
+    // :type target: int
+    // :rtype: List[int]
+    // """
+    // # return [0,1]
+    // for i in range(len(nums)):
+    //     for j in range(i+1, len(nums)):
+    //         if nums[i] + nums[j] == target:
+    //             return [i,j]`;
 
-    const [code, setCode] = useState(initialCode);
-    const [languages, setLanguages] = useState([
-        {
-            name: 'python',
-            initialcode: '',
-        },
-        {
-            name: 'cpp',
-            initialcode: '',
-        },
-    ]);
-    const [language, setLanguage] = useState(1);
+    const [code, setCode] = useState("");
+    const [languages, setLanguages] = useState([]);
+    const [activeLanguage, setActiveLanguage] = useState({
+        id: 0,
+        name: '',
+        initialcode: '',
+    })
 
-    const onChange = useCallback((value, viewUpdate) => {
-        setCode(value);
-    }, []);
+    // Handle problem_languages and generate default case
+    useEffect(() => {
+        async function fetchProblemLanguagesByProblemID(problem_id) {
+            const res = await getProblemLanguagesByProblemID(problem_id);
+            setLanguages(res.body);
 
+            // console.log("Problem languages:", res.body);
+
+            // Default language and code as cpp
+            const { language_id, name, initialcode } = res.body.find(item => item.problem_id === parseInt(id) && item.language_id === 2);
+            const lang_obj = { id: language_id, name: name, initialcode: initialcode };
+            if (!localStorage.getItem("active_language")) {
+                setActiveLanguage(lang_obj);
+                localStorage.setItem("active_language", JSON.stringify(lang_obj));
+            }
+
+            if (!localStorage.getItem(`${id}_${name}`)) {
+                setCode(convertCode(initialcode));
+                localStorage.setItem(`${id}_${name}`, initialcode);
+            }
+        }
+        fetchProblemLanguagesByProblemID(id);
+    }, [id]);
+
+    // Handle change language
     const handleLanguageChange = (e) => {
-        if (e.target.outerText === 'python') {
-            console.log(e.target.outerText);
-            setLanguage(0);
-        } else if (e.target.outerText === 'cpp') {
-            console.log(e.target.outerText);
-            setLanguage(1);
+        const lang_name = e.target.innerText;
+        const { language_id, name, initialcode } = languages.find(item => item.name === lang_name && item.problem_id === parseInt(id));
+        const lang_obj = { id: language_id, name: name, initialcode: initialcode };
+
+        setActiveLanguage(lang_obj);
+        localStorage.setItem("active_language", JSON.stringify(lang_obj));
+
+        if (!localStorage.getItem(`${id}_${name}`)) {
+            setCode(convertCode(initialcode));
+            localStorage.setItem(`${id}_${name}`, initialcode);
+        } else {
+            setCode(convertCode(localStorage.getItem(`${id}_${name}`)));
         }
     };
 
+    // Handle change code
+    const convertCode = (code) => {
+        if (!code) return "";
+        code = code.replaceAll('\\n', '\n');
+        code = code.replaceAll('\\t', '\t');
+        return code;
+    };
+
+    const onChange = useCallback((value, viewUpdate) => {
+        setCode(convertCode(value));
+        const active_language = JSON.parse(localStorage.getItem("active_language"));
+        if (active_language !== null && active_language !== undefined) {
+            localStorage.setItem(`${id}_${active_language.name}`, value);
+        } else {
+            return;
+        }
+    }, []);
+
+    const handleResetCode = () => {
+        const { initialcode } = JSON.parse(localStorage.getItem("active_language"));
+        setCode(convertCode(initialcode));
+    };
+
     useEffect(() => {
-        const fetchLanguageByID = async (language_id) => {
-            const res = await getLanguageByID(language_id);
-            console.log(res);
-        };
-        fetchLanguageByID(1);
+        const active_language = JSON.parse(localStorage.getItem("active_language"));
+
+        if (active_language == null) {
+            console.log("Not active language yet!");
+            return;
+        }
+
+        setActiveLanguage(active_language);
+        setCode(convertCode(localStorage.getItem(`${id}_${active_language.name}`)));
     }, []);
 
     // ---------------------------------------------------------------- //
@@ -133,19 +171,22 @@ function Problem() {
     const [currentCaseTest, setCurrentCaseTest] = useState(0);
     const [currentCaseResult, setCurrentCaseResult] = useState(0);
     const [currentConsoleNav, setCurrentConsoleNav] = useState(0);
-    const [currentResult, setCurrentResult] = useState({
-        body: [
-            {
-                result: 'not',
-            },
-        ],
-    });
+    const [run, setRun] = useState(false);
+    const [currentResult, setCurrentResult] = useState([
+        {
+            success: true,
+        }
+    ]);
     const [testcases, setTestcases] = useState([
         {
             input: '',
             output: '',
         },
     ]);
+
+    // console.log("case test: ", currentCaseTest);
+    // console.log("case result: ", currentCaseResult);
+    console.log("result: ", currentResult);
 
     const handleToggleConsole = () => {
         var gridRow = $('.grid-row');
@@ -226,16 +267,45 @@ function Problem() {
         });
     }, []);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const res = await problemRunCode(id, code, languages[language].name);
-        console.log(res.message);
-        if (res.message === 'Successfully') {
-            setCurrentResult(res);
-        } else {
-            alert('Try again!');
+    const handleOpenConsole = () => {
+        var gridRow = $('.grid-row');
+        var problemConsoleNav = $('.problemConsoleNav');
+        var problemConsoleBody = $('.problemConsoleBody');
+
+        if (gridRow[0].classList.contains('closeConsole')) {
+            gridRow[0].style.gridTemplateRows = null;
+            gridRow[0].classList.remove('closeConsole');
+            gridRow[0].classList.add('openConsole');
+            problemConsoleNav[0].classList.remove('hide');
+            problemConsoleBody[0].classList.remove('hide');
         }
-        console.log(res.body[0].result);
+    };
+
+    const handleRunCode = async () => {
+        handleOpenConsole();
+        setRun(true);
+
+        if (!activeLanguage) {
+            console.log("Cannot get active language");
+            return;
+        }
+
+        const res = await problemRunCode(id, code, activeLanguage.name);
+
+        if (res.message === 'Successfully') {
+            setCurrentResult(res.body);
+        } else {
+            alert('Try running the code again!');
+        }
+    }
+
+    const handleSubmitCode = async (e) => {
+        e.preventDefault();
+        if (!run) {
+            handleRunCode();
+        }
+
+        // handle submit code 
     };
 
     useEffect(() => {
@@ -255,41 +325,6 @@ function Problem() {
         return sum / length;
     };
 
-    const convertCode = (code) => {
-        code = code.replaceAll('\\n', '\n');
-        code = code.replaceAll('\\t', '\t');
-        return code;
-    };
-
-    // Handle problem_languages
-    useEffect(() => {
-        async function fetchProblemLanguagesByProblemID(problem_id) {
-            const res = await getProblemLanguagesByProblemID(problem_id);
-            console.log(res);
-            setLanguages(res.body);
-            setLanguage(parseInt(res.body[0].language_id) - 1);
-            if (localStorage.getItem(`${id}_${languages[language].name}`)) {
-                setCode(convertCode(localStorage.getItem(`${id}_${languages[language].name}`)));
-            } else {
-                setCode(convertCode(res.body[0].initialcode));
-            }
-        }
-        fetchProblemLanguagesByProblemID(id);
-    }, [id]);
-
-    useEffect(() => {
-        console.log(languages[language].initialcode);
-        if (localStorage.getItem(`${id}_${languages[language].name}`)) {
-            setCode(convertCode(localStorage.getItem(`${id}_${languages[language].name}`)));
-        } else {
-            setCode(convertCode(languages[language].initialcode));
-        }
-    }, [language, languages]);
-
-    useEffect(() => {
-        localStorage.setItem(`${id}_${languages[language].name}`, code);
-    }, [code, id, language, languages]);
-
     return (
         <div className="problem-body">
             <div className="problems">
@@ -301,9 +336,8 @@ function Problem() {
                                     <div className="problem-sidebar">
                                         <div className="problem-sidebar-items">
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'description' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'description' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problem/${id}?tab=description`);
                                                 }}
@@ -311,9 +345,8 @@ function Problem() {
                                                 Description
                                             </div>
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'solutions' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'solutions' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problem/${id}?tab=solutions`);
                                                 }}
@@ -321,9 +354,8 @@ function Problem() {
                                                 Solutions
                                             </div>
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'submissions' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'submissions' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problem/${id}?tab=submissions`);
                                                 }}
@@ -334,9 +366,8 @@ function Problem() {
                                                 Discussion
                                             </div> */}
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'editorial' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'editorial' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problem/${id}?tab=editorial`);
                                                 }}
@@ -361,21 +392,22 @@ function Problem() {
                                             {/* ------------ Code ------------ */}
                                             <div className="bg-white">
                                                 <div className="d-flex justify-content-between align-items-center problem-code-header border-bottom">
-                                                    <div class="dropdown">
+                                                    <div className="dropdown">
                                                         <div
-                                                            class="problem-languages dropdown-toggle"
+                                                            className="problem-languages dropdown-toggle"
                                                             type="button"
                                                             data-bs-toggle="dropdown"
                                                             aria-expanded="false"
                                                         >
-                                                            {languages[language].name}
+                                                            {activeLanguage !== null ? activeLanguage.name : "cpp"}
                                                         </div>
-                                                        <ul class="dropdown-menu">
-                                                            {languages.map((value) => {
+                                                        <ul className="dropdown-menu">
+                                                            {languages.map((value, index) => {
                                                                 return (
                                                                     <li
                                                                         className="dropdown-item"
                                                                         onClick={handleLanguageChange}
+                                                                        key={index}
                                                                     >
                                                                         {value.name}
                                                                     </li>
@@ -384,70 +416,74 @@ function Problem() {
                                                         </ul>
                                                     </div>
                                                     <div className="d-flex align-items-center pe-4">
-                                                        <div className="icon reset-code">
-                                                            <FontAwesomeIcon icon={faRotateLeft} />
+                                                        <div className="icon reset-code" onClick={handleResetCode}>
+                                                            <FontAwesomeIcon icon={faRotateLeft} fontSize={20} />
                                                         </div>
                                                         <div className="icon setting">
-                                                            <FontAwesomeIcon icon={faGear} />
+                                                            <FontAwesomeIcon icon={faGear} fontSize={20} />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="mt-1">
-                                                    {language === 1 && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.cpp()]}
-                                                            onChange={onChange}
-                                                            theme={xcodeLight}
-                                                        />
-                                                    )}
-                                                    {language === 'Java' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.java()]}
-                                                            onChange={onChange}
-                                                            theme={xcodeLight}
-                                                        />
-                                                    )}
-                                                    {language === 0 && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.python()]}
-                                                            onChange={onChange}
-                                                            theme={xcodeLight}
-                                                        />
-                                                    )}
-                                                    {language === 'C' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.c()]}
-                                                            onChange={onChange}
-                                                            theme={xcodeLight}
-                                                        />
-                                                    )}
-                                                    {language === 'C#' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.csharp()]}
-                                                            onChange={onChange}
-                                                            theme={xcodeLight}
-                                                        />
-                                                    )}
-                                                    {language === 'JavaScript' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.javascript()]}
-                                                            onChange={onChange}
-                                                            theme={xcodeLight}
-                                                        />
-                                                    )}
-                                                    {language === 'PHP' && (
-                                                        <CodeMirror
-                                                            value={code}
-                                                            extensions={[langs.php()]}
-                                                            onChange={onChange}
-                                                            theme={xcodeLight}
-                                                        />
+                                                    {activeLanguage && (
+                                                        <>
+                                                            {activeLanguage.id === 1 && (
+                                                                <CodeMirror
+                                                                    value={code}
+                                                                    extensions={[langs.python()]}
+                                                                    onChange={onChange}
+                                                                    theme={xcodeLight}
+                                                                />
+                                                            )}
+                                                            {activeLanguage.id === 2 && (
+                                                                <CodeMirror
+                                                                    value={code}
+                                                                    extensions={[langs.cpp()]}
+                                                                    onChange={onChange}
+                                                                    theme={xcodeLight}
+                                                                />
+                                                            )}
+                                                            {activeLanguage.id === 'Java' && (
+                                                                <CodeMirror
+                                                                    value={code}
+                                                                    extensions={[langs.java()]}
+                                                                    onChange={onChange}
+                                                                    theme={xcodeLight}
+                                                                />
+                                                            )}
+                                                            {activeLanguage.id === 'C' && (
+                                                                <CodeMirror
+                                                                    value={code}
+                                                                    extensions={[langs.c()]}
+                                                                    onChange={onChange}
+                                                                    theme={xcodeLight}
+                                                                />
+                                                            )}
+                                                            {activeLanguage.id === 'C#' && (
+                                                                <CodeMirror
+                                                                    value={code}
+                                                                    extensions={[langs.csharp()]}
+                                                                    onChange={onChange}
+                                                                    theme={xcodeLight}
+                                                                />
+                                                            )}
+                                                            {activeLanguage.id === 'JavaScript' && (
+                                                                <CodeMirror
+                                                                    value={code}
+                                                                    extensions={[langs.javascript()]}
+                                                                    onChange={onChange}
+                                                                    theme={xcodeLight}
+                                                                />
+                                                            )}
+                                                            {activeLanguage.id === 'PHP' && (
+                                                                <CodeMirror
+                                                                    value={code}
+                                                                    extensions={[langs.php()]}
+                                                                    onChange={onChange}
+                                                                    theme={xcodeLight}
+                                                                />
+                                                            )}
+                                                        </>
                                                     )}
                                                 </div>
                                             </div>
@@ -463,7 +499,9 @@ function Problem() {
                                                     >
                                                         Testcase
                                                     </div>
-                                                    <div className={clsx('problemConsoleNavItem', 'ms-4')}>Result</div>
+                                                    <div className={clsx('problemConsoleNavItem', 'ms-4')}>
+                                                        Result
+                                                    </div>
                                                 </div>
                                                 <div className={clsx('problemConsoleBody', 'hide')}>
                                                     {currentConsoleNav === 0 && (
@@ -497,7 +535,7 @@ function Problem() {
                                                                     {testcases[currentCaseTest].input
                                                                         .split(' ')
                                                                         .map((input, index) => (
-                                                                            <div>{input}</div>
+                                                                            <div key={index}>{input}</div>
                                                                         ))}
                                                                 </div>
                                                             </div>
@@ -517,7 +555,7 @@ function Problem() {
                                                     )}
 
                                                     {currentConsoleNav === 1 &&
-                                                        currentResult.body[0].result === 'not' && (
+                                                        run === false && (
                                                             <div
                                                                 className={clsx(
                                                                     'd-flex',
@@ -531,10 +569,9 @@ function Problem() {
                                                         )}
 
                                                     {currentConsoleNav === 1 &&
-                                                        currentResult.body[0].result !== 'not' && (
+                                                        run === true && (
                                                             <div>
-                                                                {currentResult.body[currentCaseResult].result ===
-                                                                    true && (
+                                                                {!!currentResult[currentCaseResult].success && (
                                                                     <div
                                                                         className={clsx(
                                                                             'problemConsoleResult',
@@ -545,8 +582,7 @@ function Problem() {
                                                                         Accepted
                                                                     </div>
                                                                 )}
-                                                                {currentResult.body[currentCaseResult].result ===
-                                                                    false && (
+                                                                {!currentResult[currentCaseResult].success && (
                                                                     <div
                                                                         className={clsx(
                                                                             'problemConsoleResult',
@@ -567,12 +603,12 @@ function Problem() {
                                                                 >
                                                                     <div className={clsx(styles.smallText)}>
                                                                         Runtime:{' '}
-                                                                        {averageRunTime(currentResult.body).toFixed(2)}{' '}
+                                                                        {averageRunTime(currentResult).toFixed(2)}{' '}
                                                                         ms
                                                                     </div>
                                                                     <div className={clsx(styles.smallText, 'ps-3')}>
                                                                         Memory:{' '}
-                                                                        {currentResult.body[0].memory.toFixed(2)} MB
+                                                                        {currentResult[0].memory.toFixed(2)} MB
                                                                     </div>
                                                                     </div>*/}
                                                                 <div
@@ -583,18 +619,24 @@ function Problem() {
                                                                     )}
                                                                 >
                                                                     <div className={clsx('problemConsoleCaseNum')}>
-                                                                        Case 1
+                                                                        {currentResult && currentResult[0] && (
+                                                                            <span className={`round-result ${currentResult[0].success ? "result-success" : "result-failure"}`}></span>
+                                                                        )}
+                                                                        <span>Case 1</span>
                                                                     </div>
                                                                     <div
-                                                                        className={clsx(
-                                                                            'problemConsoleCaseNum',
-                                                                            'mx-2',
-                                                                        )}
+                                                                        className={clsx('problemConsoleCaseNum', ' mx-2')}
                                                                     >
-                                                                        Case 2
+                                                                        {currentResult && currentResult[1] && (
+                                                                            <span className={`round-result ${currentResult[1].success ? "result-success" : "result-failure"}`}></span>
+                                                                        )}
+                                                                        <span>Case 2</span>
                                                                     </div>
                                                                     <div className={clsx('problemConsoleCaseNum')}>
-                                                                        Case 3
+                                                                        {currentResult && currentResult[2] && (
+                                                                            <span className={`round-result ${currentResult[2].success ? "result-success" : "result-failure"}`}></span>
+                                                                        )}
+                                                                        <span>Case 3</span>
                                                                     </div>
                                                                 </div>
                                                                 <div
@@ -612,7 +654,7 @@ function Problem() {
                                                                         {testcases[currentCaseResult].input
                                                                             .split(' ')
                                                                             .map((input, index) => (
-                                                                                <div>{input}</div>
+                                                                                <div key={index}>{input}</div>
                                                                             ))}
                                                                     </div>
                                                                 </div>
@@ -630,7 +672,7 @@ function Problem() {
                                                                             styles.problemConsoleCaseBodyContent,
                                                                         )}
                                                                     >
-                                                                        {currentResult.body[currentCaseResult].output}
+                                                                        {currentResult[currentCaseResult].output}
                                                                     </div>
                                                                 </div>
                                                                 <div
@@ -676,17 +718,18 @@ function Problem() {
                                                         />
                                                     </div>
                                                     <div className={clsx('d-flex', 'align-items-center')}>
-                                                        <form onSubmit={handleSubmit}>
-                                                            <button
-                                                                type="submit"
-                                                                className={clsx(styles.btnCustom, styles.btnRun)}
-                                                            >
-                                                                Run
+                                                        <button
+                                                            type="submit"
+                                                            className={clsx(styles.btnCustom, styles.btnRun)}
+                                                            onClick={handleRunCode}
+                                                        >
+                                                            Run
+                                                        </button>
+                                                        <form onSubmit={handleSubmitCode}>
+                                                            <button className={clsx(styles.btnCustom, styles.btnSubmit)}>
+                                                                Submit
                                                             </button>
                                                         </form>
-                                                        <button className={clsx(styles.btnCustom, styles.btnSubmit)}>
-                                                            Submit
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -699,6 +742,7 @@ function Problem() {
                 />
             </div>
         </div>
+
     );
 }
 
