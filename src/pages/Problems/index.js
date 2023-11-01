@@ -67,16 +67,16 @@ function Problems() {
                                 <div className="d-flex align-items-center justify-content-between problems-nav">
                                     <div className="problems-left">
                                         <div className="d-flex align-items-center justify-content-between">
-                                            <div class="dropdown">
+                                            <div className="dropdown">
                                                 <div
-                                                    class="problem-languages dropdown-toggle problems-dropdown-toggle me-3"
+                                                    className="problem-languages dropdown-toggle problems-dropdown-toggle me-3"
                                                     type="button"
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false"
                                                 >
                                                     {difficulty}
                                                 </div>
-                                                <ul class="dropdown-menu">
+                                                <ul className="dropdown-menu">
                                                     <li className="dropdown-item" onClick={dropdownToggle}>
                                                         Easy
                                                     </li>
@@ -88,16 +88,16 @@ function Problems() {
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div class="dropdown">
+                                            <div className="dropdown">
                                                 <div
-                                                    class="problem-languages dropdown-toggle problems-dropdown-toggle"
+                                                    className="problem-languages dropdown-toggle problems-dropdown-toggle"
                                                     type="button"
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false"
                                                 >
                                                     {status}
                                                 </div>
-                                                <ul class="dropdown-menu">
+                                                <ul className="dropdown-menu">
                                                     <li className="dropdown-item" onClick={dropdownToggle}>
                                                         Todo
                                                     </li>
@@ -114,7 +114,7 @@ function Problems() {
                                     <div className="problems-right">
                                         <div className="d-flex align-items-center problem-solution-search">
                                             <div className="problem-solution-search-icon">
-                                                <i class="uil uil-search"></i>
+                                                <i className="uil uil-search"></i>
                                             </div>
                                             <div className="problem-solution-search-input">
                                                 <input

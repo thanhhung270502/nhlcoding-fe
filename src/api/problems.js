@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const problemRunCode = async (problem_id, code, language) => {
     return await axios
-        .post(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${problem_id}/${language}/run`, { code: code })
+        .post(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${problem_id}/${language}/run-jobe`, { code: code })
         .then(function (response) {
             console.log(response.data);
             return response.data;

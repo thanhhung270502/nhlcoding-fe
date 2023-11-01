@@ -96,7 +96,7 @@ function Problem() {
             const res = await getProblemLanguagesByProblemID(problem_id);
             setLanguages(res.body);
 
-            console.log("Problem languages:", res.body);
+            // console.log("Problem languages:", res.body);
 
             // Default language and code as cpp
             const { language_id, name, initialcode } = res.body.find(item => item.problem_id === parseInt(id) && item.language_id === 2);
@@ -142,12 +142,17 @@ function Problem() {
     const onChange = useCallback((value, viewUpdate) => {
         setCode(convertCode(value));
         const active_language = JSON.parse(localStorage.getItem("active_language"));
-        if (active_language != null && active_language != undefined) {
+        if (active_language !== null && active_language !== undefined) {
             localStorage.setItem(`${id}_${active_language.name}`, value);
         } else {
             return;
         }
     }, []);
+
+    const handleResetCode = () => {
+        const { initialcode } = JSON.parse(localStorage.getItem("active_language"));
+        setCode(convertCode(initialcode));
+    };
 
     useEffect(() => {
         const active_language = JSON.parse(localStorage.getItem("active_language"));
@@ -166,19 +171,22 @@ function Problem() {
     const [currentCaseTest, setCurrentCaseTest] = useState(0);
     const [currentCaseResult, setCurrentCaseResult] = useState(0);
     const [currentConsoleNav, setCurrentConsoleNav] = useState(0);
-    const [currentResult, setCurrentResult] = useState({
-        body: [
-            {
-                result: 'not',
-            },
-        ],
-    });
+    const [run, setRun] = useState(false);
+    const [currentResult, setCurrentResult] = useState([
+        {
+            success: true,
+        }
+    ]);
     const [testcases, setTestcases] = useState([
         {
             input: '',
             output: '',
         },
     ]);
+
+    // console.log("case test: ", currentCaseTest);
+    // console.log("case result: ", currentCaseResult);
+    console.log("result: ", currentResult);
 
     const handleToggleConsole = () => {
         var gridRow = $('.grid-row');
@@ -259,20 +267,45 @@ function Problem() {
         });
     }, []);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleOpenConsole = () => {
+        var gridRow = $('.grid-row');
+        var problemConsoleNav = $('.problemConsoleNav');
+        var problemConsoleBody = $('.problemConsoleBody');
+
+        if (gridRow[0].classList.contains('closeConsole')) {
+            gridRow[0].style.gridTemplateRows = null;
+            gridRow[0].classList.remove('closeConsole');
+            gridRow[0].classList.add('openConsole');
+            problemConsoleNav[0].classList.remove('hide');
+            problemConsoleBody[0].classList.remove('hide');
+        }
+    };
+
+    const handleRunCode = async () => {
+        handleOpenConsole();
+        setRun(true);
+
         if (!activeLanguage) {
-            // console.log("7", activeLanguage);
+            console.log("Cannot get active language");
             return;
         }
+
         const res = await problemRunCode(id, code, activeLanguage.name);
-        // console.log(res.message);
+
         if (res.message === 'Successfully') {
-            setCurrentResult(res);
+            setCurrentResult(res.body);
         } else {
-            alert('Try again!');
+            alert('Try running the code again!');
         }
-        // console.log(res.body[0].result);
+    }
+
+    const handleSubmitCode = async (e) => {
+        e.preventDefault();
+        if (!run) {
+            handleRunCode();
+        }
+
+        // handle submit code 
     };
 
     useEffect(() => {
@@ -293,7 +326,6 @@ function Problem() {
     };
 
     return (
-
         <div className="problem-body">
             <div className="problems">
                 <Split
@@ -367,14 +399,15 @@ function Problem() {
                                                             data-bs-toggle="dropdown"
                                                             aria-expanded="false"
                                                         >
-                                                            {activeLanguage != null ? activeLanguage.name : "c"}
+                                                            {activeLanguage !== null ? activeLanguage.name : "cpp"}
                                                         </div>
                                                         <ul className="dropdown-menu">
-                                                            {languages.map((value) => {
+                                                            {languages.map((value, index) => {
                                                                 return (
                                                                     <li
                                                                         className="dropdown-item"
                                                                         onClick={handleLanguageChange}
+                                                                        key={index}
                                                                     >
                                                                         {value.name}
                                                                     </li>
@@ -383,11 +416,11 @@ function Problem() {
                                                         </ul>
                                                     </div>
                                                     <div className="d-flex align-items-center pe-4">
-                                                        <div className="icon reset-code">
-                                                            <FontAwesomeIcon icon={faRotateLeft} />
+                                                        <div className="icon reset-code" onClick={handleResetCode}>
+                                                            <FontAwesomeIcon icon={faRotateLeft} fontSize={20} />
                                                         </div>
                                                         <div className="icon setting">
-                                                            <FontAwesomeIcon icon={faGear} />
+                                                            <FontAwesomeIcon icon={faGear} fontSize={20} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -466,7 +499,9 @@ function Problem() {
                                                     >
                                                         Testcase
                                                     </div>
-                                                    <div className={clsx('problemConsoleNavItem', 'ms-4')}>Result</div>
+                                                    <div className={clsx('problemConsoleNavItem', 'ms-4')}>
+                                                        Result
+                                                    </div>
                                                 </div>
                                                 <div className={clsx('problemConsoleBody', 'hide')}>
                                                     {currentConsoleNav === 0 && (
@@ -500,7 +535,7 @@ function Problem() {
                                                                     {testcases[currentCaseTest].input
                                                                         .split(' ')
                                                                         .map((input, index) => (
-                                                                            <div>{input}</div>
+                                                                            <div key={index}>{input}</div>
                                                                         ))}
                                                                 </div>
                                                             </div>
@@ -520,7 +555,7 @@ function Problem() {
                                                     )}
 
                                                     {currentConsoleNav === 1 &&
-                                                        currentResult.body[0].result === 'not' && (
+                                                        run === false && (
                                                             <div
                                                                 className={clsx(
                                                                     'd-flex',
@@ -534,32 +569,30 @@ function Problem() {
                                                         )}
 
                                                     {currentConsoleNav === 1 &&
-                                                        currentResult.body[0].result !== 'not' && (
+                                                        run === true && (
                                                             <div>
-                                                                {currentResult.body[currentCaseResult].result ===
-                                                                    true && (
-                                                                        <div
-                                                                            className={clsx(
-                                                                                'problemConsoleResult',
-                                                                                'problemConsoleResultSuccess',
-                                                                                'pb-4',
-                                                                            )}
-                                                                        >
-                                                                            Accepted
-                                                                        </div>
-                                                                    )}
-                                                                {currentResult.body[currentCaseResult].result ===
-                                                                    false && (
-                                                                        <div
-                                                                            className={clsx(
-                                                                                'problemConsoleResult',
-                                                                                'problemConsoleResultFailure',
-                                                                                'pb-4',
-                                                                            )}
-                                                                        >
-                                                                            Wrong Answer
-                                                                        </div>
-                                                                    )}
+                                                                {!!currentResult[currentCaseResult].success && (
+                                                                    <div
+                                                                        className={clsx(
+                                                                            'problemConsoleResult',
+                                                                            'problemConsoleResultSuccess',
+                                                                            'pb-4',
+                                                                        )}
+                                                                    >
+                                                                        Accepted
+                                                                    </div>
+                                                                )}
+                                                                {!currentResult[currentCaseResult].success && (
+                                                                    <div
+                                                                        className={clsx(
+                                                                            'problemConsoleResult',
+                                                                            'problemConsoleResultFailure',
+                                                                            'pb-4',
+                                                                        )}
+                                                                    >
+                                                                        Wrong Answer
+                                                                    </div>
+                                                                )}
                                                                 {/*<div
                                                                     className={clsx(
                                                                         'd-flex',
@@ -570,12 +603,12 @@ function Problem() {
                                                                 >
                                                                     <div className={clsx(styles.smallText)}>
                                                                         Runtime:{' '}
-                                                                        {averageRunTime(currentResult.body).toFixed(2)}{' '}
+                                                                        {averageRunTime(currentResult).toFixed(2)}{' '}
                                                                         ms
                                                                     </div>
                                                                     <div className={clsx(styles.smallText, 'ps-3')}>
                                                                         Memory:{' '}
-                                                                        {currentResult.body[0].memory.toFixed(2)} MB
+                                                                        {currentResult[0].memory.toFixed(2)} MB
                                                                     </div>
                                                                     </div>*/}
                                                                 <div
@@ -586,18 +619,24 @@ function Problem() {
                                                                     )}
                                                                 >
                                                                     <div className={clsx('problemConsoleCaseNum')}>
-                                                                        Case 1
+                                                                        {currentResult && currentResult[0] && (
+                                                                            <span className={`round-result ${currentResult[0].success ? "result-success" : "result-failure"}`}></span>
+                                                                        )}
+                                                                        <span>Case 1</span>
                                                                     </div>
                                                                     <div
-                                                                        className={clsx(
-                                                                            'problemConsoleCaseNum',
-                                                                            'mx-2',
-                                                                        )}
+                                                                        className={clsx('problemConsoleCaseNum', ' mx-2')}
                                                                     >
-                                                                        Case 2
+                                                                        {currentResult && currentResult[1] && (
+                                                                            <span className={`round-result ${currentResult[1].success ? "result-success" : "result-failure"}`}></span>
+                                                                        )}
+                                                                        <span>Case 2</span>
                                                                     </div>
                                                                     <div className={clsx('problemConsoleCaseNum')}>
-                                                                        Case 3
+                                                                        {currentResult && currentResult[2] && (
+                                                                            <span className={`round-result ${currentResult[2].success ? "result-success" : "result-failure"}`}></span>
+                                                                        )}
+                                                                        <span>Case 3</span>
                                                                     </div>
                                                                 </div>
                                                                 <div
@@ -615,7 +654,7 @@ function Problem() {
                                                                         {testcases[currentCaseResult].input
                                                                             .split(' ')
                                                                             .map((input, index) => (
-                                                                                <div>{input}</div>
+                                                                                <div key={index}>{input}</div>
                                                                             ))}
                                                                     </div>
                                                                 </div>
@@ -633,7 +672,7 @@ function Problem() {
                                                                             styles.problemConsoleCaseBodyContent,
                                                                         )}
                                                                     >
-                                                                        {currentResult.body[currentCaseResult].output}
+                                                                        {currentResult[currentCaseResult].output}
                                                                     </div>
                                                                 </div>
                                                                 <div
@@ -679,17 +718,18 @@ function Problem() {
                                                         />
                                                     </div>
                                                     <div className={clsx('d-flex', 'align-items-center')}>
-                                                        <form onSubmit={handleSubmit}>
-                                                            <button
-                                                                type="submit"
-                                                                className={clsx(styles.btnCustom, styles.btnRun)}
-                                                            >
-                                                                Run
+                                                        <button
+                                                            type="submit"
+                                                            className={clsx(styles.btnCustom, styles.btnRun)}
+                                                            onClick={handleRunCode}
+                                                        >
+                                                            Run
+                                                        </button>
+                                                        <form onSubmit={handleSubmitCode}>
+                                                            <button className={clsx(styles.btnCustom, styles.btnSubmit)}>
+                                                                Submit
                                                             </button>
                                                         </form>
-                                                        <button className={clsx(styles.btnCustom, styles.btnSubmit)}>
-                                                            Submit
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
