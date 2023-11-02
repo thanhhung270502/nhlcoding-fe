@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import './problems.scss';
 import $ from 'jquery';
 import data from './problems.json';
+import { getProblemForPagination } from '~/api/problems';
+import { getCookie } from '~/api/cookie';
+import { useNavigate } from 'react-router-dom';
 
 function Problems() {
     const [problems, setProblems] = useState([]);
@@ -11,14 +14,27 @@ function Problems() {
 
     const [pics, setPics] = useState([]);
     const [page, setPage] = useState(1);
+    const limit = 2;
     const [prevPage, setPrevPage] = useState(0);
     const [nextPage, setNextPage] = useState(2);
+    const navigate = useNavigate();
+    // useEffect(() => {
+    //     fetch(`https://picsum.photos/v2/list?page=${page}`)
+    //         .then((response) => response.json())
+    //         .then((pics) => {
+    //             setPics(pics);
+    //         });
+    // }, [page]);
+
     useEffect(() => {
-        fetch(`https://picsum.photos/v2/list?page=${page}`)
-            .then((response) => response.json())
-            .then((pics) => {
-                setPics(pics);
-            });
+        (async () => {
+            let offset = limit * (page - 1);
+            const user_id = getCookie('user_id');
+            console.log(user_id);
+            const res = await getProblemForPagination(user_id, limit, offset);
+            console.log(res);
+            setProblems(res.body);
+        })();
     }, [page]);
 
     const handleNextPage = () => {
@@ -39,10 +55,21 @@ function Problems() {
         console.log(e.target.className);
     };
 
-    useEffect(() => {
-        setProblems(data);
-        console.log(problems);
-    }, []);
+    function handleLinkToProblem(problem_id) {
+        if (problem_id) navigate(`/problems/${problem_id}`);
+    }
+
+    // const handleLinkToProblem = (problem_id) => {
+    //     if (problem_id) {
+    //         // navigate(`/problems/${problem_id}`);
+    //         console.log(problem_id);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     setProblems(data);
+    //     console.log(problems);
+    // }, []);
 
     return (
         <div className="problems">
@@ -140,26 +167,33 @@ function Problems() {
                                     {problems.map((problem, index) => (
                                         <div className="py-2 d-flex align-items-center">
                                             <div className="text-center col-2">
-                                                {problem.status === '1' && (
-                                                    <div className="problems-status-accept">Complete</div>
+                                                {problem.status === 'Solved' && (
+                                                    <div className="problems-status-accept">Solved</div>
                                                 )}
                                                 {problem.status === '2' && (
                                                     <div className="problems-status-progress">In progress</div>
                                                 )}
-                                                {problem.status === '0' && (
+                                                {problem.status === 'Todo' && (
                                                     <div className="problems-status">Not starting</div>
                                                 )}
                                             </div>
-                                            <div className="text-center col-2">{problem.problem_id}</div>
-                                            <div className="px-3 col-6">{problem.problem_title}</div>
+                                            <div
+                                                className="text-center col-2"
+                                                onClick={() => {
+                                                    handleLinkToProblem(problem.id);
+                                                }}
+                                            >
+                                                {problem.id}
+                                            </div>
+                                            <div className="px-3 col-6">{problem.title}</div>
                                             <div className="text-center col-2">
-                                                {problem.problem_level_id === '1' && (
+                                                {problem.level === 'Easy' && (
                                                     <div className="problems-status-accept">Easy</div>
                                                 )}
-                                                {problem.problem_level_id === '2' && (
+                                                {problem.level === 'Medium' && (
                                                     <div className="problems-status-progress">Medium</div>
                                                 )}
-                                                {problem.problem_level_id === '3' && (
+                                                {problem.level === 'Hard' && (
                                                     <div className="problems-status-high">Hard</div>
                                                 )}
                                             </div>
@@ -167,6 +201,7 @@ function Problems() {
                                     ))}
                                 </div>
                             </div>
+                            {/*
                             <div className="mt-5">
                                 <div className="problems-head d-flex align-items-center justify-content-between">
                                     <div className="text-center col-2">ID</div>
@@ -181,6 +216,7 @@ function Problems() {
                                     ))}
                                 </div>
                             </div>
+                            */}
                             <div className="mt-5">
                                 <div className="d-flex justify-content-center align-items-center">
                                     <div className="d-flex align-items-center justify-content-center pagination">

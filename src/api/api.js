@@ -53,8 +53,8 @@ export const getUserGoogle = async () => {
 export const logoutGoogle = async () => {
     return await axios
         .get(`${process.env.REACT_APP_LOCAL_API_URL}/auth/logout`, { withCredentials: true })
-        .then(function (response) { })
-        .catch(function (err) { });
+        .then(function (response) {})
+        .catch(function (err) {});
 };
 
 export const login = async (info) => {

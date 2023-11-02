@@ -8,6 +8,7 @@ import 'katex/dist/katex.min.css';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
+import { getAllLanguages } from '~/api/languages';
 
 const MainChild = ({ descriptionData, setDescriptionData }) => {
     const [titleText, setTitleText] = useState('');
@@ -18,6 +19,22 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
             localStorage.setItem('title', inputValue);
         }
     };
+
+    const [languages, setLanguages] = useState([]);
+    useEffect(() => {
+        (async () => {
+            const res = await getAllLanguages();
+            console.log(res);
+            let p = [];
+            for (let i = 0; i < res.data.length; i++) {
+                p.push({
+                    value: res.data[i].id,
+                    label: res.data[i].name,
+                });
+            }
+            setLanguages(p);
+        })();
+    }, []);
 
     const options = [
         { value: 'cpp_function', label: 'Cpp Function' },

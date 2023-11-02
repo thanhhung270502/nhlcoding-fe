@@ -2,6 +2,7 @@ import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import './contribute.scss';
+import { createProblem } from '~/api/problems';
 
 const Contribute = ({ contributeStep, mainChild, rightChild }) => {
     const routeStep = [
@@ -15,7 +16,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
 
     const navigate = useNavigate();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // validate form data
 
         const submitData = {
@@ -32,6 +33,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
         // run code if "validate" is "true"
 
         console.log(submitData);
+        const res = await createProblem(submitData);
 
         // send data to back-end server
 
