@@ -385,7 +385,7 @@ function Problem() {
                                     <div className="problem-content">
                                         {tab === 'description' && <Description />}
                                         {tab === 'solutions' && <Solution />}
-                                        {tab === 'submissions' && <Submission />}
+                                        {tab === 'submissions' && <Submission problem_id={id} />}
                                         {tab === 'editorial' && <Editorial />}
                                     </div>
                                 </div>
