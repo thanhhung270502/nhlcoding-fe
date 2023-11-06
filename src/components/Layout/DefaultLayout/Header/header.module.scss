@@ -1,0 +1,100 @@
+.navbar {
+    height: 60px;
+    background-color: var(--blue-dark-3);
+    color: var(--white);
+    padding: 0 3rem;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.navbarBrand {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.logoImage {
+    height: 40px;
+}
+
+.logoName {
+    // color: var(--white);
+    // font-weight: bold;
+    padding-left: 1rem;
+}
+
+.navbarSeparator {
+    padding: 0 2rem;
+    color: var(--gray-dark-2);
+}
+
+.navbarNav {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-grow: 1;
+}
+
+.navbarItem {
+    padding: 1rem 2rem;
+    border-bottom: 4px solid var(--blue-dark-3);
+}
+
+.navbarLink {
+    color: var(--white);
+    font-weight: bold;
+
+    &:hover {
+        color: var(--white);
+    }
+}
+
+.navbarActive {
+    border-color: var(--blue);
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdownToggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.name {
+    font-weight: bold;
+    padding: 0 1rem;
+}
+
+.dropdownMenu {
+    position: absolute;
+    right: 0;
+    top: 120%;
+    width: 250px;
+    padding: 0.25rem 0;
+    border-radius: 2px;
+    background-color: var(--white);
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dropdownItem {
+    padding: 0.5rem 1.5rem;
+    color: var(--black);
+    cursor: pointer;
+
+    &:hover {
+        // background-color: var(--gray);
+        font-weight: bold;
+    }
+}
+
+.dropdownDivider {
+    margin: 0.3rem 0;
+    height: 1px;
+    background-color: var(--gray);
+}
