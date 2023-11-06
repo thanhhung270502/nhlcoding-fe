@@ -36,7 +36,7 @@ function Home() {
     const navigate = useNavigate();
     const handleClickStart = () => {
         if (currentUser) {
-            navigate('/problem/2');
+            navigate('/problems/1');
         } else {
             SignupModalTrigger.open();
         }

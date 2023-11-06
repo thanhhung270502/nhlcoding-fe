@@ -45,3 +45,26 @@ export const getLanguageByID = async (language_id) => {
             return error.response;
         });
 };
+
+export const getProblemForPagination = async (user_id, limit, offset) => {
+    return await axios
+        .get(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${user_id}/${limit}/${offset}`)
+        .then((response) => response.data)
+        .catch((error) => {
+            console.log(error);
+            return error.response;
+        });
+};
+
+export const createProblem = async (problem) => {
+    return await axios
+        .post(`${process.env.REACT_APP_LOCAL_API_URL}/problems`, problem)
+        .then(function (response) {
+            console.log(response.data);
+            return response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+            return error;
+        });
+};

@@ -24,9 +24,9 @@ const publicRoutes = [
         path: '/problems',
         component: Problems,
     },
-    // http://localhost:4000/problem
+    // http://localhost:4000/problems/:id
     {
-        path: '/problem/:id',
+        path: '/problems/:id',
         component: Problem,
         layout: OnlyHeader,
     },
