@@ -46,9 +46,9 @@ export const getLanguageByID = async (language_id) => {
         });
 };
 
-export const getProblemForPagination = async (user_id, limit, offset) => {
+export const getProblemForPagination = async (user_id, limit, offset, level, status) => {
     return await axios
-        .get(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${user_id}/${limit}/${offset}`)
+        .get(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${user_id}/${limit}/${offset}/${level}/${status}`)
         .then((response) => response.data)
         .catch((error) => {
             console.log(error);

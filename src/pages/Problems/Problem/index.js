@@ -212,64 +212,64 @@ function Problem() {
         }
     };
 
-    // useEffect(() => {
-    //     const problemConsoleCaseNum = $('.problemConsoleCaseNum');
-    //     // eslint-disable-next-line array-callback-return
-    //     problemConsoleCaseNum.map((index, value) => {
-    //         if (currentConsoleNav === 0) {
-    //             // eslint-disable-next-line array-callback-return
-    //             problemConsoleCaseNum.map((i, v) => {
-    //                 if (i === currentCaseTest) {
-    //                     problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
-    //                 } else {
-    //                     problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
-    //                 }
-    //             });
-    //         } else {
-    //             // eslint-disable-next-line array-callback-return
-    //             problemConsoleCaseNum.map((i, v) => {
-    //                 if (i === currentCaseResult) {
-    //                     problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
-    //                 } else {
-    //                     problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
-    //                 }
-    //             });
-    //         }
-    //         value.addEventListener('click', () => {
-    //             if (currentConsoleNav === 0) {
-    //                 setCurrentCaseTest(index);
-    //             } else {
-    //                 setCurrentCaseResult(index);
-    //             }
-    //             // eslint-disable-next-line array-callback-return
-    //             problemConsoleCaseNum.map((i, v) => {
-    //                 if (i === index) {
-    //                     problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
-    //                 } else {
-    //                     problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
-    //                 }
-    //             });
-    //         });
-    //     });
-    // }, [currentCaseResult, currentCaseTest, currentConsoleNav, currentResult]);
+    useEffect(() => {
+        const problemConsoleCaseNum = $('.problemConsoleCaseNum');
+        // eslint-disable-next-line array-callback-return
+        problemConsoleCaseNum.map((index, value) => {
+            if (currentConsoleNav === 0) {
+                // eslint-disable-next-line array-callback-return
+                problemConsoleCaseNum.map((i, v) => {
+                    if (i === currentCaseTest) {
+                        problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
+                    } else {
+                        problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
+                    }
+                });
+            } else {
+                // eslint-disable-next-line array-callback-return
+                problemConsoleCaseNum.map((i, v) => {
+                    if (i === currentCaseResult) {
+                        problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
+                    } else {
+                        problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
+                    }
+                });
+            }
+            value.addEventListener('click', () => {
+                if (currentConsoleNav === 0) {
+                    setCurrentCaseTest(index);
+                } else {
+                    setCurrentCaseResult(index);
+                }
+                // eslint-disable-next-line array-callback-return
+                problemConsoleCaseNum.map((i, v) => {
+                    if (i === index) {
+                        problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
+                    } else {
+                        problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
+                    }
+                });
+            });
+        });
+    }, [currentCaseResult, currentCaseTest, currentConsoleNav, currentResult]);
 
-    // useEffect(() => {
-    //     const problemConsoleNavItem = $('.problemConsoleNavItem');
-    //     // eslint-disable-next-line array-callback-return
-    //     problemConsoleNavItem.map((index, value) => {
-    //         value.addEventListener('click', () => {
-    //             setCurrentConsoleNav(index);
-    //             // eslint-disable-next-line array-callback-return
-    //             problemConsoleNavItem.map((i, v) => {
-    //                 if (i === index) {
-    //                     problemConsoleNavItem[i].classList.add('problemConsoleNavItemActive');
-    //                 } else {
-    //                     problemConsoleNavItem[i].classList.remove('problemConsoleNavItemActive');
-    //                 }
-    //             });
-    //         });
-    //     });
-    // }, []);
+    useEffect(() => {
+        const problemConsoleNavItem = $('.problemConsoleNavItem');
+        // eslint-disable-next-line array-callback-return
+        problemConsoleNavItem.map((index, value) => {
+            value.addEventListener('click', () => {
+                setCurrentConsoleNav(index);
+                // eslint-disable-next-line array-callback-return
+                problemConsoleNavItem.map((i, v) => {
+                    if (i === index) {
+                        problemConsoleNavItem[i].classList.add('problemConsoleNavItemActive');
+                    } else {
+                        problemConsoleNavItem[i].classList.remove('problemConsoleNavItemActive');
+                    }
+                });
+            });
+        });
+    }, []);
 
     const handleOpenConsole = () => {
         var gridRow = $('.grid-row');
@@ -312,13 +312,13 @@ function Problem() {
         // handle submit code
     };
 
-    // useEffect(() => {
-    //     async function fetchTestcaseByProblemID(problem_id) {
-    //         const res = await getTestcaseByProblemID(problem_id);
-    //         setTestcases(res.body.testcases);
-    //     }
-    //     fetchTestcaseByProblemID(id);
-    // }, [id]);
+    useEffect(() => {
+        async function fetchTestcaseByProblemID(problem_id) {
+            const res = await getTestcaseByProblemID(problem_id);
+            setTestcases(res.body.testcases);
+        }
+        fetchTestcaseByProblemID(id);
+    }, [id]);
 
     const averageRunTime = (arr) => {
         var length = arr.length;
