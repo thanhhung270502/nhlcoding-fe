@@ -1,5 +1,6 @@
 .problems {
-    height: calc(100vh - 116px);
+    min-height: calc(100vh - 116px);
+    padding-bottom: 8rem;
 }
 
 .problems-categories {
@@ -119,3 +120,12 @@
 //     background-color: var();
 //     color: var(--white);
 // }
+
+.problem-solution-search-submit {
+    border: none;
+    background-color: var(--blue-dark);
+    color: var(--white);
+    position: absolute;
+    right: 12px;
+    padding: 0 12px;
+}

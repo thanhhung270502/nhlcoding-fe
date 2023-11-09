@@ -6,9 +6,9 @@ import { getCookie } from '~/api/cookie';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getAllLevels } from '~/api/levels';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-const limit = 10;
+// const limit = 10;
 const statusData = [
     {
         id: 1,
@@ -24,16 +24,21 @@ const statusData = [
     },
 ];
 
+const limits = [5, 10, 15, 20];
+
 function Problems() {
     const [problems, setProblems] = useState([]);
     const [levels, setLevels] = useState([]);
     const [statuses, setStatuses] = useState(statusData);
+    const [text, setText] = useState(undefined);
+    const [limit, setLimit] = useState(10);
 
     const navigate = useNavigate();
     const [params, setParams] = useSearchParams();
     const page = typeof params.get('page') === 'string' ? params.get('page') : '1';
     const level = typeof params.get('level') === 'string' ? params.get('level') : undefined;
     const status = typeof params.get('status') === 'string' ? params.get('status') : undefined;
+    const search = typeof params.get('search') === 'string' ? params.get('search') : undefined;
 
     const handleNextPage = () => {
         if (level && status) {
@@ -109,7 +114,11 @@ function Problems() {
     };
 
     const deleteStatus = () => {
-        if (level) {
+        if (search && level) {
+            navigate(`/problems/?page=1&level=${level}&search=${search}`);
+        } else if (search && !level) {
+            navigate(`/problems/?page=1&search=${search}`);
+        } else if (!search && level) {
             navigate(`/problems/?page=1&level=${level}`);
         } else {
             navigate(`/problems/?page=1`);
@@ -117,11 +126,60 @@ function Problems() {
     };
 
     const deleteLevel = () => {
-        if (status) {
+        if (search && status) {
+            navigate(`/problems/?page=1&status=${status}&search=${search}`);
+        } else if (search && !status) {
+            navigate(`/problems/?page=1&search=${search}`);
+        } else if (!search && status) {
             navigate(`/problems/?page=1&status=${status}`);
         } else {
             navigate(`/problems/?page=1`);
         }
+    };
+
+    const deleteText = () => {
+        if (status && level) {
+            navigate(`/problems/?page=1&status=${status}&level=${level}`);
+        } else if (status && !level) {
+            navigate(`/problems/?page=1&status=${status}`);
+        } else if (!status && level) {
+            navigate(`/problems/?page=1&level=${level}`);
+        } else {
+            navigate(`/problems/?page=1`);
+        }
+    };
+
+    const handleChangeSearchInput = (event) => {
+        setText(event.target.value);
+    };
+
+    const handleSubmitSearch = () => {
+        console.log(text);
+        if (!text) {
+            if (level && status) {
+                navigate(`/problems/?page=${page}&level=${level}&status=${status}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${page}&status=${status}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${page}&level=${level}`);
+            } else {
+                navigate(`/problems/?page=${page}`);
+            }
+        } else {
+            if (level && status) {
+                navigate(`/problems/?page=${page}&level=${level}&status=${status}&search=${text}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${page}&status=${status}&search=${text}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${page}&level=${level}&search=${text}`);
+            } else {
+                navigate(`/problems/?page=${page}&search=${text}`);
+            }
+        }
+    };
+
+    const handleChangeLimit = (lim) => {
+        setLimit(lim);
     };
 
     useEffect(() => {
@@ -131,10 +189,12 @@ function Problems() {
             if (!user_id) user_id = 'empty';
             var curLevel = level ? level : 'empty';
             var curStatus = status ? status : 'empty';
-            var response = await getProblemForPagination(user_id, limit, offset, curLevel, curStatus);
+            var curText = search ? search : 'empty';
+            console.log(curText);
+            var response = await getProblemForPagination(user_id, limit, offset, curLevel, curStatus, curText);
             setProblems(response.body);
         })();
-    }, [level, page, status]);
+    }, [search, level, page, status, limit]);
 
     useEffect(() => {
         (async () => {
@@ -155,12 +215,15 @@ function Problems() {
                                         <div className="d-flex align-items-center justify-content-between">
                                             <div className="dropdown">
                                                 <div
-                                                    className="problem-languages dropdown-toggle problems-dropdown-toggle me-3"
+                                                    className="problem-languages problems-dropdown-toggle me-3"
                                                     type="button"
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false"
                                                 >
                                                     Difficulty
+                                                    <span className="ps-3">
+                                                        <FontAwesomeIcon icon={faCaretDown} />
+                                                    </span>
                                                 </div>
                                                 <ul className="dropdown-menu problem-dropdown-menu">
                                                     {levels.map((lel) => {
@@ -195,12 +258,15 @@ function Problems() {
                                             {getCookie('user_id') && (
                                                 <div className="dropdown">
                                                     <div
-                                                        className="problem-languages dropdown-toggle problems-dropdown-toggle me-3"
+                                                        className="problem-languages problems-dropdown-toggle me-3"
                                                         type="button"
                                                         data-bs-toggle="dropdown"
                                                         aria-expanded="false"
                                                     >
                                                         Status
+                                                        <span className="ps-3">
+                                                            <FontAwesomeIcon icon={faCaretDown} />
+                                                        </span>
                                                     </div>
                                                     <ul className="dropdown-menu problem-dropdown-menu">
                                                         {statuses.map((sta) => {
@@ -236,13 +302,16 @@ function Problems() {
                                             {!getCookie('user_id') && (
                                                 <div className="dropdown">
                                                     <button
-                                                        className="problem-languages dropdown-toggle problems-dropdown-toggle me-3"
+                                                        className="problem-languages problems-dropdown-toggle me-3"
                                                         type="button"
                                                         data-bs-toggle="dropdown"
                                                         aria-expanded="false"
                                                         disabled
                                                     >
                                                         Status
+                                                        <span className="ps-3">
+                                                            <FontAwesomeIcon icon={faCaretDown} />
+                                                        </span>
                                                     </button>
                                                 </div>
                                             )}
@@ -256,8 +325,10 @@ function Problems() {
                                             <div className="problem-solution-search-input">
                                                 <input
                                                     type="text"
-                                                    placeholder="Search for solution"
+                                                    placeholder="Search by title..."
                                                     className="form-control"
+                                                    onChange={handleChangeSearchInput}
+                                                    onKeyUp={handleSubmitSearch}
                                                 />
                                             </div>
                                         </div>
@@ -278,6 +349,14 @@ function Problems() {
                                         <div className="d-flex align-items-center filter-item">
                                             <div className="pe-1">{status}</div>
                                             <div className="filter-item-delete" onClick={deleteStatus}>
+                                                <FontAwesomeIcon icon={faXmark} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    {search && (
+                                        <div className="d-flex align-items-center filter-item">
+                                            <div className="pe-1">{search}</div>
+                                            <div className="filter-item-delete" onClick={deleteText}>
                                                 <FontAwesomeIcon icon={faXmark} />
                                             </div>
                                         </div>
@@ -332,7 +411,49 @@ function Problems() {
                                 </div>
                             </div>
                             <div className="mt-5">
-                                <div className="d-flex justify-content-center align-items-center">
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div className="dropdown">
+                                        <div
+                                            className="problem-languages problems-dropdown-toggle me-3"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                        >
+                                            {limit} / page
+                                            <span className="ps-3">
+                                                <FontAwesomeIcon icon={faCaretDown} />
+                                            </span>
+                                        </div>
+                                        <ul className="dropdown-menu problem-dropdown-menu">
+                                            {limits.map((lim) => {
+                                                if (lim === limit) {
+                                                    return (
+                                                        <li
+                                                            className="d-flex align-items-center justify-content-between dropdown-item"
+                                                            onClick={() => {
+                                                                handleChangeLimit(lim);
+                                                            }}
+                                                        >
+                                                            {lim}
+                                                            <span>
+                                                                <FontAwesomeIcon icon={faCheck} />
+                                                            </span>
+                                                        </li>
+                                                    );
+                                                } else
+                                                    return (
+                                                        <li
+                                                            className="dropdown-item"
+                                                            onClick={() => {
+                                                                handleChangeLimit(lim);
+                                                            }}
+                                                        >
+                                                            {lim}
+                                                        </li>
+                                                    );
+                                            })}
+                                        </ul>
+                                    </div>
                                     <div className="d-flex align-items-center justify-content-center pagination">
                                         {parseInt(page) === 1 && (
                                             <div className="d-flex align-items-center justify-content-center pagination">
