@@ -55,21 +55,6 @@ const RightChild = () => {
         }
     }, []);
 
-    const [isChecked, setIsChecked] = useState(false);
-
-    useEffect(() => {
-        const savedCheckedState = localStorage.getItem('validate');
-        if (savedCheckedState !== null) {
-            setIsChecked(savedCheckedState === 'true');
-        }
-    }, []);
-
-    const handleCheckboxChange = () => {
-        const updatedCheckedState = !isChecked;
-        setIsChecked(updatedCheckedState);
-        localStorage.setItem('validate', updatedCheckedState.toString());
-    };
-
     return (
         <div className="contribute-body-main-content">
             <div className="d-flex gap-1">
@@ -91,11 +76,6 @@ const RightChild = () => {
                     height="320px"
                 />
             </div>
-
-            <label className="d-flex gap-2 align-items-center">
-                <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} className="checkbox" />
-                <div>Validate on submit</div>
-            </label>
         </div>
     );
 };

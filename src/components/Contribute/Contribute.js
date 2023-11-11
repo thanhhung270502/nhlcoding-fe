@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import './contribute.scss';
 import { createProblem } from '~/api/problems';
+import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Contribute = ({ contributeStep, mainChild, rightChild }) => {
     const routeStep = [
@@ -18,29 +21,52 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
 
     const handleSubmit = async () => {
         // validate form data
+        var errors = [];
+        if (!localStorage.getItem('reason')) {
+            errors.push('reason');
+        }
+        if (!localStorage.getItem('question')) {
+            errors.push('question');
+        }
+        if (!localStorage.getItem('solution')) {
+            errors.push('solution');
+        }
+        if (!localStorage.getItem('testcase')) {
+            errors.push('testcase');
+        }
 
-        const submitData = {
-            code: localStorage.code ? localStorage.code : '',
-            desc: localStorage.desc ? localStorage.desc : '',
-            reason: localStorage.reason ? localStorage.reason : '',
-            selectedOption: localStorage.selectedOption ? JSON.parse(localStorage.selectedOption) : null,
-            solutions: localStorage.solutions ? localStorage.solutions : '',
-            testcases: localStorage.testcases ? JSON.parse(localStorage.testcases) : [],
-            title: localStorage.title ? localStorage.title : '',
-            validate: localStorage.validate ? true : false,
-        };
+        if (errors.length === 0) {
+            const submitData = {
+                code: localStorage.code ? localStorage.code : '',
+                desc: localStorage.desc ? localStorage.desc : '',
+                reason: localStorage.reason ? localStorage.reason : '',
+                selectedOption: localStorage.selectedOption ? JSON.parse(localStorage.selectedOption) : null,
+                solutions: localStorage.solutions ? localStorage.solutions : '',
+                testcases: localStorage.testcases ? JSON.parse(localStorage.testcases) : [],
+                title: localStorage.title ? localStorage.title : '',
+                validate: localStorage.validate ? true : false,
+            };
 
-        // run code if "validate" is "true"
+            // run code if "validate" is "true"
+            console.log(submitData);
+            // const res = await createProblem(submitData);
 
-        console.log(submitData);
-        const res = await createProblem(submitData);
+            // send data to back-end server
 
-        // send data to back-end server
+            // clear localStorage() - actually used after response is successful
+            // localStorage.clear();
 
-        // clear localStorage() - actually used after response is successful
-        localStorage.clear();
-
-        navigate('/contribute/success');
+            // navigate('/contribute/success');
+        } else {
+            var textError = 'Fields ';
+            for (let i = 0; i < errors.length; i++) {
+                if (i === errors.length - 1) {
+                    textError += errors[i];
+                } else textError += errors[i] + ', ';
+            }
+            textError += ' are empty';
+            toast(textError);
+        }
     };
 
     return (
@@ -192,11 +218,12 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                 <div className="contribute-body-main col-md-7">{mainChild}</div>
                 <div className="contribute-body-right col-md-5">{rightChild}</div>
             </div>
+            <ToastContainer />
             {contributeStep < 5 && (
                 <div className="contribute-footer-container">
                     <div className="contribute-footer">
                         {contributeStep !== 1 ? (
-                            <Link to={routeStep[contributeStep - 1]} className="contribute-nav-btn">
+                            <Link className="contribute-nav-btn" to={routeStep[contributeStep - 1]}>
                                 <FontAwesomeIcon icon={faArrowLeft} />
                             </Link>
                         ) : (

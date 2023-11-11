@@ -7,6 +7,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getAllLevels } from '~/api/levels';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import ProblemsTable from '~/components/ProblemsTable';
 
 // const limit = 10;
 const statusData = [
@@ -25,13 +26,14 @@ const statusData = [
 ];
 
 const limits = [5, 10, 15, 20];
-
 function Problems() {
     const [problems, setProblems] = useState([]);
+    const [currentProblems, setCurrentProblems] = useState([]);
     const [levels, setLevels] = useState([]);
     const [statuses, setStatuses] = useState(statusData);
     const [text, setText] = useState(undefined);
     const [limit, setLimit] = useState(10);
+    const [lengthOfProblems, setLengthOfProblems] = useState();
 
     const navigate = useNavigate();
     const [params, setParams] = useSearchParams();
@@ -41,38 +43,74 @@ function Problems() {
     const search = typeof params.get('search') === 'string' ? params.get('search') : undefined;
 
     const handleNextPage = () => {
-        if (level && status) {
-            navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}&status=${status}`);
-        } else if (!level && status) {
-            navigate(`/problems/?page=${parseInt(page) + 1}&status=${status}`);
-        } else if (level && !status) {
-            navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}`);
+        if (search) {
+            if (level && status) {
+                navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}&status=${status}&search=${search}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${parseInt(page) + 1}&status=${status}&search=${search}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}&search=${search}`);
+            } else {
+                navigate(`/problems/?page=${parseInt(page) + 1}&search=${search}`);
+            }
         } else {
-            navigate(`/problems/?page=${parseInt(page) + 1}`);
+            if (level && status) {
+                navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}&status=${status}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${parseInt(page) + 1}&status=${status}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}`);
+            } else {
+                navigate(`/problems/?page=${parseInt(page) + 1}`);
+            }
         }
     };
 
     const handlePreviousPage = () => {
-        if (level && status) {
-            navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}&status=${status}`);
-        } else if (!level && status) {
-            navigate(`/problems/?page=${parseInt(page) - 1}&status=${status}`);
-        } else if (level && !status) {
-            navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}`);
+        if (search) {
+            if (level && status) {
+                navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}&status=${status}&search=${search}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${parseInt(page) - 1}&status=${status}&search=${search}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}&search=${search}`);
+            } else {
+                navigate(`/problems/?page=${parseInt(page) - 1}&search=${search}`);
+            }
         } else {
-            navigate(`/problems/?page=${parseInt(page) - 1}`);
+            if (level && status) {
+                navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}&status=${status}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${parseInt(page) - 1}&status=${status}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}`);
+            } else {
+                navigate(`/problems/?page=${parseInt(page) - 1}`);
+            }
         }
     };
 
     const handleChangePage = (e) => {
-        if (level && status) {
-            navigate(`/problems/?page=${e.target.innerHTML}&level=${level}&status=${status}`);
-        } else if (!level && status) {
-            navigate(`/problems/?page=${e.target.innerHTML}&status=${status}`);
-        } else if (level && !status) {
-            navigate(`/problems/?page=${e.target.innerHTML}&level=${level}`);
+        if (search) {
+            if (level && status) {
+                navigate(`/problems/?page=${e.target.innerHTML}&level=${level}&status=${status}&search=${search}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${e.target.innerHTML}&status=${status}&search=${search}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${e.target.innerHTML}&level=${level}&search=${search}`);
+            } else {
+                navigate(`/problems/?page=${e.target.innerHTML}&search=${search}`);
+            }
         } else {
-            navigate(`/problems/?page=${e.target.innerHTML}`);
+            if (level && status) {
+                navigate(`/problems/?page=${e.target.innerHTML}&level=${level}&status=${status}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${e.target.innerHTML}&status=${status}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${e.target.innerHTML}&level=${level}`);
+            } else {
+                navigate(`/problems/?page=${e.target.innerHTML}`);
+            }
         }
     };
 
@@ -184,15 +222,18 @@ function Problems() {
 
     useEffect(() => {
         (async () => {
-            let offset = limit * (page - 1);
+            // let start = limit * (page - 1);
+            // let end = limit * page;
+            // console.log(start);
             var user_id = getCookie('user_id');
             if (!user_id) user_id = 'empty';
             var curLevel = level ? level : 'empty';
             var curStatus = status ? status : 'empty';
             var curText = search ? search : 'empty';
-            console.log(curText);
-            var response = await getProblemForPagination(user_id, limit, offset, curLevel, curStatus, curText);
+            var response = await getProblemForPagination(user_id, curLevel, curStatus, curText);
             setProblems(response.body);
+            // setCurrentProblems(response.body.slice(start, end));
+            // setLengthOfProblems(response.body.length);
         })();
     }, [search, level, page, status, limit]);
 
@@ -208,7 +249,8 @@ function Problems() {
             <div className="container">
                 <div className="py-4">
                     <div className="d-flex">
-                        <div className="col-9">
+                        <div className="col-2"></div>
+                        <div className="col-8">
                             <div className="mt-4">
                                 <div className="d-flex align-items-center justify-content-between problems-nav">
                                     <div className="problems-left">
@@ -339,7 +381,7 @@ function Problems() {
                                 <div className="d-flex align-items-center">
                                     {level && (
                                         <div className="d-flex align-items-center filter-item">
-                                            <div className="pe-1">{level}</div>
+                                            <div className="pe-2">{level}</div>
                                             <div className="filter-item-delete" onClick={deleteLevel}>
                                                 <FontAwesomeIcon icon={faXmark} />
                                             </div>
@@ -347,7 +389,7 @@ function Problems() {
                                     )}
                                     {status && (
                                         <div className="d-flex align-items-center filter-item">
-                                            <div className="pe-1">{status}</div>
+                                            <div className="pe-2">{status}</div>
                                             <div className="filter-item-delete" onClick={deleteStatus}>
                                                 <FontAwesomeIcon icon={faXmark} />
                                             </div>
@@ -355,7 +397,7 @@ function Problems() {
                                     )}
                                     {search && (
                                         <div className="d-flex align-items-center filter-item">
-                                            <div className="pe-1">{search}</div>
+                                            <div className="pe-2">{search}</div>
                                             <div className="filter-item-delete" onClick={deleteText}>
                                                 <FontAwesomeIcon icon={faXmark} />
                                             </div>
@@ -372,130 +414,10 @@ function Problems() {
                                         <div className="text-center col-2">Level</div>
                                     </div>
                                 </div>
-                                <div className="pt-2 problems-body">
-                                    {problems.map((problem, index) => (
-                                        <div className="py-2 d-flex align-items-center">
-                                            <div className="text-center col-2">
-                                                {problem.status === 'Solved' && (
-                                                    <div className="problems-status-accept">Solved</div>
-                                                )}
-                                                {problem.status === 'Attempted' && (
-                                                    <div className="problems-status-progress">Attempted</div>
-                                                )}
-                                                {(problem.status === 'Todo' || !problem.status) && (
-                                                    <div className="problems-status">-</div>
-                                                )}
-                                            </div>
-                                            <div
-                                                className="text-center col-2"
-                                                onClick={() => {
-                                                    handleLinkToProblem(problem.id);
-                                                }}
-                                            >
-                                                {problem.id}
-                                            </div>
-                                            <div className="px-3 col-6">{problem.title}</div>
-                                            <div className="text-center col-2">
-                                                {problem.name === 'Easy' && (
-                                                    <div className="problems-status-accept">Easy</div>
-                                                )}
-                                                {problem.name === 'Medium' && (
-                                                    <div className="problems-status-progress">Medium</div>
-                                                )}
-                                                {problem.name === 'Hard' && (
-                                                    <div className="problems-status-high">Hard</div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="mt-5">
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="dropdown">
-                                        <div
-                                            className="problem-languages problems-dropdown-toggle me-3"
-                                            type="button"
-                                            data-bs-toggle="dropdown"
-                                            aria-expanded="false"
-                                        >
-                                            {limit} / page
-                                            <span className="ps-3">
-                                                <FontAwesomeIcon icon={faCaretDown} />
-                                            </span>
-                                        </div>
-                                        <ul className="dropdown-menu problem-dropdown-menu">
-                                            {limits.map((lim) => {
-                                                if (lim === limit) {
-                                                    return (
-                                                        <li
-                                                            className="d-flex align-items-center justify-content-between dropdown-item"
-                                                            onClick={() => {
-                                                                handleChangeLimit(lim);
-                                                            }}
-                                                        >
-                                                            {lim}
-                                                            <span>
-                                                                <FontAwesomeIcon icon={faCheck} />
-                                                            </span>
-                                                        </li>
-                                                    );
-                                                } else
-                                                    return (
-                                                        <li
-                                                            className="dropdown-item"
-                                                            onClick={() => {
-                                                                handleChangeLimit(lim);
-                                                            }}
-                                                        >
-                                                            {lim}
-                                                        </li>
-                                                    );
-                                            })}
-                                        </ul>
-                                    </div>
-                                    <div className="d-flex align-items-center justify-content-center pagination">
-                                        {parseInt(page) === 1 && (
-                                            <div className="d-flex align-items-center justify-content-center pagination">
-                                                <button className="page-item" onClick={handlePreviousPage} disabled>
-                                                    Previous
-                                                </button>
-                                                <div className="page-item page-item-active" onClick={handleChangePage}>
-                                                    1
-                                                </div>
-                                                <div className="page-item" onClick={handleChangePage}>
-                                                    2
-                                                </div>
-                                                <div className="page-item" onClick={handleChangePage}>
-                                                    3
-                                                </div>
-                                                <div className="page-item" onClick={handleNextPage}>
-                                                    Next
-                                                </div>
-                                            </div>
-                                        )}
-                                        {parseInt(page) > 1 && (
-                                            <div className="d-flex align-items-center justify-content-center pagination">
-                                                <button className="page-item" onClick={handlePreviousPage}>
-                                                    Previous
-                                                </button>
-                                                <div className="page-item" onClick={handleChangePage}>
-                                                    {parseInt(page) - 1}
-                                                </div>
-                                                <div className="page-item page-item-active">{page}</div>
-                                                <div className="page-item" onClick={handleChangePage}>
-                                                    {parseInt(page) + 1}
-                                                </div>
-                                                <div className="page-item" onClick={handleNextPage}>
-                                                    Next
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                                <ProblemsTable problems={problems} itemsPerPage={limit} />
                             </div>
                         </div>
-                        <div className="col-3"></div>
+                        <div className="col-2"></div>
                     </div>
                 </div>
             </div>

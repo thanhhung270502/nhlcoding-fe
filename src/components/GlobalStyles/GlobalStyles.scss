@@ -5,6 +5,8 @@
 
 // Color
 :root {
+    --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20 70%);
+    --vp-home-hero-name-color: transparent;
     --black: #000;
     --white: #ffffff;
 
@@ -161,4 +163,8 @@ html {
 .disabled-div {
     pointer-events: none;
     user-select: none;
+}
+.Toastify__toast-container--top-right {
+    top: unset;
+    bottom: 1em;
 }

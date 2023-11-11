@@ -30,7 +30,14 @@ function Header() {
         var navbarItem = $('.navbarItem');
         for (let i = 0; i < navbarItem.length; i++) {
             navbarItem[i].classList.remove('navbarActive');
-        }
+        }    const dropdownToggle = () => {
+            var dropdownMenu = $('.dropdownMenu');
+            if (dropdownMenu[0].classList.contains('dropdownHide')) {
+                dropdownMenu[0].classList.remove('dropdownHide');
+            } else {
+                dropdownMenu[0].classList.add('dropdownHide');
+            }
+        };
         if (window.location.href === `${process.env.REACT_APP_LOCAL_WEB_URL}/`) {
             navbarItem[0].classList.add('navbarActive');
             // setCurrentLocation('home');

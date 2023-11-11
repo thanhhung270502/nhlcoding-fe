@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactSelect from 'react-select';
 import Contribute from './Contribute';
 // import CustomEditor from '../CKEditor';
-import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCheck, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'katex/dist/katex.min.css';
 import ReactMarkdown from 'react-markdown';
@@ -10,60 +10,125 @@ import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import { getAllLanguages } from '~/api/languages';
 
+import clsx from 'clsx';
+import styles from './contribute.module.scss';
+import { Link } from 'react-router-dom';
+import $ from 'jquery';
+import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
+
 const MainChild = ({ descriptionData, setDescriptionData }) => {
     const [titleText, setTitleText] = useState('');
+
+    const dropdownToggle = () => {
+        var dropdownMenu = $('.dropdownQuestion');
+        if (dropdownMenu[0].classList.contains('dropdownHide')) {
+            dropdownMenu[0].classList.remove('dropdownHide');
+        } else {
+            dropdownMenu[0].classList.add('dropdownHide');
+        }
+    };
     const handleChangeTitle = (event) => {
         const inputValue = event.target.value;
         if (inputValue.length <= 150) {
             setTitleText(inputValue);
-            localStorage.setItem('title', inputValue);
+            var question = JSON.parse(localStorage.getItem('question'));
+            if (question) {
+                question['title'] = inputValue;
+                localStorage.setItem('question', JSON.stringify(question));
+            } else {
+                localStorage.setItem(
+                    'question',
+                    JSON.stringify({
+                        title: inputValue,
+                        languages: '',
+                        description: '',
+                    }),
+                );
+            }
         }
     };
 
+    const checkLanguage = (languages, language) => {
+        for (let i = 0; i < languages.length; i++) {
+            if (languages[i].id === language.id) return true;
+        }
+        return false;
+    };
+
     const [languages, setLanguages] = useState([]);
+    const [currentLanguages, setCurrentLanguages] = useState([]);
+    const [isChecked, setIsChecked] = useState(false);
     useEffect(() => {
         (async () => {
             const res = await getAllLanguages();
-            console.log(res);
-            let p = [];
-            for (let i = 0; i < res.data.length; i++) {
-                p.push({
-                    value: res.data[i].id,
-                    label: res.data[i].name,
-                });
+            setLanguages(res.data);
+            var question = JSON.parse(localStorage.getItem('question'));
+
+            if (question) {
+                setTitleText(question['title']);
+                setCurrentLanguages(question['languages']);
+                setDescriptionData(question['description']);
             }
-            setLanguages(p);
+
+            const savedCheckedState = localStorage.getItem('validate');
+            if (savedCheckedState !== null) {
+                setIsChecked(savedCheckedState === 'true');
+            }
         })();
     }, []);
 
-    const options = [
-        { value: 'cpp_function', label: 'Cpp Function' },
-        { value: 'cpp_program', label: 'Cpp Program' },
-        { value: 'python3', label: 'Python3 Program' },
-    ];
-    const [selectedOption, setSelectedOption] = useState(null);
-    const handleSelectChange = (option) => {
-        setSelectedOption(option);
-        localStorage.setItem('selectedOption', JSON.stringify(option));
+    const handleCheckboxChange = () => {
+        const updatedCheckedState = !isChecked;
+        setIsChecked(updatedCheckedState);
+        localStorage.setItem('validate', updatedCheckedState.toString());
+    };
+
+    const handleSelectLanguages = (language) => {
+        var newCurrentLanguage;
+        if (checkLanguage(currentLanguages, language)) {
+            newCurrentLanguage = currentLanguages.filter((element) => element.id !== language.id);
+            setCurrentLanguages(newCurrentLanguage);
+        } else {
+            newCurrentLanguage = [...currentLanguages, language];
+            setCurrentLanguages(newCurrentLanguage);
+        }
+        var question = JSON.parse(localStorage.getItem('question'));
+        if (question) {
+            question['languages'] = newCurrentLanguage;
+            localStorage.setItem('question', JSON.stringify(question));
+        } else {
+            localStorage.setItem(
+                'question',
+                JSON.stringify({
+                    title: '',
+                    languages: newCurrentLanguage,
+                    description: '',
+                }),
+            );
+        }
     };
 
     const handleChangeDescription = (e) => {
         const inputValue = e.target.value;
         if (inputValue.length <= 5000) {
             setDescriptionData(inputValue);
-            localStorage.setItem('desc', inputValue);
+
+            var question = JSON.parse(localStorage.getItem('question'));
+            if (question) {
+                question['description'] = inputValue;
+                localStorage.setItem('question', JSON.stringify(question));
+            } else {
+                localStorage.setItem(
+                    'question',
+                    JSON.stringify({
+                        title: '',
+                        languages: '',
+                        description: inputValue,
+                    }),
+                );
+            }
         }
     };
-
-    useEffect(() => {
-        const savedTitle = localStorage.getItem('title');
-        const savedOption = localStorage.getItem('selectedOption');
-        const savedDesc = localStorage.getItem('desc');
-
-        savedTitle && setTitleText(savedTitle);
-        savedOption && setSelectedOption(JSON.parse(savedOption));
-        savedDesc && setDescriptionData(savedDesc);
-    }, [setDescriptionData]);
 
     return (
         <div className="contribute-body-main-content">
@@ -82,12 +147,51 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                     <div className="char-counter">{titleText.length}/150</div>
                 </div>
                 <div className="question-category">
-                    <div className="subtitle">Category *</div>
-                    <ReactSelect value={selectedOption} onChange={handleSelectChange} options={options} />
+                    <div className="subtitle">Languages *</div>
+                    <div class={clsx(styles.dropdown)}>
+                        <div className="dropdownToggleQuestion" onClick={dropdownToggle}>
+                            <div className={clsx(styles.name)}>Select languages</div>
+                            <FontAwesomeIcon icon={faCaretDown} />
+                        </div>
+                        <div className="dropdownHide dropdownQuestion">
+                            {languages.map((language) => {
+                                if (checkLanguage(currentLanguages, language))
+                                    return (
+                                        <div
+                                            className={clsx(
+                                                styles.dropdownItem,
+                                                'd-flex',
+                                                'align-items-center',
+                                                'justify-content-between',
+                                            )}
+                                            onClick={() => {
+                                                handleSelectLanguages(language);
+                                            }}
+                                        >
+                                            {language.name}
+                                            <span>
+                                                <FontAwesomeIcon icon={faCheck} />
+                                            </span>
+                                        </div>
+                                    );
+                                else {
+                                    return (
+                                        <div
+                                            className={clsx(styles.dropdownItem, 'd-flex', 'align-items-center')}
+                                            onClick={() => {
+                                                handleSelectLanguages(language);
+                                            }}
+                                        >
+                                            {language.name}
+                                        </div>
+                                    );
+                                }
+                            })}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="subtitle">Description *</div>
-            {/* <CustomEditor data={descriptionData} handleChange={handleChangeDescription} /> */}
             <textarea
                 className="textarea"
                 value={descriptionData}
@@ -96,7 +200,12 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                 placeholder="Type your decription about the question here."
             ></textarea>
             <div className="char-counter">{descriptionData.length}/5000</div>
-            <form method="POST" action="/contribute/store" />
+            <div className="mt-3">
+                <label className="d-flex gap-2 align-items-center">
+                    <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} className="checkbox" />
+                    <div>Validate description</div>
+                </label>
+            </div>
         </div>
     );
 };
