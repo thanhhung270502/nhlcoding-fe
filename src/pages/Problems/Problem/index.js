@@ -1,35 +1,35 @@
 // import { createContext, useCallback, useEffect, useState } from 'react';
-import './problem.scss';
-import Split from 'react-split-grid';
 import $ from 'jquery';
+import Split from 'react-split-grid';
+import './problem.scss';
 // import { useEffect, useState } from 'react';
-import Code from './code';
 import Description from './description';
 
-import Console from './console';
 
 // File: code.js
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import CodeMirror from '@uiw/react-codemirror';
+import { faGear, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { langs } from '@uiw/codemirror-extensions-langs';
 import { xcodeLight } from '@uiw/codemirror-theme-xcode';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import CodeMirror from '@uiw/react-codemirror';
+import { useCallback, useEffect, useState } from 'react';
 
 // File: console.js
-import clsx from 'clsx';
-import styles from './console.module.scss';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { getTestcaseByProblemID } from '~/api/testcases';
-import { getLanguageByID, problemRunCode } from '~/api/problems';
-import { useParams } from 'react-router-dom';
+import clsx from 'clsx';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { getCookie } from '~/api/cookie';
 import { getProblemLanguagesByProblemID } from '~/api/problem_languages';
+import { problemRunCode } from '~/api/problems';
+import { createSubmission } from '~/api/submissions';
+import { getTestcaseByProblemID } from '~/api/testcases';
+import Loading from '~/components/Loading';
+import { getCurrentTimeFormatted } from '~/utils';
+import styles from './console.module.scss';
 import Editorial from './editorial';
 import './problem.scss';
 import Solution from './solutions';
 import Submission from './submission';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import Loading from '~/components/Loading';
 
 function Problem() {
     const { id } = useParams();
@@ -97,8 +97,6 @@ function Problem() {
             const res = await getProblemLanguagesByProblemID(problem_id);
             setLanguages(res.body);
 
-            // console.log("Problem languages:", res.body);
-
             // Default language and code as cpp
             const { language_id, name, initialcode } = res.body.find(item => item.problem_id === parseInt(id) && item.language_id === 2);
             const lang_obj = { id: language_id, name: name, initialcode: initialcode };
@@ -158,12 +156,7 @@ function Problem() {
     useEffect(() => {
         const active_language = JSON.parse(localStorage.getItem("active_language"));
 
-        if (active_language == null) {
-            console.log("Not active language yet!");
-            return;
-        }
-
-        setActiveLanguage(active_language);
+        active_language && setActiveLanguage(active_language);
         setCode(convertCode(localStorage.getItem(`${id}_${active_language.name}`)));
     }, []);
 
@@ -184,10 +177,6 @@ function Problem() {
             output: '',
         },
     ]);
-
-    // console.log("case test: ", currentCaseTest);
-    // console.log("case result: ", currentCaseResult);
-    // console.log("result: ", currentResult);
 
     const handleToggleConsole = () => {
         var gridRow = $('.grid-row');
@@ -288,11 +277,6 @@ function Problem() {
     const [runTime, setRunTime] = useState(0);
 
     const handleRunCode = async () => {
-        // if (!activeLanguage) {
-        //     console.log("Cannot get active language");
-        //     return;
-        // }
-
         handleOpenConsole();
         setRun(true);
         setIsLoading(true);
@@ -308,19 +292,41 @@ function Problem() {
                 setRunTime(res.body.avg_runtime);
             }
 
-            console.log(compileInfo);
+            // console.log(compileInfo);
         } else {
             alert('Try running the code again!');
         }
     }
 
+    const user_id = getCookie('user_id');
+
     const handleSubmitCode = async (e) => {
         e.preventDefault();
-        if (!run) {
-            handleRunCode();
+        handleOpenConsole();
+        // handle submit code
+        const props = {
+            user_id,
+            problem_id: id,
+            status,
+            datetime: getCurrentTimeFormatted(),
+            language_id: activeLanguage.id,
+            runtime: runTime,
+            code
         }
 
-        // handle submit code 
+        if (run) {
+            const response = await createSubmission(props);
+            if (response.code === 201) {
+                // go to submission tab, with refresh
+                window.location.href = `/problem/${id}?tab=submissions`;
+                setRun(false);
+                setStatus("");
+                setCompileInfo("");
+                setRunTime(0);
+            }
+        } else {
+            alert("Please run your code first!");
+        }
     };
 
     useEffect(() => {
@@ -557,14 +563,7 @@ function Problem() {
                                                     )}
 
                                                     {!isLoading && currentConsoleNav === 1 && run === false && (
-                                                        <div
-                                                            className={clsx(
-                                                                'd-flex',
-                                                                'align-items-center',
-                                                                'justify-content-center',
-                                                                'h-100',
-                                                            )}
-                                                        >
+                                                        <div className='secondary-text'>
                                                             You must run your code
                                                         </div>
                                                     )}

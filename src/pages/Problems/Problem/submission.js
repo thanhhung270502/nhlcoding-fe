@@ -10,7 +10,7 @@ function Submission({ problem_id }) {
     useEffect(() => {
         async function fetchSubmissionsByUserProblemId(user_id, problem_id) {
             const response = await getSubmissionsByUserProblemId(user_id, problem_id);
-            setSubmissions(response.body);
+            response && setSubmissions(response.body);
         }
 
         fetchSubmissionsByUserProblemId(user_id, problem_id);
@@ -18,7 +18,7 @@ function Submission({ problem_id }) {
 
 
     return (
-        <div className="py-4 px-5">
+        <div className="py-4 px-5 h-100">
             <div className="submission-head">
                 <div className="d-flex align-items-center">
                     <div className="col-1-1">Status</div>
@@ -29,7 +29,12 @@ function Submission({ problem_id }) {
                 </div>
             </div>
             <div className="submission-body">
-                {submissions.map((submission, index) => {
+                {!submissions && (
+                    <div className="secondary-text">
+                        You don't have any submissions yet
+                    </div>
+                )}
+                {submissions && [...submissions].reverse().map((submission, index) => {
                     return (
                         <div className="d-flex align-items-center py-2" key={index}>
                             <div className="col-1-1">
