@@ -1,47 +1,42 @@
-// import { createContext, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import $ from 'jquery';
 import Split from 'react-split-grid';
-import './problem.scss';
-// import { useEffect, useState } from 'react';
-import Description from './description';
-
-
-// File: code.js
-import { faGear, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { langs } from '@uiw/codemirror-extensions-langs';
-import { xcodeLight } from '@uiw/codemirror-theme-xcode';
+import { faGear, faRotateLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import CodeMirror from '@uiw/react-codemirror';
-import { useCallback, useEffect, useState } from 'react';
+import { xcodeLight } from '@uiw/codemirror-theme-xcode';
+import { langs } from '@uiw/codemirror-extensions-langs';
 
-// File: console.js
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import Description from './description';
+import Editorial from './editorial';
+import Solution from './solutions';
+import Submission from './submission';
+import Loading from '~/components/Loading';
+
 import clsx from 'clsx';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import styles from './console.module.scss';
+import './console.scss';
+import './problem.scss';
+
 import { getCookie } from '~/api/cookie';
 import { getProblemLanguagesByProblemID } from '~/api/problem_languages';
 import { problemRunCode } from '~/api/problems';
 import { createSubmission } from '~/api/submissions';
 import { getTestcaseByProblemID } from '~/api/testcases';
-import Loading from '~/components/Loading';
 import { getCurrentTimeFormatted } from '~/utils';
-import styles from './console.module.scss';
-import Editorial from './editorial';
-import './problem.scss';
-import Solution from './solutions';
-import Submission from './submission';
 
 function Problem() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [tabParams, setTabParams] = useSearchParams();
-    const tab = typeof tabParams.get('tab') === 'string' ? tabParams.get('tab') : undefined;
+    const params = new URLSearchParams(window.location.search);
+    const tab = typeof params.get('tab') === 'string' ? params.get('tab') : undefined;
 
     useEffect(() => {
         if (!tab) {
             navigate(`/problems/${id}?tab=description`);
         }
-    }, [tab]);
+    }, [tab, id, navigate]);
 
     useEffect(() => {
         document.body.style.overflowY = 'hidden';
@@ -150,7 +145,7 @@ function Problem() {
         } else {
             return;
         }
-    }, []);
+    }, [id]);
 
     const handleResetCode = () => {
         const { initialcode } = JSON.parse(localStorage.getItem('active_language'));
@@ -162,7 +157,7 @@ function Problem() {
 
         active_language && setActiveLanguage(active_language);
         setCode(convertCode(localStorage.getItem(`${id}_${active_language.name}`)));
-    }, []);
+    }, [id]);
 
     // ---------------------------------------------------------------- //
     // File: console.js
@@ -202,64 +197,64 @@ function Problem() {
         }
     };
 
-    // useEffect(() => {
-    //     const problemConsoleCaseNum = $('.problemConsoleCaseNum');
-    //     // eslint-disable-next-line array-callback-return
-    //     problemConsoleCaseNum.map((index, value) => {
-    //         if (currentConsoleNav === 0) {
-    //             // eslint-disable-next-line array-callback-return
-    //             problemConsoleCaseNum.map((i, v) => {
-    //                 if (i === currentCaseTest) {
-    //                     problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
-    //                 } else {
-    //                     problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
-    //                 }
-    //             });
-    //         } else {
-    //             // eslint-disable-next-line array-callback-return
-    //             problemConsoleCaseNum.map((i, v) => {
-    //                 if (i === currentCaseResult) {
-    //                     problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
-    //                 } else {
-    //                     problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
-    //                 }
-    //             });
-    //         }
-    //         value.addEventListener('click', () => {
-    //             if (currentConsoleNav === 0) {
-    //                 setCurrentCaseTest(index);
-    //             } else {
-    //                 setCurrentCaseResult(index);
-    //             }
-    //             // eslint-disable-next-line array-callback-return
-    //             problemConsoleCaseNum.map((i, v) => {
-    //                 if (i === index) {
-    //                     problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
-    //                 } else {
-    //                     problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
-    //                 }
-    //             });
-    //         });
-    //     });
-    // }, [currentCaseResult, currentCaseTest, currentConsoleNav, currentResult]);
+    useEffect(() => {
+        const problemConsoleCaseNum = $('.problemConsoleCaseNum');
+        // eslint-disable-next-line array-callback-return
+        problemConsoleCaseNum.map((index, value) => {
+            if (currentConsoleNav === 0) {
+                // eslint-disable-next-line array-callback-return
+                problemConsoleCaseNum.map((i, v) => {
+                    if (i === currentCaseTest) {
+                        problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
+                    } else {
+                        problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
+                    }
+                });
+            } else {
+                // eslint-disable-next-line array-callback-return
+                problemConsoleCaseNum.map((i, v) => {
+                    if (i === currentCaseResult) {
+                        problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
+                    } else {
+                        problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
+                    }
+                });
+            }
+            value.addEventListener('click', () => {
+                if (currentConsoleNav === 0) {
+                    setCurrentCaseTest(index);
+                } else {
+                    setCurrentCaseResult(index);
+                }
+                // eslint-disable-next-line array-callback-return
+                problemConsoleCaseNum.map((i, v) => {
+                    if (i === index) {
+                        problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
+                    } else {
+                        problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
+                    }
+                });
+            });
+        });
+    }, [currentCaseResult, currentCaseTest, currentConsoleNav, currentResult]);
 
-    // useEffect(() => {
-    //     const problemConsoleNavItem = $('.problemConsoleNavItem');
-    //     // eslint-disable-next-line array-callback-return
-    //     problemConsoleNavItem.map((index, value) => {
-    //         value.addEventListener('click', () => {
-    //             setCurrentConsoleNav(index);
-    //             // eslint-disable-next-line array-callback-return
-    //             problemConsoleNavItem.map((i, v) => {
-    //                 if (i === index) {
-    //                     problemConsoleNavItem[i].classList.add('problemConsoleNavItemActive');
-    //                 } else {
-    //                     problemConsoleNavItem[i].classList.remove('problemConsoleNavItemActive');
-    //                 }
-    //             });
-    //         });
-    //     });
-    // }, []);
+    useEffect(() => {
+        const problemConsoleNavItem = $('.problemConsoleNavItem');
+        // eslint-disable-next-line array-callback-return
+        problemConsoleNavItem.map((index, value) => {
+            value.addEventListener('click', () => {
+                setCurrentConsoleNav(index);
+                // eslint-disable-next-line array-callback-return
+                problemConsoleNavItem.map((i, v) => {
+                    if (i === index) {
+                        problemConsoleNavItem[i].classList.add('problemConsoleNavItemActive');
+                    } else {
+                        problemConsoleNavItem[i].classList.remove('problemConsoleNavItemActive');
+                    }
+                });
+            });
+        });
+    }, []);
 
     const handleOpenConsole = () => {
         var gridRow = $('.grid-row');
@@ -322,7 +317,7 @@ function Problem() {
             const response = await createSubmission(props);
             if (response.code === 201) {
                 // go to submission tab, with refresh
-                window.location.href = `/problem/${id}?tab=submissions`;
+                window.location.href = `/problems/${id}?tab=submissions`;
                 setRun(false);
                 setStatus("");
                 setCompileInfo("");
@@ -333,13 +328,13 @@ function Problem() {
         }
     };
 
-    // useEffect(() => {
-    //     async function fetchTestcaseByProblemID(problem_id) {
-    //         const res = await getTestcaseByProblemID(problem_id);
-    //         setTestcases(res.body.testcases);
-    //     }
-    //     fetchTestcaseByProblemID(id);
-    // }, [id]);
+    useEffect(() => {
+        async function fetchTestcaseByProblemID(problem_id) {
+            const res = await getTestcaseByProblemID(problem_id);
+            setTestcases(res.body.testcases);
+        }
+        fetchTestcaseByProblemID(id);
+    }, [id]);
 
     return (
         <div className="problem-body">

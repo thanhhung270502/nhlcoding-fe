@@ -14,7 +14,7 @@ function Submission({ problem_id }) {
         }
 
         fetchSubmissionsByUserProblemId(user_id, problem_id);
-    }, []);
+    }, [user_id, problem_id]);
 
 
     return (
