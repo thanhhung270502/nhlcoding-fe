@@ -25,6 +25,7 @@ import { problemRunCode } from '~/api/problems';
 import { createSubmission } from '~/api/submissions';
 import { getTestcaseByProblemID } from '~/api/testcases';
 import { getCurrentTimeFormatted } from '~/utils';
+import { insertUserProblem } from '~/api/user_problems';
 
 function Problem() {
     const { id } = useParams();
@@ -314,6 +315,9 @@ function Problem() {
         }
 
         if (run) {
+            // Need to create the user_problems first
+            await insertUserProblem(id, user_id)
+
             const response = await createSubmission(props);
             if (response.code === 201) {
                 // go to submission tab, with refresh
