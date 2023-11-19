@@ -91,21 +91,21 @@ function Problem() {
     useEffect(() => {
         async function fetchProblemLanguagesByProblemID(problem_id) {
             const res = await getProblemLanguagesByProblemID(problem_id);
+            console.log(res)
             setLanguages(res.body);
-
             // Default language and code as cpp
-            const { language_id, name, initialcode } = res.body.find(
-                (item) => item.problem_id === parseInt(id) && item.language_id === 2,
+            const { language_id, name, initial_code, solution_code, full_code } = res.body.find(
+                (item) => item.problem_id === parseInt(id) && item.language_id === 2
             );
-            const lang_obj = { id: language_id, name: name, initialcode: initialcode };
+            const lang_obj = { id: language_id, name: name, initialcode: convertCode(initial_code) };
             if (!localStorage.getItem('active_language')) {
                 setActiveLanguage(lang_obj);
                 localStorage.setItem('active_language', JSON.stringify(lang_obj));
             }
 
             if (!localStorage.getItem(`${id}_${name}`)) {
-                setCode(convertCode(initialcode));
-                localStorage.setItem(`${id}_${name}`, initialcode);
+                setCode(convertCode(initial_code));
+                localStorage.setItem(`${id}_${name}`, initial_code);
             }
         }
         fetchProblemLanguagesByProblemID(id);
@@ -114,17 +114,17 @@ function Problem() {
     // Handle change language
     const handleLanguageChange = (e) => {
         const lang_name = e.target.innerText;
-        const { language_id, name, initialcode } = languages.find(
+        const { language_id, name, initial_code, solution_code, full_code } = languages.find(
             (item) => item.name === lang_name && item.problem_id === parseInt(id),
         );
-        const lang_obj = { id: language_id, name: name, initialcode: initialcode };
+        const lang_obj = { id: language_id, name: name, initialcode: convertCode(initial_code) };
 
         setActiveLanguage(lang_obj);
         localStorage.setItem('active_language', JSON.stringify(lang_obj));
 
         if (!localStorage.getItem(`${id}_${name}`)) {
-            setCode(convertCode(initialcode));
-            localStorage.setItem(`${id}_${name}`, initialcode);
+            setCode(convertCode(initial_code));
+            localStorage.setItem(`${id}_${name}`, initial_code);
         } else {
             setCode(convertCode(localStorage.getItem(`${id}_${name}`)));
         }
@@ -538,7 +538,7 @@ function Problem() {
                                                                     )}
                                                                 >
                                                                     {testcases[currentCaseTest].input
-                                                                        .split(' ')
+                                                                        .split('\n')
                                                                         .map((input, index) => (
                                                                             <div key={index}>{input}</div>
                                                                         ))}
@@ -653,7 +653,7 @@ function Problem() {
                                                                             )}
                                                                         >
                                                                             {testcases[currentCaseResult].input
-                                                                                .split(' ')
+                                                                                .split('\n')
                                                                                 .map((input, index) => (
                                                                                     <div key={index}>{input}</div>
                                                                                 ))}
