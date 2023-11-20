@@ -65,7 +65,7 @@ function Header() {
 
     const handleLogout = () => {
         logout();
-        window.location.href = './';
+        window.location.href = '/';
     };
 
     useEffect(() => {
@@ -183,10 +183,10 @@ function Header() {
                     {!currentUser && (
                         <div className="d-flex gap-3">
                             <div className="btn btn-signin btn-text" onClick={() => LoginModalTrigger.open()}>
-                                Đăng nhập
+                                Log in
                             </div>
                             <div className="btn btn-success btn-text" onClick={() => SignupModalTrigger.open()}>
-                                Đăng ký
+                                Sign up
                             </div>
                         </div>
                     )}
