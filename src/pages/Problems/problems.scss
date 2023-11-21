@@ -52,6 +52,13 @@
 
 .problems-head {
     font-weight: bold;
+    // background: var(--vp-home-hero-name-background);
+    background-color: var(--blue-dark-2);
+    color: var(--white);
+}
+
+.problems-row {
+    background-color: var(--gray-light);
 }
 
 .problems-status-accept {

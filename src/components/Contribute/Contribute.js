@@ -13,6 +13,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
         '/contribute/reason',
         '/contribute/question',
         '/contribute/solutions',
+        '/contribute/codes',
         '/contribute/testcases',
         '/contribute/success',
     ];
@@ -71,7 +72,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
 
     return (
         <div className="container">
-            <div className={`contribute-navbar-container ${contributeStep === 5 ? 'disabled-div' : ''}`}>
+            <div className={`contribute-navbar-container ${contributeStep === 6 ? 'disabled-div' : ''}`}>
                 <div className="contribute-navbar-line">
                     <div className="contribute-navbar-line-segment-container">
                         <div className={`contribute-navbar-line-segment contribute-navbar-line-segment-entered`}></div>
@@ -101,6 +102,13 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                         <div
                             className={`contribute-navbar-line-segment ${
                                 contributeStep >= 5 ? 'contribute-navbar-line-segment-entered' : ''
+                            }`}
+                        ></div>
+                    </div>
+                    <div className="contribute-navbar-line-segment-container">
+                        <div
+                            className={`contribute-navbar-line-segment ${
+                                contributeStep >= 6 ? 'contribute-navbar-line-segment-entered' : ''
                             }`}
                         ></div>
                     </div>
@@ -185,14 +193,14 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                                 </div>
                             </div>
                         </Link>
-                        <Link to="/contribute/testcases">
+                        <Link to="/contribute/codes">
                             <div className="contribute-navbar-step">
                                 <div
                                     className={`contribute-navbar-step-label ${
                                         contributeStep === 4 ? 'contribute-navbar-step-label-active' : ''
                                     }`}
                                 >
-                                    Testcases
+                                    Codes
                                 </div>
                                 <div
                                     className={`contribute-navbar-step-circle ${
@@ -211,6 +219,32 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                                 </div>
                             </div>
                         </Link>
+                        <Link to="/contribute/testcases">
+                            <div className="contribute-navbar-step">
+                                <div
+                                    className={`contribute-navbar-step-label ${
+                                        contributeStep === 5 ? 'contribute-navbar-step-label-active' : ''
+                                    }`}
+                                >
+                                    Testcases
+                                </div>
+                                <div
+                                    className={`contribute-navbar-step-circle ${
+                                        contributeStep >= 5 ? 'contribute-navbar-step-circle-entered' : ''
+                                    }`}
+                                >
+                                    <svg
+                                        height="36"
+                                        width="36"
+                                        className={`contribute-navbar-step-svg ${
+                                            contributeStep >= 5 ? 'contribute-navbar-step-svg-entered' : ''
+                                        }`}
+                                    >
+                                        <circle cx="18" cy="18" r="12.5"></circle>
+                                    </svg>
+                                </div>
+                            </div>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -219,9 +253,9 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                 <div className="contribute-body-right col-md-5">{rightChild}</div>
             </div>
             <ToastContainer />
-            {contributeStep < 5 && (
-                <div className="contribute-footer-container">
-                    <div className="contribute-footer">
+            {contributeStep < 6 && (
+                <div className="d-flex justify-content-center contribute-footer-container">
+                    <div className="col-6 contribute-footer">
                         {contributeStep !== 1 ? (
                             <Link className="contribute-nav-btn" to={routeStep[contributeStep - 1]}>
                                 <FontAwesomeIcon icon={faArrowLeft} />
@@ -229,7 +263,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                         ) : (
                             <div></div>
                         )}
-                        {contributeStep !== 4 ? (
+                        {contributeStep !== 5 ? (
                             <Link to={routeStep[contributeStep + 1]} className="contribute-nav-btn">
                                 <FontAwesomeIcon icon={faArrowRight} />
                             </Link>

@@ -5,7 +5,9 @@
 
 // Color
 :root {
-    --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20 70%);
+    --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20);
+    --vp-home-title-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f38120);
+    --vp-home-btn-name-background: -webkit-linear-gradient(120deg, #f38120 30%, #f3eb20);
     --vp-home-hero-name-color: transparent;
     --black: #000;
     --white: #ffffff;
@@ -38,8 +40,24 @@
     --gray-dark-2: #696969;
     --gray-dark-3: #bdbdbd;
     --gray-light: #f0f0f0;
+
+    --navbar: var(--blue-dark);
+    --navbar-text: var(--white);
+    --navbar-border: var(--gray);
 }
 
+[data-theme='dark'] {
+    --white: black;
+    --black: white;
+    --primary-dark: #ffc174;
+    --beige-light: #3a3b3c;
+    --primary-light: #424140;
+    --white-2: #23201b;
+    --navbar: var(--blue-dark-3);
+    --navbar-text: white;
+    --navbar-border: var(--white);
+    --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20);
+}
 * {
     padding: 0;
     margin: 0;

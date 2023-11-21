@@ -20,6 +20,7 @@ import $ from 'jquery';
 function Header() {
     const [currentUser, setCurrentUser] = useState();
     const [currentLocation, setCurrentLocation] = useState('');
+    const [isChecked, setIsChecked] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -30,7 +31,8 @@ function Header() {
         var navbarItem = $('.navbarItem');
         for (let i = 0; i < navbarItem.length; i++) {
             navbarItem[i].classList.remove('navbarActive');
-        }    const dropdownToggle = () => {
+        }
+        const dropdownToggle = () => {
             var dropdownMenu = $('.dropdownMenu');
             if (dropdownMenu[0].classList.contains('dropdownHide')) {
                 dropdownMenu[0].classList.remove('dropdownHide');
@@ -51,6 +53,28 @@ function Header() {
         console.log(window.location.href);
         // setCurrentLocation();
     });
+
+    const handleChangeDarkMode = () => {
+        var currentTheme = localStorage.getItem('theme');
+        if (currentTheme && currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            setIsChecked(false);
+        } else if (!currentTheme || currentTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            setIsChecked(true);
+        }
+    };
+
+    useEffect(() => {
+        const savedCheckedState = localStorage.getItem('theme');
+        if (savedCheckedState && savedCheckedState === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            setIsChecked(true);
+        }
+        // else if (savedCheckedState && savedCheckedState === '')
+    }, []);
 
     useEffect(() => {
         (async () => {
@@ -134,10 +158,19 @@ function Header() {
                                         Profile
                                     </Link>
                                 </div>
-                                <div className={clsx(styles.dropdownItem)}>
-                                    <Link className={clsx(styles.dropdownLink)} to="">
-                                        Profile
-                                    </Link>
+                                <div
+                                    className={clsx(
+                                        styles.dropdownItem,
+                                        'd-flex',
+                                        'align-items-center',
+                                        'justify-content-between',
+                                    )}
+                                >
+                                    <div>Dark mode</div>
+                                    <label class={clsx(styles.switch)}>
+                                        <input type="checkbox" onChange={handleChangeDarkMode} checked={isChecked} />
+                                        <span class={clsx(styles.slider, styles.round)}></span>
+                                    </label>
                                 </div>
                                 <div className={clsx(styles.dropdownDivider)}></div>
                                 <div className={clsx(styles.dropdownItem)} onClick={handleLogout}>

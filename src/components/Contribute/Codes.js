@@ -83,7 +83,7 @@ const Solutions = () => {
     return (
         <>
             <form method="POST" action="/contribute/store" />
-            <Contribute contributeStep={3} mainChild={<MainChild />} rightChild={<RightChild />} />;
+            <Contribute contributeStep={4} mainChild={<MainChild />} rightChild={<RightChild />} />;
         </>
     );
 };

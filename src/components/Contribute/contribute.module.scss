@@ -58,16 +58,19 @@
 
 .dropdown {
     position: relative;
+    border: 1px solid var(--gray);
+    // border-radius: 8px;
 }
 
 .dropdownItem {
     padding: 0.5rem 1.5rem;
     color: var(--black);
     cursor: pointer;
-
+    border-bottom: 1px solid var(--gray-light);
+    border-top: 1px solid var(--gray-light);
+    // border-radius: 8px;
     &:hover {
-        // background-color: var(--gray);
-        font-weight: bold;
+        background-color: var(--gray);
     }
 }
 

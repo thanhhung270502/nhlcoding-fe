@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import ReactSelect from 'react-select';
+import { useCallback, useEffect, useState } from 'react';
 import Contribute from './Contribute';
 // import CustomEditor from '../CKEditor';
 import { faCaretDown, faCheck, faLightbulb } from '@fortawesome/free-solid-svg-icons';
@@ -14,19 +13,31 @@ import clsx from 'clsx';
 import styles from './contribute.module.scss';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
-import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
+// import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
+import { langs } from '@uiw/codemirror-extensions-langs';
+import { xcodeLight } from '@uiw/codemirror-theme-xcode';
+import CodeMirror from '@uiw/react-codemirror';
+import { getAllLevels } from '~/api/levels';
 
 const MainChild = ({ descriptionData, setDescriptionData }) => {
+    // State
     const [titleText, setTitleText] = useState('');
+    const [levels, setLevels] = useState([]);
+    const [level, setLevel] = useState();
+    const [languages, setLanguages] = useState([]);
+    const [currentLanguages, setCurrentLanguages] = useState([]);
+    const [isChecked, setIsChecked] = useState(false);
 
-    const dropdownToggle = () => {
+    const dropdownToggle = (index) => {
+        // console.log(event);
         var dropdownMenu = $('.dropdownQuestion');
-        if (dropdownMenu[0].classList.contains('dropdownHide')) {
-            dropdownMenu[0].classList.remove('dropdownHide');
+        if (dropdownMenu[index].classList.contains('dropdownHide')) {
+            dropdownMenu[index].classList.remove('dropdownHide');
         } else {
-            dropdownMenu[0].classList.add('dropdownHide');
+            dropdownMenu[index].classList.add('dropdownHide');
         }
     };
+
     const handleChangeTitle = (event) => {
         const inputValue = event.target.value;
         if (inputValue.length <= 150) {
@@ -55,28 +66,6 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
         return false;
     };
 
-    const [languages, setLanguages] = useState([]);
-    const [currentLanguages, setCurrentLanguages] = useState([]);
-    const [isChecked, setIsChecked] = useState(false);
-    useEffect(() => {
-        (async () => {
-            const res = await getAllLanguages();
-            setLanguages(res.data);
-            var question = JSON.parse(localStorage.getItem('question'));
-
-            if (question) {
-                setTitleText(question['title']);
-                setCurrentLanguages(question['languages']);
-                setDescriptionData(question['description']);
-            }
-
-            const savedCheckedState = localStorage.getItem('validate');
-            if (savedCheckedState !== null) {
-                setIsChecked(savedCheckedState === 'true');
-            }
-        })();
-    }, []);
-
     const handleCheckboxChange = () => {
         const updatedCheckedState = !isChecked;
         setIsChecked(updatedCheckedState);
@@ -102,6 +91,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                 JSON.stringify({
                     title: '',
                     languages: newCurrentLanguage,
+                    level: '',
                     description: '',
                 }),
             );
@@ -123,6 +113,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                     JSON.stringify({
                         title: '',
                         languages: '',
+                        level: '',
                         description: inputValue,
                     }),
                 );
@@ -130,11 +121,54 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
         }
     };
 
+    const handleSelectLevels = (level) => {
+        setLevel(level);
+
+        var question = JSON.parse(localStorage.getItem('question'));
+        if (question) {
+            question['level'] = level;
+            localStorage.setItem('question', JSON.stringify(question));
+        } else {
+            localStorage.setItem(
+                'question',
+                JSON.stringify({
+                    title: '',
+                    languages: '',
+                    level: level,
+                    description: '',
+                }),
+            );
+        }
+    };
+
+    useEffect(() => {
+        (async () => {
+            const res = await getAllLanguages();
+            setLanguages(res.data);
+            const res2 = await getAllLevels();
+            setLevels(res2);
+            var question = JSON.parse(localStorage.getItem('question'));
+
+            if (question) {
+                setTitleText(question['title']);
+                setCurrentLanguages(question['languages']);
+                setDescriptionData(question['description']);
+                setLevel(question['level']);
+            }
+
+            const savedCheckedState = localStorage.getItem('validate');
+            if (savedCheckedState !== null) {
+                setIsChecked(savedCheckedState === 'true');
+            }
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <div className="contribute-body-main-content">
             <div className="title">Please describe your question.</div>
-            <div className="d-flex gap-4 mb-3">
-                <div className="question-title">
+            <div className="d-flex gap-4">
+                <div className="col-12">
                     <div className="subtitle">Title *</div>
                     <input
                         type="text"
@@ -146,11 +180,14 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                     />
                     <div className="char-counter">{titleText.length}/150</div>
                 </div>
-                <div className="question-category">
+            </div>
+
+            <div className="d-flex mb-3">
+                <div className="col-6 pe-2">
                     <div className="subtitle">Languages *</div>
                     <div class={clsx(styles.dropdown)}>
-                        <div className="dropdownToggleQuestion" onClick={dropdownToggle}>
-                            <div className={clsx(styles.name)}>Select languages</div>
+                        <div className="dropdownToggleQuestion" onClick={() => dropdownToggle(0)}>
+                            <div className={clsx(styles.name)}>Select one or languages ...</div>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
                         <div className="dropdownHide dropdownQuestion">
@@ -190,17 +227,61 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                         </div>
                     </div>
                 </div>
+                <div className="col-6 ps-2">
+                    <div className="subtitle">Level *</div>
+                    <div class={clsx(styles.dropdown)}>
+                        <div className="dropdownToggleQuestion" onClick={() => dropdownToggle(1)}>
+                            <div className={clsx(styles.name)}>Select level ...</div>
+                            <FontAwesomeIcon icon={faCaretDown} />
+                        </div>
+                        <div className="dropdownHide dropdownQuestion">
+                            {levels.map((curLevel) => {
+                                if (level && curLevel.id === level.id)
+                                    return (
+                                        <div
+                                            className={clsx(
+                                                styles.dropdownItem,
+                                                'd-flex',
+                                                'align-items-center',
+                                                'justify-content-between',
+                                            )}
+                                            onClick={() => {
+                                                handleSelectLevels(curLevel);
+                                            }}
+                                        >
+                                            {curLevel.name}
+                                            <span>
+                                                <FontAwesomeIcon icon={faCheck} />
+                                            </span>
+                                        </div>
+                                    );
+                                else {
+                                    return (
+                                        <div
+                                            className={clsx(styles.dropdownItem, 'd-flex', 'align-items-center')}
+                                            onClick={() => {
+                                                handleSelectLevels(curLevel);
+                                            }}
+                                        >
+                                            {curLevel.name}
+                                        </div>
+                                    );
+                                }
+                            })}
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className="subtitle">Description *</div>
             <textarea
-                className="textarea"
+                className="textarea form-control"
                 value={descriptionData}
                 onChange={handleChangeDescription}
                 name="description"
                 placeholder="Type your decription about the question here."
             ></textarea>
             <div className="char-counter">{descriptionData.length}/5000</div>
-            <div className="mt-3">
+            <div className="mt-3 mb-5">
                 <label className="d-flex gap-2 align-items-center">
                     <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} className="checkbox" />
                     <div>Validate description</div>

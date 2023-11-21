@@ -58,7 +58,9 @@ function Home() {
                         Get started
                     </div>
                 </div>
-                <img src="/images/home-intro.png" className="intro-img skeleton" />
+                <div className="intro-img-container">
+                    <img src="/images/home-intro.png" className="intro-img skeleton" alt="home-pic" />
+                </div>
             </div>
             <div className="wwd-container">
                 <div className="wwd-title">What We Do</div>

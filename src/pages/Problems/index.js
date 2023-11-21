@@ -42,82 +42,6 @@ function Problems() {
     const status = typeof params.get('status') === 'string' ? params.get('status') : undefined;
     const search = typeof params.get('search') === 'string' ? params.get('search') : undefined;
 
-    const handleNextPage = () => {
-        if (search) {
-            if (level && status) {
-                navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}&status=${status}&search=${search}`);
-            } else if (!level && status) {
-                navigate(`/problems/?page=${parseInt(page) + 1}&status=${status}&search=${search}`);
-            } else if (level && !status) {
-                navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}&search=${search}`);
-            } else {
-                navigate(`/problems/?page=${parseInt(page) + 1}&search=${search}`);
-            }
-        } else {
-            if (level && status) {
-                navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}&status=${status}`);
-            } else if (!level && status) {
-                navigate(`/problems/?page=${parseInt(page) + 1}&status=${status}`);
-            } else if (level && !status) {
-                navigate(`/problems/?page=${parseInt(page) + 1}&level=${level}`);
-            } else {
-                navigate(`/problems/?page=${parseInt(page) + 1}`);
-            }
-        }
-    };
-
-    const handlePreviousPage = () => {
-        if (search) {
-            if (level && status) {
-                navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}&status=${status}&search=${search}`);
-            } else if (!level && status) {
-                navigate(`/problems/?page=${parseInt(page) - 1}&status=${status}&search=${search}`);
-            } else if (level && !status) {
-                navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}&search=${search}`);
-            } else {
-                navigate(`/problems/?page=${parseInt(page) - 1}&search=${search}`);
-            }
-        } else {
-            if (level && status) {
-                navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}&status=${status}`);
-            } else if (!level && status) {
-                navigate(`/problems/?page=${parseInt(page) - 1}&status=${status}`);
-            } else if (level && !status) {
-                navigate(`/problems/?page=${parseInt(page) - 1}&level=${level}`);
-            } else {
-                navigate(`/problems/?page=${parseInt(page) - 1}`);
-            }
-        }
-    };
-
-    const handleChangePage = (e) => {
-        if (search) {
-            if (level && status) {
-                navigate(`/problems/?page=${e.target.innerHTML}&level=${level}&status=${status}&search=${search}`);
-            } else if (!level && status) {
-                navigate(`/problems/?page=${e.target.innerHTML}&status=${status}&search=${search}`);
-            } else if (level && !status) {
-                navigate(`/problems/?page=${e.target.innerHTML}&level=${level}&search=${search}`);
-            } else {
-                navigate(`/problems/?page=${e.target.innerHTML}&search=${search}`);
-            }
-        } else {
-            if (level && status) {
-                navigate(`/problems/?page=${e.target.innerHTML}&level=${level}&status=${status}`);
-            } else if (!level && status) {
-                navigate(`/problems/?page=${e.target.innerHTML}&status=${status}`);
-            } else if (level && !status) {
-                navigate(`/problems/?page=${e.target.innerHTML}&level=${level}`);
-            } else {
-                navigate(`/problems/?page=${e.target.innerHTML}`);
-            }
-        }
-    };
-
-    const handleLinkToProblem = (problem_id) => {
-        if (problem_id) navigate(`/problems/${problem_id}`);
-    };
-
     const filterLevel = (lel) => {
         if (level === lel.name) {
             if (status) {
@@ -216,15 +140,8 @@ function Problems() {
         }
     };
 
-    const handleChangeLimit = (lim) => {
-        setLimit(lim);
-    };
-
     useEffect(() => {
         (async () => {
-            // let start = limit * (page - 1);
-            // let end = limit * page;
-            // console.log(start);
             var user_id = getCookie('user_id');
             if (!user_id) user_id = 'empty';
             var curLevel = level ? level : 'empty';
@@ -232,8 +149,6 @@ function Problems() {
             var curText = search ? search : 'empty';
             var response = await getProblemForPagination(user_id, curLevel, curStatus, curText);
             setProblems(response.body);
-            // setCurrentProblems(response.body.slice(start, end));
-            // setLengthOfProblems(response.body.length);
         })();
     }, [search, level, page, status, limit]);
 
@@ -406,13 +321,11 @@ function Problems() {
                                 </div>
                             </div>
                             <div className="mt-4">
-                                <div className="problems-head pb-2 border-bottom">
-                                    <div className="d-flex align-items-center">
-                                        <div className="text-center col-2">Status</div>
-                                        <div className="text-center col-2">ID</div>
-                                        <div className="px-3 col-6">Title</div>
-                                        <div className="text-center col-2">Level</div>
-                                    </div>
+                                <div className="problems-head py-2 border-bottom d-flex align-items-center">
+                                    <div className="text-center col-2">Status</div>
+                                    <div className="text-center col-2">ID</div>
+                                    <div className="px-3 col-6">Title</div>
+                                    <div className="text-center col-2">Level</div>
                                 </div>
                                 <ProblemsTable problems={problems} itemsPerPage={limit} />
                             </div>

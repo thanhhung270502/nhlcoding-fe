@@ -155,7 +155,7 @@ const Testcases = () => {
     const [testcases, setTestcases] = useState([]);
     return (
         <Contribute
-            contributeStep={4}
+            contributeStep={5}
             mainChild={<MainChild testcases={testcases} setTestcases={setTestcases} />}
             rightChild={<RightChild testcases={testcases} setTestcases={setTestcases} />}
         />

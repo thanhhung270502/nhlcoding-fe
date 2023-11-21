@@ -51,29 +51,65 @@ function ProblemsTable({ problems }) {
 
     return (
         <div>
-            {paginateInfo.currentItems.map((problem, index) => (
-                <div className="py-2 d-flex align-items-center">
-                    <div className="text-center col-2">
-                        {problem.status === 'Solved' && <div className="problems-status-accept">Solved</div>}
-                        {problem.status === 'Attempted' && <div className="problems-status-progress">Attempted</div>}
-                        {(problem.status === 'Todo' || !problem.status) && <div className="problems-status">-</div>}
-                    </div>
-                    <div
-                        className="text-center col-2"
-                        onClick={() => {
-                            handleLinkToProblem(problem.id);
-                        }}
-                    >
-                        {problem.id}
-                    </div>
-                    <div className="px-3 col-6">{problem.title}</div>
-                    <div className="text-center col-2">
-                        {problem.name === 'Easy' && <div className="problems-status-accept">Easy</div>}
-                        {problem.name === 'Medium' && <div className="problems-status-progress">Medium</div>}
-                        {problem.name === 'Hard' && <div className="problems-status-high">Hard</div>}
-                    </div>
-                </div>
-            ))}
+            {paginateInfo.currentItems.map((problem, index) => {
+                if (index % 2 === 0) {
+                    return (
+                        <div className="py-2 d-flex align-items-center">
+                            <div className="text-center col-2">
+                                {problem.status === 'Solved' && <div className="problems-status-accept">Solved</div>}
+                                {problem.status === 'Attempted' && (
+                                    <div className="problems-status-progress">Attempted</div>
+                                )}
+                                {(problem.status === 'Todo' || !problem.status) && (
+                                    <div className="problems-status">-</div>
+                                )}
+                            </div>
+                            <div
+                                className="text-center col-2"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.id}
+                            </div>
+                            <div className="px-3 col-6">{problem.title}</div>
+                            <div className="text-center col-2">
+                                {problem.name === 'Easy' && <div className="problems-status-accept">Easy</div>}
+                                {problem.name === 'Medium' && <div className="problems-status-progress">Medium</div>}
+                                {problem.name === 'Hard' && <div className="problems-status-high">Hard</div>}
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div className="py-2 d-flex align-items-center problems-row">
+                            <div className="text-center col-2">
+                                {problem.status === 'Solved' && <div className="problems-status-accept">Solved</div>}
+                                {problem.status === 'Attempted' && (
+                                    <div className="problems-status-progress">Attempted</div>
+                                )}
+                                {(problem.status === 'Todo' || !problem.status) && (
+                                    <div className="problems-status">-</div>
+                                )}
+                            </div>
+                            <div
+                                className="text-center col-2"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.id}
+                            </div>
+                            <div className="px-3 col-6">{problem.title}</div>
+                            <div className="text-center col-2">
+                                {problem.name === 'Easy' && <div className="problems-status-accept">Easy</div>}
+                                {problem.name === 'Medium' && <div className="problems-status-progress">Medium</div>}
+                                {problem.name === 'Hard' && <div className="problems-status-high">Hard</div>}
+                            </div>
+                        </div>
+                    );
+                }
+            })}
             <div className="d-flex justify-content-between align-items-center mt-5">
                 <div className="dropdown">
                     <div
