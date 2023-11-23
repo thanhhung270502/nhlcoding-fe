@@ -23,7 +23,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
     // State
     const [titleText, setTitleText] = useState('');
     const [levels, setLevels] = useState([]);
-    const [level, setLevel] = useState();
+    const [level, setLevel] = useState(undefined);
     const [languages, setLanguages] = useState([]);
     const [currentLanguages, setCurrentLanguages] = useState([]);
     const [isChecked, setIsChecked] = useState(false);
@@ -51,8 +51,9 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                     'question',
                     JSON.stringify({
                         title: inputValue,
-                        languages: '',
+                        languages: [],
                         description: '',
+                        level: '',
                     }),
                 );
             }
@@ -112,7 +113,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                     'question',
                     JSON.stringify({
                         title: '',
-                        languages: '',
+                        languages: [],
                         level: '',
                         description: inputValue,
                     }),
@@ -133,11 +134,21 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                 'question',
                 JSON.stringify({
                     title: '',
-                    languages: '',
+                    languages: [],
                     level: level,
                     description: '',
                 }),
             );
+        }
+    };
+
+    const convertLanguages = (languages) => {
+        if (languages.length > 0) {
+            var stringLanguages = languages[0]['name'];
+            for (var i = 1; i < languages.length; i++) {
+                stringLanguages = stringLanguages + ', ' + languages[i]['name'];
+            }
+            return stringLanguages;
         }
     };
 
@@ -187,7 +198,11 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                     <div className="subtitle">Languages *</div>
                     <div class={clsx(styles.dropdown)}>
                         <div className="dropdownToggleQuestion" onClick={() => dropdownToggle(0)}>
-                            <div className={clsx(styles.name)}>Select one or languages ...</div>
+                            <div className={clsx(styles.name)}>
+                                {currentLanguages.length > 0
+                                    ? convertLanguages(currentLanguages)
+                                    : 'Select one or languages ...'}
+                            </div>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
                         <div className="dropdownHide dropdownQuestion">
@@ -231,7 +246,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                     <div className="subtitle">Level *</div>
                     <div class={clsx(styles.dropdown)}>
                         <div className="dropdownToggleQuestion" onClick={() => dropdownToggle(1)}>
-                            <div className={clsx(styles.name)}>Select level ...</div>
+                            <div className={clsx(styles.name)}>{level ? level.name : 'Select level ...'}</div>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
                         <div className="dropdownHide dropdownQuestion">

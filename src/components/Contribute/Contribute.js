@@ -23,34 +23,98 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
     const handleSubmit = async () => {
         // validate form data
         var errors = [];
-        if (!localStorage.getItem('reason')) {
+
+        var reason = localStorage.getItem('reason');
+        if (!reason) {
             errors.push('reason');
         }
-        if (!localStorage.getItem('question')) {
+
+        var question = JSON.parse(localStorage.getItem('question'));
+        if (!question) {
             errors.push('question');
+        } else {
+            if (question.title === '') errors.push('question.title');
+            if (question.description === '') errors.push('question.description');
+            if (question.languages.length === 0) errors.push('question.languages');
+            if (question.level === '') errors.push('question.level');
         }
-        if (!localStorage.getItem('solution')) {
-            errors.push('solution');
+
+        var solutions = localStorage.getItem('solutions');
+        if (!solutions) {
+            errors.push('solutions');
         }
-        if (!localStorage.getItem('testcase')) {
-            errors.push('testcase');
+
+        var testcases = JSON.parse(localStorage.getItem('testcases'));
+        if (!testcases) {
+            errors.push('testcases');
+        }
+
+        var validate = JSON.parse(localStorage.getItem('validate'));
+
+        var cpp_code = JSON.parse(localStorage.getItem('cpp_code'));
+        var python_code = JSON.parse(localStorage.getItem('python_code'));
+
+        for (var i = 0; i < question.languages.length; i++) {
+            // python
+            if (question.languages[i].id === 1) {
+                if (python_code.initialCode === '') errors.push('python_code.initialCode');
+                if (python_code.solutionCode === '') errors.push('python_code.solutionCode');
+                if (python_code.fullCode === '') errors.push('python_code.fullCode');
+            }
+            // cpp
+            if (question.languages[i].id === 2) {
+                if (cpp_code.initialCode === '') errors.push('cpp_code.initialCode');
+                if (cpp_code.solutionCode === '') errors.push('cpp_code.solutionCode');
+                if (cpp_code.fullCode === '') errors.push('cpp_code.fullCode');
+            }
         }
 
         if (errors.length === 0) {
+            var problem_languages = [];
+            for (var i = 0; i < question.languages.length; i++) {
+                // python
+                if (question.languages[i].id === 1) {
+                    problem_languages.push({
+                        language_id: question.languages[i].id,
+                        initialCode: python_code.initialCode,
+                        solutionCode: python_code.solutionCode,
+                        fullCode: python_code.fullCode,
+                    });
+                } else if (question.languages[i].id === 2) {
+                    problem_languages.push({
+                        language_id: question.languages[i].id,
+                        initialCode: cpp_code.initialCode,
+                        solutionCode: cpp_code.solutionCode,
+                        fullCode: cpp_code.fullCode,
+                    });
+                }
+            }
+
             const submitData = {
-                code: localStorage.code ? localStorage.code : '',
-                desc: localStorage.desc ? localStorage.desc : '',
-                reason: localStorage.reason ? localStorage.reason : '',
-                selectedOption: localStorage.selectedOption ? JSON.parse(localStorage.selectedOption) : null,
-                solutions: localStorage.solutions ? localStorage.solutions : '',
-                testcases: localStorage.testcases ? JSON.parse(localStorage.testcases) : [],
-                title: localStorage.title ? localStorage.title : '',
-                validate: localStorage.validate ? true : false,
+                reason: reason,
+                title: question.title,
+                description: question.description,
+                languages: question.languages,
+                level_id: question.level.id,
+                solutions: solutions,
+                validate: validate,
+                problem_languages: problem_languages,
+                testcases: testcases,
             };
+            // const submitData = {
+            //     code: localStorage.code ? localStorage.code : '',
+            //     desc: localStorage.desc ? localStorage.desc : '',
+            //     reason: localStorage.reason ? localStorage.reason : '',
+
+            //     solutions: localStorage.solutions ? localStorage.solutions : '',
+            //     testcases: localStorage.testcases ? JSON.parse(localStorage.testcases) : [],
+            //     title: localStorage.title ? localStorage.title : '',
+            //     validate: localStorage.validate ? true : false,
+            // };
 
             // run code if "validate" is "true"
             console.log(submitData);
-            // const res = await createProblem(submitData);
+            const res = await createProblem(submitData);
 
             // send data to back-end server
 
@@ -248,7 +312,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                     </div>
                 </div>
             </div>
-            <div className="row">
+            <div className="row mb-5">
                 <div className="contribute-body-main col-md-7">{mainChild}</div>
                 <div className="contribute-body-right col-md-5">{rightChild}</div>
             </div>

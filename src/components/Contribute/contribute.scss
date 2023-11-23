@@ -224,7 +224,7 @@
 }
 
 .contribute-nav-btn {
-    background-color: var(--orange-light);
+    background-color: var(--orange);
     font-size: 18px;
     cursor: pointer;
     font-weight: 700;
@@ -286,18 +286,17 @@
 
 .preview-description {
     height: 520px;
-    overflow-y: auto;
+    // overflow-y: auto;
     color: var(--gray-dark-2);
     font-size: 16px;
 }
 
 .preview-code {
-    color: var(--red);
-    padding: 2px 4px;
-    font-size: 90%;
-    color: var(--red);
-    background-color: #f9f2f4;
+    // font-size: 90%;
+    // background-color: var(--gray);
     border-radius: 4px;
+    color: var(--red);
+    // margin-bottom: 0;
 }
 
 .code-block {
@@ -379,4 +378,21 @@
 .form-select {
     border-radius: 0;
     padding: 8px 20px;
+}
+
+// Codes
+.codeToggle {
+    font-size: 1.25rem;
+    // background-color: var(--gray-light);
+    padding: 8px 0;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.errorInput {
+    border-color: var(--red);
+}
+
+.ͼ1 .cm-lineNumbers .cm-gutterElement {
+    min-width: 30px;
 }
