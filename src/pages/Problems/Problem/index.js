@@ -156,8 +156,10 @@ function Problem() {
     useEffect(() => {
         const active_language = JSON.parse(localStorage.getItem('active_language'));
 
-        active_language && setActiveLanguage(active_language);
-        setCode(convertCode(localStorage.getItem(`${id}_${active_language.name}`)));
+        if (active_language) {
+            setActiveLanguage(active_language);
+            setCode(convertCode(localStorage.getItem(`${id}_${active_language.name}`)));
+        }
     }, [id]);
 
     // ---------------------------------------------------------------- //
@@ -291,44 +293,55 @@ function Problem() {
             if (res.body.status === "Accepted" || res.body.status === "Wrong answer") {
                 setRunTime(res.body.avg_runtime);
             }
-
-            // console.log(compileInfo);
         } else {
             alert('Try running the code again!');
         }
     };
 
     const user_id = getCookie('user_id');
+    const [renderSubmissions, setRenderSubmissions] = useState(true);
 
     const handleSubmitCode = async (e) => {
         e.preventDefault();
-        handleOpenConsole();
-        // handle submit code
-        const props = {
-            user_id,
-            problem_id: id,
-            status,
-            datetime: getCurrentTimeFormatted(),
-            language_id: activeLanguage.id,
-            runtime: runTime,
-            code
-        }
 
-        if (run) {
+        handleOpenConsole();
+        setRun(true);
+        setIsLoading(true);
+
+        const res = await problemRunCode(id, code, activeLanguage.name);
+
+        if (res.message === 'Successfully') {
+            setRenderSubmissions(false);
+            setIsLoading(false);
+            setStatus(res.body.status);
+            setCompileInfo(res.body.compile_info);
+            setCurrentResult(res.body.result);
+            if (res.body.status === "Accepted" || res.body.status === "Wrong answer") {
+                setRunTime(res.body.avg_runtime);
+            }
+
             // Need to create the user_problems first
-            await insertUserProblem(id, user_id)
+            const problem_status = res.body.status === "Accepted" ? "Solved" : "Attempted";
+            await insertUserProblem(id, user_id, problem_status);
+
+            const props = {
+                user_id,
+                problem_id: id,
+                status: res.body.status,
+                datetime: getCurrentTimeFormatted(),
+                language_id: activeLanguage.id,
+                runtime: res.body.avg_runtime,
+                code: code
+            }
 
             const response = await createSubmission(props);
             if (response.code === 201) {
-                // go to submission tab, with refresh
-                window.location.href = `/problems/${id}?tab=submissions`;
-                setRun(false);
-                setStatus("");
-                setCompileInfo("");
-                setRunTime(0);
+                // go to submission tab, and re-render submissions
+                navigate(`/problems/${id}?tab=submissions`);
+                setRenderSubmissions(true);
             }
         } else {
-            alert("Please run your code first!");
+            alert('Try running the code again!');
         }
     };
 
@@ -394,7 +407,7 @@ function Problem() {
                                     <div className="problem-content">
                                         {tab === 'description' && <Description />}
                                         {tab === 'solutions' && <Solution />}
-                                        {tab === 'submissions' && <Submission problem_id={id} />}
+                                        {tab === 'submissions' && renderSubmissions && <Submission problem_id={id} />}
                                         {tab === 'editorial' && <Editorial />}
                                     </div>
                                 </div>

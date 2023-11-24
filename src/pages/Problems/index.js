@@ -164,7 +164,7 @@ function Problems() {
                                     </div>
                                 </div>
                                 <div className="pt-2 problems-body">
-                                    {problems.map((problem, index) => (
+                                    {problems && problems.map((problem, index) => (
                                         <div className="py-2 d-flex align-items-center">
                                             <div className="text-center col-2">
                                                 {problem.status === 'Solved' && (
