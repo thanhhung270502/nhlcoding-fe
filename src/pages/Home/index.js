@@ -9,30 +9,30 @@ import { useEffect, useState } from 'react';
 
 function Home() {
     const [currentUser, setCurrentUser] = useState();
-    useEffect(() => {
-        (async () => {
-            const user_id = getCookie('user_id');
-            if (user_id) {
-                await getUserByID(user_id).then((data) => {
-                    console.log(data.data.body.user);
-                    setCurrentUser(data.data.body.user);
-                });
-            } else {
-                const res = await getUserGoogle();
-                if (res.code === 200) {
-                    await getUserByID(res.body.data.body.user.id).then(async (data) => {
-                        await logoutGoogle();
-                        console.log(data.data.body.user);
-                        setCookie('user_id', data.data.body.user.id);
-                        setCurrentUser(data.data.body.user);
-                    });
-                } else {
-                    console.log('Not');
-                    setCurrentUser(null);
-                }
-            }
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         const user_id = getCookie('user_id');
+    //         if (user_id) {
+    //             await getUserByID(user_id).then((data) => {
+    //                 console.log(data.data.body.user);
+    //                 setCurrentUser(data.data.body.user);
+    //             });
+    //         } else {
+    //             const res = await getUserGoogle();
+    //             if (res.code === 200) {
+    //                 await getUserByID(res.body.data.body.user.id).then(async (data) => {
+    //                     await logoutGoogle();
+    //                     console.log(data.data.body.user);
+    //                     setCookie('user_id', data.data.body.user.id);
+    //                     setCurrentUser(data.data.body.user);
+    //                 });
+    //             } else {
+    //                 console.log('Not');
+    //                 setCurrentUser(null);
+    //             }
+    //         }
+    //     })();
+    // }, []);
     const navigate = useNavigate();
     const handleClickStart = () => {
         if (currentUser) {

@@ -2,7 +2,7 @@ import { faCaretDown, faRightFromBracket, faUser } from '@fortawesome/free-solid
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
+import { checkAuth, getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
 import { getCookie, setCookie } from '~/api/cookie';
 import {
     LoginModal,
@@ -73,29 +73,29 @@ function Header() {
             document.documentElement.setAttribute('data-theme', 'dark');
             setIsChecked(true);
         }
-        // else if (savedCheckedState && savedCheckedState === '')
     }, []);
 
     useEffect(() => {
         (async () => {
-            const user_id = getCookie('user_id');
-            if (user_id) {
-                await getUserByID(user_id).then((data) => {
-                    console.log(data.data.body.user);
-                    setCurrentUser(data.data.body.user);
-                });
+            var session = localStorage.getItem('session');
+            if (session) {
+                session = JSON.parse(session);
+                const authen = await checkAuth(session.accessToken);
+                console.log(authen);
+                if (authen.login === true) {
+                    setCurrentUser(session.user);
+                }
             } else {
-                const res = await getUserGoogle();
-                if (res.code === 200) {
-                    await getUserByID(res.body.data.body.user.id).then(async (data) => {
-                        await logoutGoogle();
-                        console.log(data.data.body.user);
-                        setCookie('user_id', data.data.body.user.id);
-                        setCurrentUser(data.data.body.user);
-                    });
-                } else {
-                    console.log('Not');
-                    setCurrentUser(null);
+                console.log('Here');
+                await getUserGoogle();
+                session = localStorage.getItem('session');
+                if (session) {
+                    await logoutGoogle();
+                    session = JSON.parse(session);
+                    const authen = await checkAuth(session.accessToken);
+                    if (authen.login === true) {
+                        setCurrentUser(session.user);
+                    }
                 }
             }
         })();

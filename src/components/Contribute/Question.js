@@ -18,6 +18,7 @@ import { langs } from '@uiw/codemirror-extensions-langs';
 import { xcodeLight } from '@uiw/codemirror-theme-xcode';
 import CodeMirror from '@uiw/react-codemirror';
 import { getAllLevels } from '~/api/levels';
+import { validateDescription } from '~/api/problems';
 
 const MainChild = ({ descriptionData, setDescriptionData }) => {
     // State
@@ -27,6 +28,10 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
     const [languages, setLanguages] = useState([]);
     const [currentLanguages, setCurrentLanguages] = useState([]);
     const [isChecked, setIsChecked] = useState(false);
+    const [errorTitle, setErrorTitle] = useState(undefined);
+    const [errorDescription, setErrorDescription] = useState(undefined);
+    const [errorLanguages, setErrorLanguages] = useState(undefined);
+    const [errorLevel, setErrorLevel] = useState(undefined);
 
     const dropdownToggle = (index) => {
         // console.log(event);
@@ -42,8 +47,9 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
         const inputValue = event.target.value;
         if (inputValue.length <= 150) {
             setTitleText(inputValue);
-            var question = JSON.parse(localStorage.getItem('question'));
+            var question = localStorage.getItem('question');
             if (question) {
+                question = JSON.parse(question);
                 question['title'] = inputValue;
                 localStorage.setItem('question', JSON.stringify(question));
             } else {
@@ -82,8 +88,9 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
             newCurrentLanguage = [...currentLanguages, language];
             setCurrentLanguages(newCurrentLanguage);
         }
-        var question = JSON.parse(localStorage.getItem('question'));
+        var question = localStorage.getItem('question');
         if (question) {
+            question = JSON.parse(question);
             question['languages'] = newCurrentLanguage;
             localStorage.setItem('question', JSON.stringify(question));
         } else {
@@ -104,8 +111,9 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
         if (inputValue.length <= 5000) {
             setDescriptionData(inputValue);
 
-            var question = JSON.parse(localStorage.getItem('question'));
+            var question = localStorage.getItem('question');
             if (question) {
+                question = JSON.parse(question);
                 question['description'] = inputValue;
                 localStorage.setItem('question', JSON.stringify(question));
             } else {
@@ -125,8 +133,9 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
     const handleSelectLevels = (level) => {
         setLevel(level);
 
-        var question = JSON.parse(localStorage.getItem('question'));
+        var question = localStorage.getItem('question');
         if (question) {
+            question = JSON.parse(question);
             question['level'] = level;
             localStorage.setItem('question', JSON.stringify(question));
         } else {
@@ -152,15 +161,21 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
         }
     };
 
+    const handleValidateDescription = async () => {
+        const res = await validateDescription(descriptionData);
+    };
+
     useEffect(() => {
         (async () => {
             const res = await getAllLanguages();
+            console.log(res.data);
             setLanguages(res.data);
             const res2 = await getAllLevels();
             setLevels(res2);
-            var question = JSON.parse(localStorage.getItem('question'));
+            var question = localStorage.getItem('question');
 
             if (question) {
+                question = JSON.parse(question);
                 setTitleText(question['title']);
                 setCurrentLanguages(question['languages']);
                 setDescriptionData(question['description']);
@@ -171,9 +186,39 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
             if (savedCheckedState !== null) {
                 setIsChecked(savedCheckedState === 'true');
             }
+
+            const savedErrorTitle = localStorage.getItem('errorQuestionTitle');
+            const savedErrorDescription = localStorage.getItem('errorQuestionDescription');
+            const savedErrorLanguages = localStorage.getItem('errorQuestionLanguages');
+            const savedErrorLevel = localStorage.getItem('errorQuestionLevel');
+
+            savedErrorTitle && setErrorTitle(savedErrorTitle);
+            savedErrorDescription && setErrorDescription(savedErrorDescription);
+            savedErrorLanguages && setErrorLanguages(savedErrorLanguages);
+            savedErrorLevel && setErrorLevel(savedErrorLevel);
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        console.log(typeof level);
+        if (titleText.length > 0) {
+            setErrorTitle(undefined);
+            localStorage.setItem('errorQuestionTitle', '');
+        }
+        if (descriptionData.length > 0) {
+            setErrorDescription(undefined);
+            localStorage.setItem('errorQuestionDescription', '');
+        }
+        if (level !== undefined && !(typeof level === 'string')) {
+            setErrorLevel(undefined);
+            localStorage.setItem('errorQuestionLevel', '');
+        }
+        if (currentLanguages.length > 0) {
+            setErrorLanguages(undefined);
+            localStorage.setItem('errorQuestionLanguages', '');
+        }
+    }, [currentLanguages.length, descriptionData.length, level, titleText.length]);
 
     return (
         <div className="contribute-body-main-content">
@@ -181,24 +226,31 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
             <div className="d-flex gap-4">
                 <div className="col-12">
                     <div className="subtitle">Title *</div>
+                    {errorTitle && (
+                        <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                            - {errorTitle}
+                        </label>
+                    )}
                     <input
                         type="text"
-                        className="form-control w-100"
+                        className={clsx('form-control', 'w-100', `${errorTitle ? 'errorInput' : ''}`)}
                         id="question-title"
                         name="question-title"
                         value={titleText}
                         onChange={handleChangeTitle}
                     />
-                    <div className="char-counter">{titleText.length}/150</div>
+                    <div className={clsx('char-counter', `${errorTitle ? 'errorText' : ''}`)}>
+                        {titleText.length}/150
+                    </div>
                 </div>
             </div>
 
             <div className="d-flex mb-3">
                 <div className="col-6 pe-2">
                     <div className="subtitle">Languages *</div>
-                    <div class={clsx(styles.dropdown)}>
+                    <div class={clsx(styles.dropdown, `${errorLanguages ? 'errorInput' : ''}`)}>
                         <div className="dropdownToggleQuestion" onClick={() => dropdownToggle(0)}>
-                            <div className={clsx(styles.name)}>
+                            <div className={clsx(styles.name, `${errorLanguages ? 'errorText' : ''}`)}>
                                 {currentLanguages.length > 0
                                     ? convertLanguages(currentLanguages)
                                     : 'Select one or languages ...'}
@@ -244,9 +296,11 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                 </div>
                 <div className="col-6 ps-2">
                     <div className="subtitle">Level *</div>
-                    <div class={clsx(styles.dropdown)}>
+                    <div class={clsx(styles.dropdown, `${errorLevel ? 'errorInput' : ''}`)}>
                         <div className="dropdownToggleQuestion" onClick={() => dropdownToggle(1)}>
-                            <div className={clsx(styles.name)}>{level ? level.name : 'Select level ...'}</div>
+                            <div className={clsx(styles.name, `${errorLevel ? 'errorText' : ''}`)}>
+                                {level ? level.name : 'Select level ...'}
+                            </div>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
                         <div className="dropdownHide dropdownQuestion">
@@ -288,20 +342,28 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                 </div>
             </div>
             <div className="subtitle">Description *</div>
+            {errorDescription && (
+                <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                    - {errorDescription}
+                </label>
+            )}
             <textarea
-                className="textarea form-control"
+                className={clsx('textarea', 'form-control', `${errorDescription ? 'errorInput' : ''}`)}
                 value={descriptionData}
                 onChange={handleChangeDescription}
                 name="description"
                 placeholder="Type your decription about the question here."
             ></textarea>
-            <div className="char-counter">{descriptionData.length}/5000</div>
+            <div className={clsx('char-counter', `${errorDescription ? 'errorText' : ''}`)}>
+                {descriptionData.length}/5000
+            </div>
             <div className="mt-3 mb-5">
                 <label className="d-flex gap-2 align-items-center">
                     <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} className="checkbox" />
-                    <div>Validate description</div>
+                    <div>Validate-description</div>
                 </label>
             </div>
+            <div onClick={handleValidateDescription}>abc</div>
         </div>
     );
 };

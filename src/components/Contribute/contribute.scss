@@ -390,7 +390,11 @@
 }
 
 .errorInput {
-    border-color: var(--red);
+    border-color: var(--red) !important;
+}
+
+.errorText {
+    color: var(--red) !important;
 }
 
 .ͼ1 .cm-lineNumbers .cm-gutterElement {

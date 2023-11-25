@@ -68,3 +68,16 @@ export const createProblem = async (problem) => {
             return error;
         });
 };
+
+export const validateDescription = async (description) => {
+    return await axios
+        .post(`http://127.0.0.1:5000/api/v1/validate-description`, { description })
+        .then(function (response) {
+            console.log(response.data);
+            return response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+            return error.response;
+        });
+};

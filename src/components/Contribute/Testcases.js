@@ -37,6 +37,8 @@ const MainChild = () => {
         const newTestcases = [...testcases, { input: input, output: output }];
         setTestcases(newTestcases);
         localStorage.setItem('testcases', JSON.stringify(newTestcases));
+        localStorage.setItem('testcase-input', '');
+        localStorage.setItem('testcase-output', '');
         setInput('');
         setOutput('');
     };

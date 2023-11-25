@@ -80,6 +80,14 @@
     background-color: var(--gray);
 }
 
+// question
+.validation {
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    background-color: var(--orange);
+    color: white;
+}
+
 // Codes
 .codeDropdown {
     // border-bottom: 2px solid var(--gray-light);

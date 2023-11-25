@@ -16,17 +16,21 @@ import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
 const MainChild = () => {
-    const [language, setLanguage] = useState('cpp');
+    const [language, setLanguage] = useState();
     const [languages, setLanguages] = useState([]);
     const [initialCode, setInitialCode] = useState('');
     const [solutionCode, setSolutionCode] = useState('');
     const [fullCode, setFullCode] = useState('');
+    const [errorInitialCode, setErrorInitialCode] = useState('');
+    const [errorSolutionCode, setErrorSolutionCode] = useState('');
+    const [errorFullCode, setErrorFullCode] = useState('');
 
     const handleChangeInitialCode = useCallback(
         (val) => {
             if (language === 'cpp') {
-                var cppCode = JSON.parse(localStorage.getItem('cpp_code'));
+                var cppCode = localStorage.getItem('cpp_code');
                 if (cppCode) {
+                    cppCode = JSON.parse(cppCode);
                     cppCode['initialCode'] = val;
                     localStorage.setItem('cpp_code', JSON.stringify(cppCode));
                 } else {
@@ -40,8 +44,9 @@ const MainChild = () => {
                     );
                 }
             } else if (language === 'python') {
-                var pythonCode = JSON.parse(localStorage.getItem('python_code'));
+                var pythonCode = localStorage.getItem('python_code');
                 if (pythonCode) {
+                    pythonCode = JSON.parse(pythonCode);
                     pythonCode['initialCode'] = val;
                     localStorage.setItem('python_code', JSON.stringify(pythonCode));
                 } else {
@@ -55,8 +60,7 @@ const MainChild = () => {
                     );
                 }
             }
-            // setInitialCode(val);
-            console.log('val:', val);
+            setInitialCode(val);
         },
         [language],
     );
@@ -64,8 +68,9 @@ const MainChild = () => {
     const handleChangeSolutionCode = useCallback(
         (val) => {
             if (language === 'cpp') {
-                var cppCode = JSON.parse(localStorage.getItem('cpp_code'));
+                var cppCode = localStorage.getItem('cpp_code');
                 if (cppCode) {
+                    cppCode = JSON.parse(cppCode);
                     cppCode['solutionCode'] = val;
                     localStorage.setItem('cpp_code', JSON.stringify(cppCode));
                 } else {
@@ -79,8 +84,9 @@ const MainChild = () => {
                     );
                 }
             } else if (language === 'python') {
-                var pythonCode = JSON.parse(localStorage.getItem('python_code'));
+                var pythonCode = localStorage.getItem('python_code');
                 if (pythonCode) {
+                    pythonCode = JSON.parse(pythonCode);
                     pythonCode['solutionCode'] = val;
                     localStorage.setItem('python_code', JSON.stringify(pythonCode));
                 } else {
@@ -94,8 +100,7 @@ const MainChild = () => {
                     );
                 }
             }
-            // setSolutionCode(val);
-            console.log('val:', val);
+            setSolutionCode(val);
         },
         [language],
     );
@@ -103,8 +108,9 @@ const MainChild = () => {
     const handleChangeFullCode = useCallback(
         (val) => {
             if (language === 'cpp') {
-                var cppCode = JSON.parse(localStorage.getItem('cpp_code'));
+                var cppCode = localStorage.getItem('cpp_code');
                 if (cppCode) {
+                    cppCode = JSON.parse(cppCode);
                     cppCode['fullCode'] = val;
                     localStorage.setItem('cpp_code', JSON.stringify(cppCode));
                 } else {
@@ -118,8 +124,9 @@ const MainChild = () => {
                     );
                 }
             } else if (language === 'python') {
-                var pythonCode = JSON.parse(localStorage.getItem('python_code'));
+                var pythonCode = localStorage.getItem('python_code');
                 if (pythonCode) {
+                    pythonCode = JSON.parse(pythonCode);
                     pythonCode['fullCode'] = val;
                     localStorage.setItem('python_code', JSON.stringify(pythonCode));
                 } else {
@@ -133,14 +140,12 @@ const MainChild = () => {
                     );
                 }
             }
-            console.log('val:', val);
+            setFullCode(val);
         },
         [language],
     );
 
     const dropdownToggle = (index, id) => {
-        console.log('index: ', index);
-        console.log('id: ', id);
         if (id === 1) {
             setLanguage('python');
         } else if (id === 2) {
@@ -150,7 +155,6 @@ const MainChild = () => {
 
         if (dropdownMenu[index].classList.contains('dropdownHide')) {
             for (var i = 0; i < dropdownMenu.length; i++) {
-                console.log(i);
                 dropdownMenu[i].classList.add('dropdownHide');
             }
             dropdownMenu[index].classList.remove('dropdownHide');
@@ -160,17 +164,28 @@ const MainChild = () => {
     };
 
     useEffect(() => {
-        console.log(language);
         if (language === 'cpp') {
-            var cppCode = JSON.parse(localStorage.getItem('cpp_code'));
+            var cppCode = localStorage.getItem('cpp_code');
             if (cppCode) {
+                cppCode = JSON.parse(cppCode);
                 setInitialCode(cppCode.initialCode);
                 setFullCode(cppCode.fullCode);
                 setSolutionCode(cppCode.solutionCode);
+            } else {
+                setInitialCode('');
+                setFullCode('');
+                setSolutionCode('');
             }
+            const savedErrorPythonInitialCode = localStorage.getItem('errorPythonInitialCode');
+            const savedErrorPythonSolutionCode = localStorage.getItem('errorPythonSolutionCode');
+            const savedErrorPythonFullCode = localStorage.getItem('errorPythonFullCode');
+            savedErrorPythonInitialCode && setErrorInitialCode(savedErrorPythonInitialCode);
+            savedErrorPythonSolutionCode && setErrorSolutionCode(savedErrorPythonSolutionCode);
+            savedErrorPythonFullCode && setErrorFullCode(savedErrorPythonFullCode);
         } else if (language === 'python') {
-            var pythonCode = JSON.parse(localStorage.getItem('python_code'));
+            var pythonCode = localStorage.getItem('python_code');
             if (pythonCode) {
+                pythonCode = JSON.parse(pythonCode);
                 setInitialCode(pythonCode.initialCode);
                 setFullCode(pythonCode.fullCode);
                 setSolutionCode(pythonCode.solutionCode);
@@ -179,17 +194,54 @@ const MainChild = () => {
                 setFullCode('');
                 setSolutionCode('');
             }
+            const savedErrorPythonInitialCode = localStorage.getItem('errorPythonInitialCode');
+            const savedErrorPythonSolutionCode = localStorage.getItem('errorPythonSolutionCode');
+            const savedErrorPythonFullCode = localStorage.getItem('errorPythonFullCode');
+            savedErrorPythonInitialCode && setErrorInitialCode(savedErrorPythonInitialCode);
+            savedErrorPythonSolutionCode && setErrorSolutionCode(savedErrorPythonSolutionCode);
+            savedErrorPythonFullCode && setErrorFullCode(savedErrorPythonFullCode);
         }
     }, [language]);
 
     useEffect(() => {
         (async () => {
-            const langs = JSON.parse(localStorage.getItem('question'));
+            var langs = localStorage.getItem('question');
             if (langs) {
+                langs = JSON.parse(langs);
                 setLanguages(langs['languages']);
             }
         })();
     }, []);
+
+    useEffect(() => {
+        if (language === 'cpp') {
+            if (initialCode.length > 0) {
+                setErrorInitialCode(undefined);
+                localStorage.setItem('errorCppInitialCode', '');
+            }
+            if (solutionCode.length > 0) {
+                setErrorSolutionCode(undefined);
+                localStorage.setItem('errorCppSolutionCode', '');
+            }
+            if (fullCode.length > 0) {
+                setErrorFullCode(undefined);
+                localStorage.setItem('errorCppFullCode', '');
+            }
+        } else if (language === 'python') {
+            if (initialCode.length > 0) {
+                setErrorInitialCode(undefined);
+                localStorage.setItem('errorPythonInitialCode', '');
+            }
+            if (solutionCode.length > 0) {
+                setErrorSolutionCode(undefined);
+                localStorage.setItem('errorPythonSolutionCode', '');
+            }
+            if (fullCode.length > 0) {
+                setErrorFullCode(undefined);
+                localStorage.setItem('errorPythonFullCode', '');
+            }
+        }
+    }, [fullCode.length, initialCode.length, language, solutionCode.length]);
 
     return (
         <div className="contribute-body-main-content">
@@ -212,7 +264,7 @@ const MainChild = () => {
                             <div className="codeMenu dropdownCheck dropdownHide">
                                 <div className={clsx(styles.codeItem)}>
                                     <div className={styles.codeItemTitle}>Initial Code</div>
-                                    <div className={clsx(styles.codeScript)}>
+                                    <div className={clsx(styles.codeScript, `${errorInitialCode ? 'errorInput' : ''}`)}>
                                         {lang.name === 'python' && (
                                             <CodeMirror
                                                 value={initialCode}
@@ -230,28 +282,74 @@ const MainChild = () => {
                                             />
                                         )}
                                     </div>
+                                    {errorInitialCode && (
+                                        <label
+                                            for="exampleFormControlInput1"
+                                            className={clsx('form-label', styles.errorText)}
+                                        >
+                                            - {errorInitialCode}
+                                        </label>
+                                    )}
                                 </div>
                                 <div className={clsx(styles.codeItem)}>
                                     <div className={styles.codeItemTitle}>Solution Code</div>
-                                    <div className={clsx(styles.codeScript)}>
-                                        <CodeMirror
-                                            value={solutionCode}
-                                            extensions={[langs.cpp()]}
-                                            onChange={handleChangeSolutionCode}
-                                            theme={xcodeLight}
-                                        />
+                                    <div
+                                        className={clsx(styles.codeScript, `${errorSolutionCode ? 'errorInput' : ''}`)}
+                                    >
+                                        {lang.name === 'python' && (
+                                            <CodeMirror
+                                                value={solutionCode}
+                                                extensions={[langs.python()]}
+                                                onChange={handleChangeSolutionCode}
+                                                theme={xcodeLight}
+                                            />
+                                        )}
+                                        {lang.name === 'cpp' && (
+                                            <CodeMirror
+                                                value={solutionCode}
+                                                extensions={[langs.cpp()]}
+                                                onChange={handleChangeSolutionCode}
+                                                theme={xcodeLight}
+                                            />
+                                        )}
                                     </div>
+                                    {errorSolutionCode && (
+                                        <label
+                                            for="exampleFormControlInput1"
+                                            className={clsx('form-label', styles.errorText)}
+                                        >
+                                            - {errorSolutionCode}
+                                        </label>
+                                    )}
                                 </div>
                                 <div className={clsx(styles.codeItem)}>
                                     <div className={styles.codeItemTitle}>Full Code</div>
-                                    <div className={clsx(styles.codeScript)}>
-                                        <CodeMirror
-                                            value={fullCode}
-                                            extensions={[langs.cpp()]}
-                                            onChange={handleChangeFullCode}
-                                            theme={xcodeLight}
-                                        />
+                                    <div className={clsx(styles.codeScript, `${errorFullCode ? 'errorInput' : ''}`)}>
+                                        {lang.name === 'python' && (
+                                            <CodeMirror
+                                                value={fullCode}
+                                                extensions={[langs.python()]}
+                                                onChange={handleChangeFullCode}
+                                                theme={xcodeLight}
+                                            />
+                                        )}
+                                        {lang.name === 'cpp' && (
+                                            <CodeMirror
+                                                value={fullCode}
+                                                extensions={[langs.cpp()]}
+                                                onChange={handleChangeFullCode}
+                                                theme={xcodeLight}
+                                            />
+                                        )}
                                     </div>
+                                    {errorFullCode && (
+                                        <label
+                                            for="exampleFormControlInput1"
+                                            className={clsx('form-label', styles.errorText)}
+                                        >
+                                            - {errorFullCode}
+                                        </label>
+                                    )}
                                 </div>
                             </div>
                         </div>
