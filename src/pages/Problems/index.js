@@ -147,6 +147,7 @@ function Problems() {
             var curLevel = level ? level : 'empty';
             var curStatus = status ? status : 'empty';
             var curText = search ? search : 'empty';
+            console.log(curLevel);
             var response = await getProblemForPagination(user_id, curLevel, curStatus, curText);
             setProblems(response.body);
         })();

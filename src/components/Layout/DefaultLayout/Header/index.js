@@ -24,7 +24,7 @@ function Header() {
 
     const handleLogout = () => {
         logout();
-        window.location.href = './';
+        window.location.href = '/';
     };
 
     useEffect(() => {
@@ -180,12 +180,12 @@ function Header() {
                         </div>
                     )}
                     {!currentUser && (
-                        <div className={clsx(styles.navbarUser)}>
-                            <div className="btn btn-signin btn-text me-3" onClick={() => LoginModalTrigger.open()}>
-                                Đăng nhập
+                        <div className="d-flex gap-3">
+                            <div className="btn btn-signin btn-text" onClick={() => LoginModalTrigger.open()}>
+                                Log in
                             </div>
                             <div className="btn btn-success btn-text" onClick={() => SignupModalTrigger.open()}>
-                                Đăng ký
+                                Sign up
                             </div>
                         </div>
                     )}

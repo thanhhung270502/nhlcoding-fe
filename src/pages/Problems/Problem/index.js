@@ -1,46 +1,43 @@
-// import { createContext, useCallback, useEffect, useState } from 'react';
-import './problem.scss';
-import Split from 'react-split-grid';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import $ from 'jquery';
-// import { useEffect, useState } from 'react';
-import Code from './code';
-import Description from './description';
-
-import Console from './console';
-
-// File: code.js
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import CodeMirror from '@uiw/react-codemirror';
-import { langs } from '@uiw/codemirror-extensions-langs';
-import { xcodeLight } from '@uiw/codemirror-theme-xcode';
+import Split from 'react-split-grid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faRotateLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import CodeMirror from '@uiw/react-codemirror';
+import { xcodeLight } from '@uiw/codemirror-theme-xcode';
+import { langs } from '@uiw/codemirror-extensions-langs';
 
-// File: console.js
-import clsx from 'clsx';
-import styles from './console.module.scss';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { getTestcaseByProblemID } from '~/api/testcases';
-import { getLanguageByID, problemRunCode } from '~/api/problems';
-import { useParams } from 'react-router-dom';
-import { getProblemLanguagesByProblemID } from '~/api/problem_languages';
+import Description from './description';
 import Editorial from './editorial';
-import './problem.scss';
 import Solution from './solutions';
 import Submission from './submission';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import Loading from '~/components/Loading';
+
+import clsx from 'clsx';
+import styles from './console.module.scss';
+import './console.scss';
+import './problem.scss';
+
+import { getCookie } from '~/api/cookie';
+import { getProblemLanguagesByProblemID } from '~/api/problem_languages';
+import { problemRunCode } from '~/api/problems';
+import { createSubmission } from '~/api/submissions';
+import { getTestcaseByProblemID } from '~/api/testcases';
+import { getCurrentTimeFormatted } from '~/utils';
+import { insertUserProblem } from '~/api/user_problems';
 
 function Problem() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [tabParams, setTabParams] = useSearchParams();
-    const tab = typeof tabParams.get('tab') === 'string' ? tabParams.get('tab') : undefined;
+    const params = new URLSearchParams(window.location.search);
+    const tab = typeof params.get('tab') === 'string' ? params.get('tab') : undefined;
 
     useEffect(() => {
         if (!tab) {
             navigate(`/problems/${id}?tab=description`);
         }
-    }, [tab]);
+    }, [tab, id, navigate]);
 
     useEffect(() => {
         document.body.style.overflowY = 'hidden';
@@ -94,23 +91,21 @@ function Problem() {
     useEffect(() => {
         async function fetchProblemLanguagesByProblemID(problem_id) {
             const res = await getProblemLanguagesByProblemID(problem_id);
+            console.log(res);
             setLanguages(res.body);
-
-            // console.log("Problem languages:", res.body);
-
             // Default language and code as cpp
-            const { language_id, name, initialcode } = res.body.find(
+            const { language_id, name, initial_code, solution_code, full_code } = res.body.find(
                 (item) => item.problem_id === parseInt(id) && item.language_id === 2,
             );
-            const lang_obj = { id: language_id, name: name, initialcode: initialcode };
+            const lang_obj = { id: language_id, name: name, initialcode: convertCode(initial_code) };
             if (!localStorage.getItem('active_language')) {
                 setActiveLanguage(lang_obj);
                 localStorage.setItem('active_language', JSON.stringify(lang_obj));
             }
 
             if (!localStorage.getItem(`${id}_${name}`)) {
-                setCode(convertCode(initialcode));
-                localStorage.setItem(`${id}_${name}`, initialcode);
+                setCode(convertCode(initial_code));
+                localStorage.setItem(`${id}_${name}`, initial_code);
             }
         }
         fetchProblemLanguagesByProblemID(id);
@@ -119,17 +114,17 @@ function Problem() {
     // Handle change language
     const handleLanguageChange = (e) => {
         const lang_name = e.target.innerText;
-        const { language_id, name, initialcode } = languages.find(
+        const { language_id, name, initial_code, solution_code, full_code } = languages.find(
             (item) => item.name === lang_name && item.problem_id === parseInt(id),
         );
-        const lang_obj = { id: language_id, name: name, initialcode: initialcode };
+        const lang_obj = { id: language_id, name: name, initialcode: convertCode(initial_code) };
 
         setActiveLanguage(lang_obj);
         localStorage.setItem('active_language', JSON.stringify(lang_obj));
 
         if (!localStorage.getItem(`${id}_${name}`)) {
-            setCode(convertCode(initialcode));
-            localStorage.setItem(`${id}_${name}`, initialcode);
+            setCode(convertCode(initial_code));
+            localStorage.setItem(`${id}_${name}`, initial_code);
         } else {
             setCode(convertCode(localStorage.getItem(`${id}_${name}`)));
         }
@@ -143,15 +138,18 @@ function Problem() {
         return code;
     };
 
-    const onChange = useCallback((value, viewUpdate) => {
-        setCode(convertCode(value));
-        const active_language = JSON.parse(localStorage.getItem('active_language'));
-        if (active_language !== null && active_language !== undefined) {
-            localStorage.setItem(`${id}_${active_language.name}`, value);
-        } else {
-            return;
-        }
-    }, []);
+    const onChange = useCallback(
+        (value, viewUpdate) => {
+            setCode(convertCode(value));
+            const active_language = JSON.parse(localStorage.getItem('active_language'));
+            if (active_language !== null && active_language !== undefined) {
+                localStorage.setItem(`${id}_${active_language.name}`, value);
+            } else {
+                return;
+            }
+        },
+        [id],
+    );
 
     const handleResetCode = () => {
         const { initialcode } = JSON.parse(localStorage.getItem('active_language'));
@@ -161,14 +159,11 @@ function Problem() {
     useEffect(() => {
         const active_language = JSON.parse(localStorage.getItem('active_language'));
 
-        if (active_language == null) {
-            console.log('Not active language yet!');
-            return;
+        if (active_language) {
+            setActiveLanguage(active_language);
+            setCode(convertCode(localStorage.getItem(`${id}_${active_language.name}`)));
         }
-
-        setActiveLanguage(active_language);
-        setCode(convertCode(localStorage.getItem(`${id}_${active_language.name}`)));
-    }, []);
+    }, [id]);
 
     // ---------------------------------------------------------------- //
     // File: console.js
@@ -187,10 +182,6 @@ function Problem() {
             output: '',
         },
     ]);
-
-    // console.log("case test: ", currentCaseTest);
-    // console.log("case result: ", currentCaseResult);
-    console.log('result: ', currentResult);
 
     const handleToggleConsole = () => {
         var gridRow = $('.grid-row');
@@ -285,31 +276,76 @@ function Problem() {
         }
     };
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [status, setStatus] = useState('');
+    const [compileInfo, setCompileInfo] = useState('');
+    const [runTime, setRunTime] = useState(0);
+
     const handleRunCode = async () => {
         handleOpenConsole();
         setRun(true);
-
-        if (!activeLanguage) {
-            console.log('Cannot get active language');
-            return;
-        }
+        setIsLoading(true);
 
         const res = await problemRunCode(id, code, activeLanguage.name);
 
         if (res.message === 'Successfully') {
-            setCurrentResult(res.body);
+            setIsLoading(false);
+            setStatus(res.body.status);
+            setCompileInfo(res.body.compile_info);
+            setCurrentResult(res.body.result);
+            if (res.body.status === 'Accepted' || res.body.status === 'Wrong answer') {
+                setRunTime(res.body.avg_runtime);
+            }
         } else {
             alert('Try running the code again!');
         }
     };
 
+    const user_id = getCookie('user_id');
+    const [renderSubmissions, setRenderSubmissions] = useState(true);
+
     const handleSubmitCode = async (e) => {
         e.preventDefault();
-        if (!run) {
-            handleRunCode();
-        }
 
-        // handle submit code
+        handleOpenConsole();
+        setRun(true);
+        setIsLoading(true);
+
+        const res = await problemRunCode(id, code, activeLanguage.name);
+
+        if (res.message === 'Successfully') {
+            setRenderSubmissions(false);
+            setIsLoading(false);
+            setStatus(res.body.status);
+            setCompileInfo(res.body.compile_info);
+            setCurrentResult(res.body.result);
+            if (res.body.status === 'Accepted' || res.body.status === 'Wrong answer') {
+                setRunTime(res.body.avg_runtime);
+            }
+
+            // Need to create the user_problems first
+            const problem_status = res.body.status === 'Accepted' ? 'Solved' : 'Attempted';
+            await insertUserProblem(id, user_id, problem_status);
+
+            const props = {
+                user_id,
+                problem_id: id,
+                status: res.body.status,
+                datetime: getCurrentTimeFormatted(),
+                language_id: activeLanguage.id,
+                runtime: res.body.avg_runtime,
+                code: code,
+            };
+
+            const response = await createSubmission(props);
+            if (response.code === 201) {
+                // go to submission tab, and re-render submissions
+                navigate(`/problems/${id}?tab=submissions`);
+                setRenderSubmissions(true);
+            }
+        } else {
+            alert('Try running the code again!');
+        }
     };
 
     useEffect(() => {
@@ -319,15 +355,6 @@ function Problem() {
         }
         fetchTestcaseByProblemID(id);
     }, [id]);
-
-    const averageRunTime = (arr) => {
-        var length = arr.length;
-        var sum = 0;
-        for (var i = 0; i < length; i++) {
-            sum += arr[i].runtime;
-        }
-        return sum / length;
-    };
 
     return (
         <div className="problem-body">
@@ -387,7 +414,7 @@ function Problem() {
                                     <div className="problem-content">
                                         {tab === 'description' && <Description />}
                                         {tab === 'solutions' && <Solution />}
-                                        {tab === 'submissions' && <Submission />}
+                                        {tab === 'submissions' && renderSubmissions && <Submission problem_id={id} />}
                                         {tab === 'editorial' && <Editorial />}
                                     </div>
                                 </div>
@@ -483,14 +510,6 @@ function Problem() {
                                                                     theme={xcodeLight}
                                                                 />
                                                             )}
-                                                            {activeLanguage.id === 'PHP' && (
-                                                                <CodeMirror
-                                                                    value={code}
-                                                                    extensions={[langs.php()]}
-                                                                    onChange={onChange}
-                                                                    theme={xcodeLight}
-                                                                />
-                                                            )}
                                                         </>
                                                     )}
                                                 </div>
@@ -539,7 +558,7 @@ function Problem() {
                                                                     )}
                                                                 >
                                                                     {testcases[currentCaseTest].input
-                                                                        .split(' ')
+                                                                        .split('\n')
                                                                         .map((input, index) => (
                                                                             <div key={index}>{input}</div>
                                                                         ))}
@@ -560,146 +579,172 @@ function Problem() {
                                                         </div>
                                                     )}
 
-                                                    {currentConsoleNav === 1 && run === false && (
-                                                        <div
-                                                            className={clsx(
-                                                                'd-flex',
-                                                                'align-items-center',
-                                                                'justify-content-center',
-                                                                'h-100',
-                                                            )}
-                                                        >
-                                                            You must run your code
-                                                        </div>
+                                                    {!!isLoading && currentConsoleNav === 1 && <Loading />}
+
+                                                    {!isLoading && currentConsoleNav === 1 && run === false && (
+                                                        <div className="secondary-text">You must run your code</div>
                                                     )}
 
-                                                    {currentConsoleNav === 1 && run === true && (
-                                                        <div>
-                                                            {!!currentResult[currentCaseResult].success && (
-                                                                <div
-                                                                    className={clsx(
-                                                                        'problemConsoleResult',
-                                                                        'problemConsoleResultSuccess',
-                                                                        'pb-4',
+                                                    {!isLoading && currentConsoleNav === 1 && run === true && (
+                                                        <>
+                                                            {status !== 'Accepted' && status !== 'Wrong answer' && (
+                                                                <>
+                                                                    <div
+                                                                        className={` problemConsoleResult mb-4 problemConsoleResultFailure`}
+                                                                    >
+                                                                        {status}
+                                                                    </div>
+
+                                                                    {!!compileInfo && (
+                                                                        <pre className="mt-4">{compileInfo}</pre>
                                                                     )}
-                                                                >
-                                                                    Accepted
+                                                                </>
+                                                            )}
+
+                                                            {(status === 'Accepted' || status === 'Wrong answer') && (
+                                                                <div>
+                                                                    <div className="d-flex gap-4 align-items-center mb-4">
+                                                                        <div
+                                                                            className={` problemConsoleResult
+                                                                        ${
+                                                                            status === 'Accepted'
+                                                                                ? 'problemConsoleResultSuccess'
+                                                                                : 'problemConsoleResultFailure'
+                                                                        }
+                                                                    `}
+                                                                        >
+                                                                            {status}
+                                                                        </div>
+
+                                                                        <div className="footer-secondary">
+                                                                            Runtime: {runTime} ms
+                                                                        </div>
+                                                                    </div>
+                                                                    {/*<div
+                                                                        className={clsx(
+                                                                            'd-flex',
+                                                                            'align-items-center',
+                                                                            'pt-2',
+                                                                            'pb-4',
+                                                                        )}
+                                                                    >
+                                                                        <div className={clsx(styles.smallText)}>
+                                                                            Runtime:{' '}
+                                                                            {averageRunTime(currentResult).toFixed(2)}{' '}
+                                                                            ms
+                                                                        </div>
+                                                                        <div className={clsx(styles.smallText, 'ps-3')}>
+                                                                            Memory:{' '}
+                                                                            {currentResult[0].memory.toFixed(2)} MB
+                                                                        </div>
+                                                                        </div>*/}
+                                                                    <div
+                                                                        className={clsx(
+                                                                            'd-flex',
+                                                                            'align-items-center',
+                                                                            styles.problemConsoleCaseHeader,
+                                                                        )}
+                                                                    >
+                                                                        <div className={clsx('problemConsoleCaseNum')}>
+                                                                            {currentResult && currentResult[0] && (
+                                                                                <span
+                                                                                    className={`round-result ${
+                                                                                        currentResult[0].success
+                                                                                            ? 'result-success'
+                                                                                            : 'result-failure'
+                                                                                    }`}
+                                                                                ></span>
+                                                                            )}
+                                                                            <span>Case 1</span>
+                                                                        </div>
+                                                                        <div
+                                                                            className={clsx(
+                                                                                'problemConsoleCaseNum',
+                                                                                ' mx-2',
+                                                                            )}
+                                                                        >
+                                                                            {currentResult && currentResult[1] && (
+                                                                                <span
+                                                                                    className={`round-result ${
+                                                                                        currentResult[1].success
+                                                                                            ? 'result-success'
+                                                                                            : 'result-failure'
+                                                                                    }`}
+                                                                                ></span>
+                                                                            )}
+                                                                            <span>Case 2</span>
+                                                                        </div>
+                                                                        <div className={clsx('problemConsoleCaseNum')}>
+                                                                            {currentResult && currentResult[2] && (
+                                                                                <span
+                                                                                    className={`round-result ${
+                                                                                        currentResult[2].success
+                                                                                            ? 'result-success'
+                                                                                            : 'result-failure'
+                                                                                    }`}
+                                                                                ></span>
+                                                                            )}
+                                                                            <span>Case 3</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        className={clsx(
+                                                                            styles.problemConsoleCaseBody,
+                                                                            'pt-3',
+                                                                        )}
+                                                                    >
+                                                                        <div className={clsx(styles.smallText)}>
+                                                                            Input:
+                                                                        </div>
+                                                                        <div
+                                                                            className={clsx(
+                                                                                styles.problemConsoleCaseBodyContent,
+                                                                            )}
+                                                                        >
+                                                                            {testcases[currentCaseResult].input
+                                                                                .split('\n')
+                                                                                .map((input, index) => (
+                                                                                    <div key={index}>{input}</div>
+                                                                                ))}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        className={clsx(
+                                                                            styles.problemConsoleCaseBody,
+                                                                            'pt-3',
+                                                                        )}
+                                                                    >
+                                                                        <div className={clsx(styles.smallText)}>
+                                                                            Output:
+                                                                        </div>
+                                                                        <div
+                                                                            className={clsx(
+                                                                                styles.problemConsoleCaseBodyContent,
+                                                                            )}
+                                                                        >
+                                                                            {currentResult[currentCaseResult].output}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        className={clsx(
+                                                                            styles.problemConsoleCaseBody,
+                                                                            'pt-3',
+                                                                        )}
+                                                                    >
+                                                                        <div className={clsx(styles.smallText)}>
+                                                                            Expected:
+                                                                        </div>
+                                                                        <div
+                                                                            className={clsx(
+                                                                                styles.problemConsoleCaseBodyContent,
+                                                                            )}
+                                                                        >
+                                                                            {testcases[currentCaseResult].output}
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             )}
-                                                            {!currentResult[currentCaseResult].success && (
-                                                                <div
-                                                                    className={clsx(
-                                                                        'problemConsoleResult',
-                                                                        'problemConsoleResultFailure',
-                                                                        'pb-4',
-                                                                    )}
-                                                                >
-                                                                    Wrong Answer
-                                                                </div>
-                                                            )}
-                                                            {/*<div
-                                                                    className={clsx(
-                                                                        'd-flex',
-                                                                        'align-items-center',
-                                                                        'pt-2',
-                                                                        'pb-4',
-                                                                    )}
-                                                                >
-                                                                    <div className={clsx(styles.smallText)}>
-                                                                        Runtime:{' '}
-                                                                        {averageRunTime(currentResult).toFixed(2)}{' '}
-                                                                        ms
-                                                                    </div>
-                                                                    <div className={clsx(styles.smallText, 'ps-3')}>
-                                                                        Memory:{' '}
-                                                                        {currentResult[0].memory.toFixed(2)} MB
-                                                                    </div>
-                                                                    </div>*/}
-                                                            <div
-                                                                className={clsx(
-                                                                    'd-flex',
-                                                                    'align-items-center',
-                                                                    styles.problemConsoleCaseHeader,
-                                                                )}
-                                                            >
-                                                                <div className={clsx('problemConsoleCaseNum')}>
-                                                                    {currentResult && currentResult[0] && (
-                                                                        <span
-                                                                            className={`round-result ${
-                                                                                currentResult[0].success
-                                                                                    ? 'result-success'
-                                                                                    : 'result-failure'
-                                                                            }`}
-                                                                        ></span>
-                                                                    )}
-                                                                    <span>Case 1</span>
-                                                                </div>
-                                                                <div className={clsx('problemConsoleCaseNum', ' mx-2')}>
-                                                                    {currentResult && currentResult[1] && (
-                                                                        <span
-                                                                            className={`round-result ${
-                                                                                currentResult[1].success
-                                                                                    ? 'result-success'
-                                                                                    : 'result-failure'
-                                                                            }`}
-                                                                        ></span>
-                                                                    )}
-                                                                    <span>Case 2</span>
-                                                                </div>
-                                                                <div className={clsx('problemConsoleCaseNum')}>
-                                                                    {currentResult && currentResult[2] && (
-                                                                        <span
-                                                                            className={`round-result ${
-                                                                                currentResult[2].success
-                                                                                    ? 'result-success'
-                                                                                    : 'result-failure'
-                                                                            }`}
-                                                                        ></span>
-                                                                    )}
-                                                                    <span>Case 3</span>
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                                className={clsx(styles.problemConsoleCaseBody, 'pt-3')}
-                                                            >
-                                                                <div className={clsx(styles.smallText)}>Input:</div>
-                                                                <div
-                                                                    className={clsx(
-                                                                        styles.problemConsoleCaseBodyContent,
-                                                                    )}
-                                                                >
-                                                                    {testcases[currentCaseResult].input
-                                                                        .split(' ')
-                                                                        .map((input, index) => (
-                                                                            <div key={index}>{input}</div>
-                                                                        ))}
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                                className={clsx(styles.problemConsoleCaseBody, 'pt-3')}
-                                                            >
-                                                                <div className={clsx(styles.smallText)}>Output:</div>
-                                                                <div
-                                                                    className={clsx(
-                                                                        styles.problemConsoleCaseBodyContent,
-                                                                    )}
-                                                                >
-                                                                    {currentResult[currentCaseResult].output}
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                                className={clsx(styles.problemConsoleCaseBody, 'pt-3')}
-                                                            >
-                                                                <div className={clsx(styles.smallText)}>Expected:</div>
-                                                                <div
-                                                                    className={clsx(
-                                                                        styles.problemConsoleCaseBodyContent,
-                                                                    )}
-                                                                >
-                                                                    {testcases[currentCaseResult].output}
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        </>
                                                     )}
                                                 </div>
                                                 <div

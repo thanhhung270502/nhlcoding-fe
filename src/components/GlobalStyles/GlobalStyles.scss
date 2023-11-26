@@ -242,3 +242,12 @@ html {
     top: unset;
     bottom: 1em;
 }
+
+.secondary-text {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25em;
+    color: var(--gray-dark);
+}
