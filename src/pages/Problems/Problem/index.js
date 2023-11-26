@@ -280,10 +280,12 @@ function Problem() {
     const [status, setStatus] = useState('');
     const [compileInfo, setCompileInfo] = useState('');
     const [runTime, setRunTime] = useState(0);
+    const [wrongCase, setWrongCase] = useState(null);
 
     const handleRunCode = async () => {
         handleOpenConsole();
         setRun(true);
+        setCurrentCaseResult(0);
         setIsLoading(true);
 
         const res = await problemRunCode(id, code, activeLanguage.name);
@@ -296,6 +298,7 @@ function Problem() {
             if (res.body.status === 'Accepted' || res.body.status === 'Wrong answer') {
                 setRunTime(res.body.avg_runtime);
             }
+            setWrongCase(res.body.wrong_testcase);
         } else {
             alert('Try running the code again!');
         }
@@ -306,9 +309,9 @@ function Problem() {
 
     const handleSubmitCode = async (e) => {
         e.preventDefault();
-
         handleOpenConsole();
         setRun(true);
+        setCurrentCaseResult(0);
         setIsLoading(true);
 
         const res = await problemRunCode(id, code, activeLanguage.name);
@@ -322,6 +325,7 @@ function Problem() {
             if (res.body.status === 'Accepted' || res.body.status === 'Wrong answer') {
                 setRunTime(res.body.avg_runtime);
             }
+            setWrongCase(res.body.wrong_testcase);
 
             // Need to create the user_problems first
             const problem_status = res.body.status === 'Accepted' ? 'Solved' : 'Attempted';
@@ -335,7 +339,8 @@ function Problem() {
                 language_id: activeLanguage.id,
                 runtime: res.body.avg_runtime,
                 code: code,
-            };
+                wrong_testcase_id: wrongCase ? wrongCase.id : null,
+            }
 
             const response = await createSubmission(props);
             if (response.code === 201) {
@@ -351,7 +356,7 @@ function Problem() {
     useEffect(() => {
         async function fetchTestcaseByProblemID(problem_id) {
             const res = await getTestcaseByProblemID(problem_id);
-            setTestcases(res.body.testcases);
+            setTestcases(res.body.testcases.slice(0, 3));
         }
         fetchTestcaseByProblemID(id);
     }, [id]);
@@ -367,9 +372,8 @@ function Problem() {
                                     <div className="problem-sidebar">
                                         <div className="problem-sidebar-items">
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'description' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'description' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=description`);
                                                 }}
@@ -377,9 +381,8 @@ function Problem() {
                                                 Description
                                             </div>
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'solutions' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'solutions' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=solutions`);
                                                 }}
@@ -387,9 +390,8 @@ function Problem() {
                                                 Solutions
                                             </div>
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'submissions' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'submissions' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=submissions`);
                                                 }}
@@ -400,9 +402,8 @@ function Problem() {
                                                 Discussion
                                             </div> */}
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'editorial' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'editorial' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=editorial`);
                                                 }}
@@ -538,15 +539,11 @@ function Problem() {
                                                                     styles.problemConsoleCaseHeader,
                                                                 )}
                                                             >
-                                                                <div className={clsx('problemConsoleCaseNum')}>
-                                                                    Case 1
-                                                                </div>
-                                                                <div className={clsx('problemConsoleCaseNum', 'mx-2')}>
-                                                                    Case 2
-                                                                </div>
-                                                                <div className={clsx('problemConsoleCaseNum')}>
-                                                                    Case 3
-                                                                </div>
+                                                                {testcases.map((testcase, index) => (
+                                                                    <div className={clsx('problemConsoleCaseNum', 'me-2')}>
+                                                                        Case {index + 1}
+                                                                    </div>
+                                                                ))}
                                                             </div>
                                                             <div
                                                                 className={clsx(styles.problemConsoleCaseBody, 'pt-3')}
@@ -606,11 +603,10 @@ function Problem() {
                                                                     <div className="d-flex gap-4 align-items-center mb-4">
                                                                         <div
                                                                             className={` problemConsoleResult
-                                                                        ${
-                                                                            status === 'Accepted'
-                                                                                ? 'problemConsoleResultSuccess'
-                                                                                : 'problemConsoleResultFailure'
-                                                                        }
+                                                                        ${status === 'Accepted'
+                                                                                    ? 'problemConsoleResultSuccess'
+                                                                                    : 'problemConsoleResultFailure'
+                                                                                }
                                                                     `}
                                                                         >
                                                                             {status}
@@ -620,24 +616,6 @@ function Problem() {
                                                                             Runtime: {runTime} ms
                                                                         </div>
                                                                     </div>
-                                                                    {/*<div
-                                                                        className={clsx(
-                                                                            'd-flex',
-                                                                            'align-items-center',
-                                                                            'pt-2',
-                                                                            'pb-4',
-                                                                        )}
-                                                                    >
-                                                                        <div className={clsx(styles.smallText)}>
-                                                                            Runtime:{' '}
-                                                                            {averageRunTime(currentResult).toFixed(2)}{' '}
-                                                                            ms
-                                                                        </div>
-                                                                        <div className={clsx(styles.smallText, 'ps-3')}>
-                                                                            Memory:{' '}
-                                                                            {currentResult[0].memory.toFixed(2)} MB
-                                                                        </div>
-                                                                        </div>*/}
                                                                     <div
                                                                         className={clsx(
                                                                             'd-flex',
@@ -645,47 +623,22 @@ function Problem() {
                                                                             styles.problemConsoleCaseHeader,
                                                                         )}
                                                                     >
-                                                                        <div className={clsx('problemConsoleCaseNum')}>
-                                                                            {currentResult && currentResult[0] && (
-                                                                                <span
-                                                                                    className={`round-result ${
-                                                                                        currentResult[0].success
-                                                                                            ? 'result-success'
-                                                                                            : 'result-failure'
-                                                                                    }`}
-                                                                                ></span>
-                                                                            )}
-                                                                            <span>Case 1</span>
-                                                                        </div>
-                                                                        <div
-                                                                            className={clsx(
-                                                                                'problemConsoleCaseNum',
-                                                                                ' mx-2',
-                                                                            )}
-                                                                        >
-                                                                            {currentResult && currentResult[1] && (
-                                                                                <span
-                                                                                    className={`round-result ${
-                                                                                        currentResult[1].success
-                                                                                            ? 'result-success'
-                                                                                            : 'result-failure'
-                                                                                    }`}
-                                                                                ></span>
-                                                                            )}
-                                                                            <span>Case 2</span>
-                                                                        </div>
-                                                                        <div className={clsx('problemConsoleCaseNum')}>
-                                                                            {currentResult && currentResult[2] && (
-                                                                                <span
-                                                                                    className={`round-result ${
-                                                                                        currentResult[2].success
-                                                                                            ? 'result-success'
-                                                                                            : 'result-failure'
-                                                                                    }`}
-                                                                                ></span>
-                                                                            )}
-                                                                            <span>Case 3</span>
-                                                                        </div>
+                                                                        {testcases.map((testcase, index) => (
+                                                                            <div className={clsx('problemConsoleCaseNum', 'me-2')}>
+                                                                                {currentResult && currentResult[index] && (
+                                                                                    <span className={`round-result ${currentResult[index].success ? "result-success" : "result-failure"}`}></span>
+                                                                                )}
+                                                                                <span>Case {index + 1}</span>
+                                                                            </div>
+                                                                        ))}
+                                                                        {wrongCase !== null && (
+                                                                            <div className={clsx('problemConsoleCaseNum', 'me-2')}>
+                                                                                {currentResult && currentResult[testcases.length] && (
+                                                                                    <span className={`round-result result-failure`}></span>
+                                                                                )}
+                                                                                <span>Case {testcases.length + 1}</span>
+                                                                            </div>
+                                                                        )}
                                                                     </div>
                                                                     <div
                                                                         className={clsx(
@@ -701,7 +654,12 @@ function Problem() {
                                                                                 styles.problemConsoleCaseBodyContent,
                                                                             )}
                                                                         >
-                                                                            {testcases[currentCaseResult].input
+                                                                            {currentCaseResult < 3 && testcases[currentCaseResult].input
+                                                                                .split('\n')
+                                                                                .map((input, index) => (
+                                                                                    <div key={index}>{input}</div>
+                                                                                ))}
+                                                                            {currentCaseResult >= 3 && wrongCase && wrongCase.input
                                                                                 .split('\n')
                                                                                 .map((input, index) => (
                                                                                     <div key={index}>{input}</div>
@@ -722,7 +680,12 @@ function Problem() {
                                                                                 styles.problemConsoleCaseBodyContent,
                                                                             )}
                                                                         >
-                                                                            {currentResult[currentCaseResult].output}
+                                                                            {currentCaseResult < 3 && (
+                                                                                <span>{currentResult[currentCaseResult].output}</span>
+                                                                            )}
+                                                                            {currentCaseResult >= 3 && wrongCase && (
+                                                                                <span>{wrongCase.actual_output}</span>
+                                                                            )}
                                                                         </div>
                                                                     </div>
                                                                     <div
@@ -739,7 +702,12 @@ function Problem() {
                                                                                 styles.problemConsoleCaseBodyContent,
                                                                             )}
                                                                         >
-                                                                            {testcases[currentCaseResult].output}
+                                                                            {currentCaseResult < 3 && (
+                                                                                <span>{testcases[currentCaseResult].output}</span>
+                                                                            )}
+                                                                            {currentCaseResult >= 3 && wrongCase && (
+                                                                                <span>{wrongCase.output}</span>
+                                                                            )}
                                                                         </div>
                                                                     </div>
                                                                 </div>
