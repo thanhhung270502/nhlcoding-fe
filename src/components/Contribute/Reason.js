@@ -18,10 +18,18 @@ const MainChild = () => {
 
     const handleChange = (event) => {
         const inputValue = event.target.value;
+        if (inputValue.length === 0) {
+            setErrorReason('Missing reason');
+            localStorage.setItem('errorReason', 'Missing reason');
+        }
         if (inputValue.length <= 5000) {
             setText(inputValue);
             localStorage.setItem('reason', inputValue);
         }
+    };
+
+    const handleCheckEmpty = () => {
+        if (text.length === 0) setErrorReason('Missing reason');
     };
 
     useEffect(() => {
@@ -58,10 +66,13 @@ const MainChild = () => {
                     placeholder={placeholder}
                     value={text}
                     onChange={handleChange}
+                    onClick={handleChange}
                     name="reason"
                 />
             </form>
-            <div className={clsx('char-counter', `${errorReason ? 'errorText' : ''}`)}>{text.length}/5000</div>
+            <div className={clsx('d-flex', 'justify-content-end', 'pt-2', `${errorReason ? 'errorText' : ''}`)}>
+                {text.length}/5000
+            </div>
         </div>
     );
 };

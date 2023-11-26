@@ -20,10 +20,16 @@
 }
 
 .problems-dropdown-toggle {
-    background-color: var(--gray-light);
+    background-color: var(--hnl-problems-dropdown-toggle-bg);
+    color: var(--hnl-problems-dropdown-toggle-color);
     padding: 6px 12px;
     border-radius: 5px;
     border: none;
+
+    &:disabled {
+        color: var(--gray-light);
+        opacity: 50%;
+    }
 }
 
 .problems-dropdown-menu {
@@ -45,6 +51,17 @@
 .problem-dropdown-menu {
     border: unset !important;
     box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.1);
+    background-color: var(--hnl-dropdown-bg);
+    border: 1px solid var(--hnl-dropdown-border);
+
+    .dropdown-item {
+        color: var(--black);
+        padding: 8px 24px;
+
+        &:hover {
+            background-color: var(--hnl-select-bg);
+        }
+    }
 }
 
 .problems-right {

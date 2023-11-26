@@ -45,6 +45,10 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
 
     const handleChangeTitle = (event) => {
         const inputValue = event.target.value;
+        if (inputValue.length === 0) {
+            setErrorTitle('Missing question title');
+            localStorage.setItem('errorQuestionTitle', 'Missing question title');
+        }
         if (inputValue.length <= 150) {
             setTitleText(inputValue);
             var question = localStorage.getItem('question');
@@ -108,6 +112,10 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
 
     const handleChangeDescription = (e) => {
         const inputValue = e.target.value;
+        if (inputValue.length === 0) {
+            setErrorDescription('Missing question description');
+            localStorage.setItem('errorQuestionDescription', 'Missing question description');
+        }
         if (inputValue.length <= 5000) {
             setDescriptionData(inputValue);
 
@@ -165,6 +173,22 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
         const res = await validateDescription(descriptionData);
     };
 
+    const handleCheckEmpty = (type) => {
+        if (type === 'languages') {
+            if (currentLanguages.length === 0) {
+                setErrorLanguages('Required languages');
+                localStorage.setItem('errorQuestionLanguages', 'Missing question languages');
+            }
+        }
+        if (type === 'level') {
+            // console.log(level);
+            if (level === undefined) {
+                setErrorLevel('Required level');
+                localStorage.setItem('errorQuestionLevel', 'Missing question level');
+            }
+        }
+    };
+
     useEffect(() => {
         (async () => {
             const res = await getAllLanguages();
@@ -206,14 +230,18 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
             setErrorTitle(undefined);
             localStorage.setItem('errorQuestionTitle', '');
         }
+
         if (descriptionData.length > 0) {
             setErrorDescription(undefined);
             localStorage.setItem('errorQuestionDescription', '');
         }
+
         if (level !== undefined && !(typeof level === 'string')) {
+            console.log('here');
             setErrorLevel(undefined);
             localStorage.setItem('errorQuestionLevel', '');
         }
+
         if (currentLanguages.length > 0) {
             setErrorLanguages(undefined);
             localStorage.setItem('errorQuestionLanguages', '');
@@ -225,21 +253,32 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
             <div className="title">Please describe your question.</div>
             <div className="d-flex gap-4">
                 <div className="col-12">
-                    <div className="subtitle">Title *</div>
-                    {errorTitle && (
-                        <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
-                            - {errorTitle}
-                        </label>
-                    )}
+                    <div className="d-flex align-items-center justify-content-between">
+                        <div className="subtitle">Title *</div>
+                        {errorTitle && (
+                            <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                                - {errorTitle}
+                            </label>
+                        )}
+                    </div>
                     <input
                         type="text"
-                        className={clsx('form-control', 'w-100', `${errorTitle ? 'errorInput' : ''}`)}
+                        className={clsx('form-control', styles.input, 'w-100', `${errorTitle ? 'errorInput' : ''}`)}
                         id="question-title"
                         name="question-title"
                         value={titleText}
                         onChange={handleChangeTitle}
+                        onClick={handleChangeTitle}
                     />
-                    <div className={clsx('char-counter', `${errorTitle ? 'errorText' : ''}`)}>
+                    <div
+                        className={clsx(
+                            'd-flex',
+                            'align-items-center',
+                            'justify-content-end',
+                            `${errorTitle ? 'errorText' : ''}`,
+                            'pt-2',
+                        )}
+                    >
                         {titleText.length}/150
                     </div>
                 </div>
@@ -247,9 +286,22 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
 
             <div className="d-flex mb-3">
                 <div className="col-6 pe-2">
-                    <div className="subtitle">Languages *</div>
+                    <div className="d-flex align-items-center justify-content-between">
+                        <div className="subtitle">Languages *</div>
+                        {errorLanguages && (
+                            <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                                - {errorLanguages}
+                            </label>
+                        )}
+                    </div>
                     <div class={clsx(styles.dropdown, `${errorLanguages ? 'errorInput' : ''}`)}>
-                        <div className="dropdownToggleQuestion" onClick={() => dropdownToggle(0)}>
+                        <div
+                            className="dropdownToggleQuestion"
+                            onClick={() => {
+                                dropdownToggle(0);
+                                handleCheckEmpty('languages');
+                            }}
+                        >
                             <div className={clsx(styles.name, `${errorLanguages ? 'errorText' : ''}`)}>
                                 {currentLanguages.length > 0
                                     ? convertLanguages(currentLanguages)
@@ -295,9 +347,22 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                     </div>
                 </div>
                 <div className="col-6 ps-2">
-                    <div className="subtitle">Level *</div>
+                    <div className="d-flex align-items-center justify-content-between">
+                        <div className="subtitle">Level *</div>
+                        {errorLevel && (
+                            <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                                - {errorLevel}
+                            </label>
+                        )}
+                    </div>
                     <div class={clsx(styles.dropdown, `${errorLevel ? 'errorInput' : ''}`)}>
-                        <div className="dropdownToggleQuestion" onClick={() => dropdownToggle(1)}>
+                        <div
+                            className="dropdownToggleQuestion"
+                            onClick={() => {
+                                dropdownToggle(1);
+                                handleCheckEmpty('level');
+                            }}
+                        >
                             <div className={clsx(styles.name, `${errorLevel ? 'errorText' : ''}`)}>
                                 {level ? level.name : 'Select level ...'}
                             </div>
@@ -341,29 +406,33 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                     </div>
                 </div>
             </div>
-            <div className="subtitle">Description *</div>
-            {errorDescription && (
-                <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
-                    - {errorDescription}
-                </label>
-            )}
+            <div className="d-flex align-items-center justify-content-between">
+                <div className="subtitle">Description *</div>
+                {errorDescription && (
+                    <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                        - {errorDescription}
+                    </label>
+                )}
+            </div>
             <textarea
                 className={clsx('textarea', 'form-control', `${errorDescription ? 'errorInput' : ''}`)}
                 value={descriptionData}
                 onChange={handleChangeDescription}
+                onClick={handleChangeDescription}
                 name="description"
                 placeholder="Type your decription about the question here."
             ></textarea>
-            <div className={clsx('char-counter', `${errorDescription ? 'errorText' : ''}`)}>
+            <div
+                className={clsx(
+                    'd-flex',
+                    'align-items-center',
+                    'justify-content-end',
+                    `${errorDescription ? 'errorText' : ''}`,
+                    'pt-2',
+                )}
+            >
                 {descriptionData.length}/5000
             </div>
-            <div className="mt-3 mb-5">
-                <label className="d-flex gap-2 align-items-center">
-                    <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} className="checkbox" />
-                    <div>Validate-description</div>
-                </label>
-            </div>
-            <div onClick={handleValidateDescription}>abc</div>
         </div>
     );
 };

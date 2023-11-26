@@ -1,3 +1,8 @@
+.contributeContainer {
+    background-color: var(--primary-background);
+    min-height: 100vh;
+}
+
 .navbar {
     height: 60px;
     background-color: var(--blue-dark-3);
@@ -58,7 +63,8 @@
 
 .dropdown {
     position: relative;
-    border: 1px solid var(--gray);
+    border: 2px solid var(--hnl-input-border);
+    background-color: var(--hnl-input-bg);
     // border-radius: 8px;
 }
 
@@ -66,11 +72,11 @@
     padding: 0.5rem 1.5rem;
     color: var(--black);
     cursor: pointer;
-    border-bottom: 1px solid var(--gray-light);
-    border-top: 1px solid var(--gray-light);
+    // border-bottom: 1px solid var(--gray-light);
+    // border-top: 1px solid var(--gray-light);
     // border-radius: 8px;
     &:hover {
-        background-color: var(--gray);
+        background-color: var(--hnl-select-bg);
     }
 }
 
@@ -107,10 +113,11 @@
     border: 1px solid var(--gray-light);
     height: 300px;
     overflow: hidden scroll;
+    background-color: var(--hnl-code-bg);
 }
 
 .sampleCodeContainer {
-    background-color: var(--gray);
+    background-color: var(--hnl-sample-code-bg);
     padding: 12px;
     border-radius: 5px;
     margin-bottom: 1rem;
@@ -144,9 +151,10 @@
     font-weight: bold;
 }
 .testcaseContainer {
-    background-color: var(--gray-light);
+    background-color: var(--hnl-testcase-container-bg);
     padding: 1.5rem 2rem;
-    margin-top: 8px;
+    // margin-top: 1rem;
+    border-radius: 10px;
 
     .title {
         font-weight: bold;
@@ -163,12 +171,26 @@
         cursor: pointer;
     }
 }
-
+.testcaseItem {
+    background-color: var(--hnl-testcase-container-bg);
+}
 .errorText {
-    color: var(--red);
+    color: var(--hnl-error-text-color);
     font-size: 0.8rem;
 }
 
 .trash {
     cursor: pointer;
+}
+
+.input {
+    border: 2px solid var(--hnl-input-border);
+    background-color: var(--hnl-input-bg);
+    color: var(--hnl-input-color);
+
+    &:focus {
+        background-color: var(--hnl-input-bg);
+        border-color: var(--hnl-input-border);
+        color: var(--hnl-input-color);
+    }
 }

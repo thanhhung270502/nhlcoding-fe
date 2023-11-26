@@ -34,13 +34,13 @@ const MainChild = ({ solutionData, setSolutionData }) => {
         <div className="contribute-body-main-content">
             <div className="title">Share your solution *</div>
             <textarea
-                className="textarea"
+                className="form-control textarea"
                 placeholder={placeholder}
                 value={solutionData}
                 onChange={handleChange}
                 name="solutions"
             />
-            <div className="char-counter">{solutionData.length}/5000</div>
+            <div className="d-flex justify-content-end pt-2">{solutionData.length}/5000</div>
         </div>
     );
 };

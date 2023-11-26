@@ -91,10 +91,14 @@ export const checkAuth = async (accessToken) => {
         })
         .then((res) => {
             var session = JSON.parse(localStorage.getItem('session'));
-            session['login'] = res.data.login;
-            session['message'] = res.data.message;
-            localStorage.setItem('session', JSON.stringify(session));
-            console.log(res);
+            if (res.data.login === false) {
+                localStorage.setItem('session', '');
+            } else {
+                session['login'] = res.data.login;
+                session['message'] = res.data.message;
+                localStorage.setItem('session', JSON.stringify(session));
+                console.log(res);
+            }
             return res.data;
         })
         .catch((error) => console.log(error));

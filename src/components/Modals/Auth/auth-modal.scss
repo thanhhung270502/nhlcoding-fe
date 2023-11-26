@@ -50,3 +50,25 @@
     color: var(--gray-dark);
     margin-right: 0.25rem;
 }
+
+.modal-content {
+    background-color: var(--hnl-dropdown-bg);
+}
+
+.btn-google {
+    background-color: var(--red);
+    width: fit-content;
+    padding: 6px 3rem;
+    border-radius: 5px;
+    margin: 1rem 0;
+    cursor: pointer;
+    color: white;
+
+    span {
+        font-size: 0.9rem;
+        color: white;
+        padding-left: 1.5rem;
+        padding-right: 1rem;
+        font-weight: bold;
+    }
+}

@@ -14,6 +14,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
+import { dracula } from '@uiw/codemirror-theme-dracula';
 
 const MainChild = () => {
     const [language, setLanguage] = useState();
@@ -24,10 +25,15 @@ const MainChild = () => {
     const [errorInitialCode, setErrorInitialCode] = useState('');
     const [errorSolutionCode, setErrorSolutionCode] = useState('');
     const [errorFullCode, setErrorFullCode] = useState('');
+    const [theme, setTheme] = useState('');
 
     const handleChangeInitialCode = useCallback(
         (val) => {
             if (language === 'cpp') {
+                if (val.length === 0) {
+                    setErrorInitialCode('Missing initial code');
+                    localStorage.setItem('errorCppInitialCode', 'Missing initial code');
+                }
                 var cppCode = localStorage.getItem('cpp_code');
                 if (cppCode) {
                     cppCode = JSON.parse(cppCode);
@@ -44,6 +50,10 @@ const MainChild = () => {
                     );
                 }
             } else if (language === 'python') {
+                if (val.length === 0) {
+                    setErrorInitialCode('Missing initial code');
+                    localStorage.setItem('errorPythonInitialCode', 'Missing initial code');
+                }
                 var pythonCode = localStorage.getItem('python_code');
                 if (pythonCode) {
                     pythonCode = JSON.parse(pythonCode);
@@ -68,6 +78,10 @@ const MainChild = () => {
     const handleChangeSolutionCode = useCallback(
         (val) => {
             if (language === 'cpp') {
+                if (val.length === 0) {
+                    setErrorSolutionCode('Missing solution code');
+                    localStorage.setItem('errorCppSolutionCode', 'Missing solution code');
+                }
                 var cppCode = localStorage.getItem('cpp_code');
                 if (cppCode) {
                     cppCode = JSON.parse(cppCode);
@@ -84,6 +98,10 @@ const MainChild = () => {
                     );
                 }
             } else if (language === 'python') {
+                if (val.length === 0) {
+                    setErrorSolutionCode('Missing solution code');
+                    localStorage.setItem('errorPythonSolutionCode', 'Missing solution code');
+                }
                 var pythonCode = localStorage.getItem('python_code');
                 if (pythonCode) {
                     pythonCode = JSON.parse(pythonCode);
@@ -108,6 +126,10 @@ const MainChild = () => {
     const handleChangeFullCode = useCallback(
         (val) => {
             if (language === 'cpp') {
+                if (val.length === 0) {
+                    setErrorFullCode('Missing full code');
+                    localStorage.setItem('errorCppFullCode', 'Missing full code');
+                }
                 var cppCode = localStorage.getItem('cpp_code');
                 if (cppCode) {
                     cppCode = JSON.parse(cppCode);
@@ -124,6 +146,10 @@ const MainChild = () => {
                     );
                 }
             } else if (language === 'python') {
+                if (val.length === 0) {
+                    setErrorFullCode('Missing full code');
+                    localStorage.setItem('errorPythonFullCode', 'Missing full code');
+                }
                 var pythonCode = localStorage.getItem('python_code');
                 if (pythonCode) {
                     pythonCode = JSON.parse(pythonCode);
@@ -160,6 +186,48 @@ const MainChild = () => {
             dropdownMenu[index].classList.remove('dropdownHide');
         } else {
             dropdownMenu[index].classList.add('dropdownHide');
+        }
+    };
+
+    const handleCheckEmpty = (type) => {
+        if (language === 'cpp') {
+            if (type === 'initialCode') {
+                if (initialCode.length === 0) {
+                    setErrorInitialCode('Missing initial code');
+                    localStorage.setItem('errorCppInitialCode', 'Missing initial code');
+                }
+            }
+            if (type === 'fullCode') {
+                if (fullCode.length === 0) {
+                    setErrorFullCode('Missing full code');
+                    localStorage.setItem('errorCppFullCode', 'Missing full code');
+                }
+            }
+            if (type === 'solutionCode') {
+                if (solutionCode.length === 0) {
+                    setErrorSolutionCode('Missing solution code');
+                    localStorage.setItem('errorCppSolutionCode', 'Missing solution code');
+                }
+            }
+        } else if (language === 'python') {
+            if (type === 'initialCode') {
+                if (initialCode.length === 0) {
+                    setErrorInitialCode('Missing initial code');
+                    localStorage.setItem('errorPythonInitialCode', 'Missing initial code');
+                }
+            }
+            if (type === 'fullCode') {
+                if (fullCode.length === 0) {
+                    setErrorFullCode('Missing full code');
+                    localStorage.setItem('errorPythonFullCode', 'Missing full code');
+                }
+            }
+            if (type === 'solutionCode') {
+                if (solutionCode.length === 0) {
+                    setErrorSolutionCode('Missing solution code');
+                    localStorage.setItem('errorPythonSolutionCode', 'Missing solution code');
+                }
+            }
         }
     };
 
@@ -211,6 +279,7 @@ const MainChild = () => {
                 setLanguages(langs['languages']);
             }
         })();
+        setTheme(localStorage.getItem('theme'));
     }, []);
 
     useEffect(() => {
@@ -263,14 +332,27 @@ const MainChild = () => {
                             </div>
                             <div className="codeMenu dropdownCheck dropdownHide">
                                 <div className={clsx(styles.codeItem)}>
-                                    <div className={styles.codeItemTitle}>Initial Code</div>
+                                    <div className="d-flex align-items-center justify-content-between">
+                                        <div className={styles.codeItemTitle}>Initial Code</div>
+                                        {errorInitialCode && (
+                                            <label
+                                                for="exampleFormControlInput1"
+                                                className={clsx('form-label', styles.errorText)}
+                                            >
+                                                - {errorInitialCode}
+                                            </label>
+                                        )}
+                                    </div>
                                     <div className={clsx(styles.codeScript, `${errorInitialCode ? 'errorInput' : ''}`)}>
                                         {lang.name === 'python' && (
                                             <CodeMirror
                                                 value={initialCode}
                                                 extensions={[langs.python()]}
                                                 onChange={handleChangeInitialCode}
-                                                theme={xcodeLight}
+                                                onClick={() => {
+                                                    handleCheckEmpty('initialCode');
+                                                }}
+                                                theme={theme === 'light' ? xcodeLight : dracula}
                                             />
                                         )}
                                         {lang.name === 'cpp' && (
@@ -278,21 +360,26 @@ const MainChild = () => {
                                                 value={initialCode}
                                                 extensions={[langs.cpp()]}
                                                 onChange={handleChangeInitialCode}
-                                                theme={xcodeLight}
+                                                onClick={() => {
+                                                    handleCheckEmpty('initialCode');
+                                                }}
+                                                theme={theme === 'light' ? xcodeLight : dracula}
                                             />
                                         )}
                                     </div>
-                                    {errorInitialCode && (
-                                        <label
-                                            for="exampleFormControlInput1"
-                                            className={clsx('form-label', styles.errorText)}
-                                        >
-                                            - {errorInitialCode}
-                                        </label>
-                                    )}
                                 </div>
                                 <div className={clsx(styles.codeItem)}>
-                                    <div className={styles.codeItemTitle}>Solution Code</div>
+                                    <div className="d-flex align-items-center justify-content-between">
+                                        <div className={styles.codeItemTitle}>Solution Code</div>
+                                        {errorSolutionCode && (
+                                            <label
+                                                for="exampleFormControlInput1"
+                                                className={clsx('form-label', styles.errorText)}
+                                            >
+                                                - {errorSolutionCode}
+                                            </label>
+                                        )}
+                                    </div>
                                     <div
                                         className={clsx(styles.codeScript, `${errorSolutionCode ? 'errorInput' : ''}`)}
                                     >
@@ -301,7 +388,10 @@ const MainChild = () => {
                                                 value={solutionCode}
                                                 extensions={[langs.python()]}
                                                 onChange={handleChangeSolutionCode}
-                                                theme={xcodeLight}
+                                                onClick={() => {
+                                                    handleCheckEmpty('solutionCode');
+                                                }}
+                                                theme={theme === 'light' ? xcodeLight : dracula}
                                             />
                                         )}
                                         {lang.name === 'cpp' && (
@@ -309,28 +399,36 @@ const MainChild = () => {
                                                 value={solutionCode}
                                                 extensions={[langs.cpp()]}
                                                 onChange={handleChangeSolutionCode}
-                                                theme={xcodeLight}
+                                                onClick={() => {
+                                                    handleCheckEmpty('solutionCode');
+                                                }}
+                                                theme={theme === 'light' ? xcodeLight : dracula}
                                             />
                                         )}
                                     </div>
-                                    {errorSolutionCode && (
-                                        <label
-                                            for="exampleFormControlInput1"
-                                            className={clsx('form-label', styles.errorText)}
-                                        >
-                                            - {errorSolutionCode}
-                                        </label>
-                                    )}
                                 </div>
                                 <div className={clsx(styles.codeItem)}>
-                                    <div className={styles.codeItemTitle}>Full Code</div>
+                                    <div className="d-flex align-items-center justify-content-between">
+                                        <div className={styles.codeItemTitle}>Full Code</div>
+                                        {errorFullCode && (
+                                            <label
+                                                for="exampleFormControlInput1"
+                                                className={clsx('form-label', styles.errorText)}
+                                            >
+                                                - {errorFullCode}
+                                            </label>
+                                        )}
+                                    </div>
                                     <div className={clsx(styles.codeScript, `${errorFullCode ? 'errorInput' : ''}`)}>
                                         {lang.name === 'python' && (
                                             <CodeMirror
                                                 value={fullCode}
                                                 extensions={[langs.python()]}
                                                 onChange={handleChangeFullCode}
-                                                theme={xcodeLight}
+                                                onClick={() => {
+                                                    handleCheckEmpty('fullCode');
+                                                }}
+                                                theme={theme === 'light' ? xcodeLight : dracula}
                                             />
                                         )}
                                         {lang.name === 'cpp' && (
@@ -338,18 +436,13 @@ const MainChild = () => {
                                                 value={fullCode}
                                                 extensions={[langs.cpp()]}
                                                 onChange={handleChangeFullCode}
-                                                theme={xcodeLight}
+                                                onClick={() => {
+                                                    handleCheckEmpty('fullCode');
+                                                }}
+                                                theme={theme === 'light' ? xcodeLight : dracula}
                                             />
                                         )}
                                     </div>
-                                    {errorFullCode && (
-                                        <label
-                                            for="exampleFormControlInput1"
-                                            className={clsx('form-label', styles.errorText)}
-                                        >
-                                            - {errorFullCode}
-                                        </label>
-                                    )}
                                 </div>
                             </div>
                         </div>

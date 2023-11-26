@@ -7,7 +7,7 @@ import Contribute from './Contribute';
 import clsx from 'clsx';
 import styles from './contribute.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight, faLightbulb, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleRight, faLightbulb, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { getAllLanguages } from '~/api/languages';
 import $ from 'jquery';
 import ReactMarkdown from 'react-markdown';
@@ -21,6 +21,8 @@ const MainChild = () => {
     const [output, setOutput] = useState('');
     const [errorOutput, setErrorOutput] = useState(undefined);
     const [testcases, setTestcases] = useState([]);
+    const [manual, setManual] = useState(false);
+    const [review, setReview] = useState(false);
 
     const handleAddTestcase = () => {
         if (!input) {
@@ -64,16 +66,17 @@ const MainChild = () => {
     };
 
     const dropdownToggle = (index) => {
+        if (index === 0) {
+            setManual(!manual);
+        } else if (index === 1) {
+            setReview(!review);
+        }
         var dropdownMenu = $('.codeMenu');
 
-        if (dropdownMenu[index - 1].classList.contains('dropdownHide')) {
-            // for (var i = 0; i < dropdownMenu.length; i++) {
-            //     console.log(i);
-            //     dropdownMenu[i].classList.add('dropdownHide');
-            // }
-            dropdownMenu[index - 1].classList.remove('dropdownHide');
+        if (dropdownMenu[index].classList.contains('dropdownHide')) {
+            dropdownMenu[index].classList.remove('dropdownHide');
         } else {
-            dropdownMenu[index - 1].classList.add('dropdownHide');
+            dropdownMenu[index].classList.add('dropdownHide');
         }
     };
 
@@ -104,21 +107,32 @@ const MainChild = () => {
                     <div
                         className={clsx(styles.testcaseToggle)}
                         onClick={() => {
-                            dropdownToggle(1);
+                            dropdownToggle(0);
                         }}
                     >
                         <spam className="pe-3">
-                            <FontAwesomeIcon icon={faAngleRight} />
+                            {manual && <FontAwesomeIcon icon={faAngleDown} />}
+                            {!manual && <FontAwesomeIcon icon={faAngleRight} />}
                         </spam>
                         <div className={clsx(styles.codeToggleTitle)}>Add manual</div>
                     </div>
                     <div className="codeMenu dropdownCheck dropdownHide">
-                        <div className={clsx(styles.testcaseContainer)}>
-                            <div className={clsx(styles.title)}>Test cases</div>
+                        <div className={clsx(styles.testcaseContainer, 'mt-3')}>
+                            <div className={clsx(styles.title)}>TestCases</div>
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">
-                                    Standard Input
-                                </label>
+                                <div className="d-flex align-items-center justify-content-between">
+                                    <label for="exampleFormControlInput1" class="form-label">
+                                        Standard Input
+                                    </label>
+                                    {errorInput && (
+                                        <label
+                                            for="exampleFormControlInput1"
+                                            className={clsx('form-label', styles.errorText)}
+                                        >
+                                            - {errorInput}
+                                        </label>
+                                    )}
+                                </div>
 
                                 <input
                                     type="text"
@@ -127,19 +141,22 @@ const MainChild = () => {
                                     onChange={handleChangeInput}
                                     value={input}
                                 />
-                                {errorInput && (
-                                    <label
-                                        for="exampleFormControlInput1"
-                                        className={clsx('form-label', styles.errorText)}
-                                    >
-                                        - {errorInput}
-                                    </label>
-                                )}
                             </div>
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">
-                                    Expected Output
-                                </label>
+                                <div className="d-flex align-items-center justify-content-between">
+                                    <label for="exampleFormControlInput1" class="form-label">
+                                        Expected Output
+                                    </label>
+
+                                    {errorOutput && (
+                                        <label
+                                            for="exampleFormControlInput1"
+                                            className={clsx('form-label', styles.errorText)}
+                                        >
+                                            {errorOutput}
+                                        </label>
+                                    )}
+                                </div>
                                 <input
                                     type="text"
                                     class={clsx('form-control', `${errorOutput ? 'errorInput' : ''}`)}
@@ -147,14 +164,6 @@ const MainChild = () => {
                                     onChange={handleChangeOutput}
                                     value={output}
                                 />
-                                {errorOutput && (
-                                    <label
-                                        for="exampleFormControlInput1"
-                                        className={clsx('form-label', styles.errorText)}
-                                    >
-                                        {errorOutput}
-                                    </label>
-                                )}
                             </div>
                             <div className={clsx(styles.testcaseSubmit)} onClick={handleAddTestcase}>
                                 Add
@@ -166,11 +175,12 @@ const MainChild = () => {
                     <div
                         className={clsx(styles.testcaseToggle)}
                         onClick={() => {
-                            dropdownToggle(2);
+                            dropdownToggle(1);
                         }}
                     >
                         <spam className="pe-3">
-                            <FontAwesomeIcon icon={faAngleRight} />
+                            {review && <FontAwesomeIcon icon={faAngleDown} />}
+                            {!review && <FontAwesomeIcon icon={faAngleRight} />}
                         </spam>
                         <div className={clsx(styles.codeToggleTitle)}>Testcase Review</div>
                     </div>
@@ -178,27 +188,29 @@ const MainChild = () => {
                         <div className={clsx(styles.testcasesSample, 'row', 'align-items-center')}>
                             {testcases.map((testcase, index) => {
                                 return (
-                                    <div className="col-4 py-3">
-                                        <div
-                                            className={clsx(
-                                                styles.testcaseTitle,
-                                                'd-flex',
-                                                'justify-content-between',
-                                                'align-items-center',
-                                            )}
-                                        >
-                                            Test case {index}
+                                    <div className={clsx('col-4', 'p-3')}>
+                                        <div className={clsx('p-3', styles.testcaseItem)}>
                                             <div
-                                                className={clsx(styles.trash)}
-                                                onClick={() => handleDeleteTestcase(index)}
+                                                className={clsx(
+                                                    styles.testcaseTitle,
+                                                    'd-flex',
+                                                    'justify-content-between',
+                                                    'align-items-center',
+                                                )}
                                             >
-                                                <FontAwesomeIcon icon={faTrash} />
+                                                Test case {index}
+                                                <div
+                                                    className={clsx(styles.trash)}
+                                                    onClick={() => handleDeleteTestcase(index)}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} />
+                                                </div>
                                             </div>
+                                            <div className={clsx(styles.testcaseSubTitle)}>Standard Input</div>
+                                            <div className={clsx(styles.testcaseContainer)}>{testcase.input}</div>
+                                            <div className={clsx(styles.testcaseSubTitle)}>Expected Output</div>
+                                            <div className={clsx(styles.testcaseContainer)}>{testcase.output}</div>
                                         </div>
-                                        <div className={clsx(styles.testcaseSubTitle)}>Standard Input</div>
-                                        <div className={clsx(styles.testcaseContainer)}>{testcase.input}</div>
-                                        <div className={clsx(styles.testcaseSubTitle)}>Expected Output</div>
-                                        <div className={clsx(styles.testcaseContainer)}>{testcase.output}</div>
                                     </div>
                                 );
                             })}

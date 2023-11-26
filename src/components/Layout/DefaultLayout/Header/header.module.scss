@@ -92,8 +92,7 @@
     cursor: pointer;
 
     &:hover {
-        // background-color: var(--gray);
-        font-weight: bold;
+        background-color: var(--hnl-select-bg);
     }
 }
 

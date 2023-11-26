@@ -6,6 +6,8 @@ import { createProblem, validateDescription } from '~/api/problems';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import clsx from 'clsx';
+import styles from './contribute.module.scss';
 
 const Contribute = ({ contributeStep, mainChild, rightChild }) => {
     const routeStep = [
@@ -23,7 +25,6 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
     const clearStorage = () => {
         localStorage.setItem('reason', '');
         localStorage.setItem('question', '');
-        localStorage.setItem('validate', false);
         localStorage.setItem('solutions', '');
         localStorage.setItem('testcases', '');
         localStorage.setItem('cpp_code', '');
@@ -76,18 +77,12 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                 localStorage.setItem('errorQuestionDescription', 'Missing question.description');
             } else {
                 localStorage.setItem('errorQuestionDescription', '');
-                if (validate === true) {
-                    localStorage.setItem('errorQuestionValidation', '');
-                    const res = await validateDescription(question.description);
-                    if (res.isValid === false) {
-                        errors.push('question.description is invalid');
-                        localStorage.setItem('errorQuestionDescription', 'Question.description is invalid');
-                    } else {
-                        localStorage.setItem('errorQuestionDescription', '');
-                    }
+                const res = await validateDescription(question.description);
+                if (res.isValid === false) {
+                    errors.push('question.description is invalid');
+                    localStorage.setItem('errorQuestionDescription', 'Question.description is invalid');
                 } else {
-                    errors.push('question.validation');
-                    localStorage.setItem('errorQuestionValidation', 'Question.validation is empty. Please choose it');
+                    localStorage.setItem('errorQuestionDescription', '');
                 }
             }
 
@@ -150,6 +145,13 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                         } else {
                             localStorage.setItem('errorPythonFullCode', '');
                         }
+                    } else {
+                        errors.push('python_code.initialCode');
+                        localStorage.setItem('errorPythonInitialCode', 'Missing initial code');
+                        errors.push('python_code.solutionCode');
+                        localStorage.setItem('errorPythonSolutionCode', 'Missing solution code');
+                        errors.push('python_code.fullCode');
+                        localStorage.setItem('errorPythonFullCode', 'Missing full code');
                     }
                 }
                 // cpp
@@ -226,12 +228,11 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
             }
             textError += ' are empty';
             toast(textError);
-            navigate('/contribute/success');
         }
     };
 
     return (
-        <div className="container">
+        <div className={clsx('container', styles.contributeContainer)}>
             <div className={`contribute-navbar-container ${contributeStep === 6 ? 'disabled-div' : ''}`}>
                 <div className="contribute-navbar-line">
                     <div className="contribute-navbar-line-segment-container">
