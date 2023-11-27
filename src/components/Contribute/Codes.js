@@ -457,7 +457,7 @@ const RightChild = () => {
     const initialCode = '```cpp\nint add(int a, int b) {\n\n}\n```';
     const solutionCode = '```cpp\nint add(int a, int b) {\n\treturn a + b;\n}\n```';
     const fullCode =
-        '```cpp\n#include <iostream>\nusing namespace std;\n\n{{ANSWER}}    // must have to replace code for grading\n\nint add(int a, int b) {\n\treturn a + b;\n}\n\nint main() {\n\tint a, b;\n\tcin >> a >> b;\n\tcout << add(a, b) << endl;\n\treturn 0;\n}\n```';
+        '```cpp\n#include <iostream>\nusing namespace std;\n\n{{ANSWER}}\t// must have to replace with code\n\nint main() {\n\tint a, b;\n\tcin >> a >> b;\n\tcout << add(a, b);\n\treturn 0;\n}\n```';
     return (
         <div className="contribute-border-box mb-5">
             <FontAwesomeIcon icon={faLightbulb} fontSize={32} className="lightbulb" />
