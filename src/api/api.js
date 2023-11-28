@@ -67,7 +67,6 @@ export const login = async (info) => {
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/sessions/login`, info)
         .then(function (response) {
             console.log(response);
-            setCookie('user_id', response.data.body.user.id);
             const session = {
                 accessToken: response.data.body.accessToken,
                 user: response.data.body.user,
@@ -124,7 +123,11 @@ export const signup = async (info) => {
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/users`, info)
         .then(function (response) {
             console.log(response);
-            setCookie('user_id', response.data.body.user.id);
+            const session = {
+                accessToken: response.data.body.accessToken,
+                user: response.data.body.user,
+            };
+            localStorage.setItem('session', JSON.stringify(session));
             return response.data.body.user;
         })
         .catch(function (error) {
