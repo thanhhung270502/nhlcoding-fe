@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { checkAuth, getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
-import { getCookie, setCookie } from '~/api/cookie';
 import {
     LoginModal,
     LoginModalTrigger,

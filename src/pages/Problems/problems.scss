@@ -27,7 +27,7 @@
     border: none;
 
     &:disabled {
-        color: var(--gray-light);
+        color: var(--hnl-problems-dropdown-toggle-disable-color);
         opacity: 50%;
     }
 }

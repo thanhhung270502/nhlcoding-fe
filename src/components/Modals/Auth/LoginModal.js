@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
 import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
-import { getCookie, setCookie } from '~/api/cookie';
 import clsx from 'clsx';
 import styles from '../../Contribute/contribute.module.scss';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';

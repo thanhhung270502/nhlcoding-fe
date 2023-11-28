@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './problems.scss';
 import $ from 'jquery';
 import { getProblemForPagination } from '~/api/problems';
-import { getCookie } from '~/api/cookie';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getAllLevels } from '~/api/levels';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,6 +33,7 @@ function Problems() {
     const [text, setText] = useState(undefined);
     const [limit, setLimit] = useState(10);
     const [lengthOfProblems, setLengthOfProblems] = useState();
+    const [currentUser, setCurrentUser] = useState(undefined);
 
     const navigate = useNavigate();
     const [params, setParams] = useSearchParams();
@@ -142,8 +142,15 @@ function Problems() {
 
     useEffect(() => {
         (async () => {
-            var user_id = getCookie('user_id');
-            if (!user_id) user_id = 'empty';
+            var session = localStorage.getItem('session');
+            var user_id;
+            if (session) {
+                session = JSON.parse(session);
+                user_id = session.user.id;
+                setCurrentUser(session.user);
+            } else {
+                user_id = 'empty';
+            }
             var curLevel = level ? level : 'empty';
             var curStatus = status ? status : 'empty';
             var curText = search ? search : 'empty';
@@ -213,7 +220,7 @@ function Problems() {
                                                     })}
                                                 </ul>
                                             </div>
-                                            {getCookie('user_id') && (
+                                            {currentUser && (
                                                 <div className="dropdown">
                                                     <div
                                                         className="problem-languages problems-dropdown-toggle me-3"
@@ -257,7 +264,7 @@ function Problems() {
                                                     </ul>
                                                 </div>
                                             )}
-                                            {!getCookie('user_id') && (
+                                            {!currentUser && (
                                                 <div className="dropdown">
                                                     <button
                                                         className="problem-languages problems-dropdown-toggle me-3"
