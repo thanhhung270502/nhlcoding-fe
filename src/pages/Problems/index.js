@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import ProblemsTable from '~/components/ProblemsTable';
 
-// const limit = 10;
 const statusData = [
     {
         id: 1,
@@ -24,17 +23,7 @@ const statusData = [
     },
 ];
 
-const limits = [5, 10, 15, 20];
 function Problems() {
-    const [problems, setProblems] = useState([]);
-    const [currentProblems, setCurrentProblems] = useState([]);
-    const [levels, setLevels] = useState([]);
-    const [statuses, setStatuses] = useState(statusData);
-    const [text, setText] = useState(undefined);
-    const [limit, setLimit] = useState(10);
-    const [lengthOfProblems, setLengthOfProblems] = useState();
-    const [currentUser, setCurrentUser] = useState(undefined);
-
     const navigate = useNavigate();
     const [params, setParams] = useSearchParams();
     const page = typeof params.get('page') === 'string' ? params.get('page') : '1';
@@ -42,16 +31,30 @@ function Problems() {
     const status = typeof params.get('status') === 'string' ? params.get('status') : undefined;
     const search = typeof params.get('search') === 'string' ? params.get('search') : undefined;
 
+    const [problems, setProblems] = useState([]);
+    const [levels, setLevels] = useState([]);
+    const [statuses, setStatuses] = useState(statusData);
+    const [text, setText] = useState(search);
+    const [currentUser, setCurrentUser] = useState(undefined);
+
     const filterLevel = (lel) => {
         if (level === lel.name) {
-            if (status) {
+            if (search && status) {
+                navigate(`/problems/?page=1&status=${status}&search=${search}`);
+            } else if (!search && status) {
                 navigate(`/problems/?page=1&status=${status}`);
+            } else if (search && !status) {
+                navigate(`/problems/?page=1&search=${search}`);
             } else {
                 navigate(`/problems/?page=1`);
             }
         } else {
-            if (status) {
+            if (search && status) {
+                navigate(`/problems/?page=1&level=${lel.name}&status=${status}&search=${search}`);
+            } else if (!search && status) {
                 navigate(`/problems/?page=1&level=${lel.name}&status=${status}`);
+            } else if (search && !status) {
+                navigate(`/problems/?page=1&level=${lel.name}&search=${search}`);
             } else {
                 navigate(`/problems/?page=1&level=${lel.name}`);
             }
@@ -60,14 +63,22 @@ function Problems() {
 
     const filterStatus = (sta) => {
         if (status === sta.name) {
-            if (level) {
+            if (search && level) {
+                navigate(`/problems/?page=1&level=${level}&search=${search}`);
+            } else if (!search && level) {
                 navigate(`/problems/?page=1&level=${level}`);
+            } else if (search && !level) {
+                navigate(`/problems/?page=1&search=${search}`);
             } else {
                 navigate(`/problems/?page=1`);
             }
         } else {
-            if (level) {
+            if (search && level) {
+                navigate(`/problems/?page=1&level=${level}&status=${sta.name}&search=${search}`);
+            } else if (!search && level) {
                 navigate(`/problems/?page=1&level=${level}&status=${sta.name}`);
+            } else if (search && !level) {
+                navigate(`/problems/?page=1&status=${sta.name}&search=${search}`);
             } else {
                 navigate(`/problems/?page=1&status=${sta.name}`);
             }
@@ -154,11 +165,19 @@ function Problems() {
             var curLevel = level ? level : 'empty';
             var curStatus = status ? status : 'empty';
             var curText = search ? search : 'empty';
-            console.log(curLevel);
             var response = await getProblemForPagination(user_id, curLevel, curStatus, curText);
-            setProblems(response.body);
+            var newProblems = response.body;
+            if (status && status !== 'Todo') {
+                newProblems = response.body.filter((problem) => problem.status === status);
+            } else if (status && status === 'Todo') {
+                newProblems = response.body.filter(
+                    (problem) => problem.status !== 'Attempted' && problem.status !== 'Solved',
+                );
+            }
+            console.log(newProblems);
+            setProblems(newProblems);
         })();
-    }, [search, level, page, status, limit]);
+    }, [search, level, page, status]);
 
     useEffect(() => {
         (async () => {
@@ -290,6 +309,7 @@ function Problems() {
                                             <div className="problem-solution-search-input">
                                                 <input
                                                     type="text"
+                                                    value={text}
                                                     placeholder="Search by title..."
                                                     className="form-control"
                                                     onChange={handleChangeSearchInput}
@@ -335,7 +355,13 @@ function Problems() {
                                     <div className="px-3 col-6">Title</div>
                                     <div className="text-center col-2">Level</div>
                                 </div>
-                                <ProblemsTable problems={problems} itemsPerPage={limit} />
+                                <ProblemsTable
+                                    problems={problems}
+                                    page={JSON.parse(page)}
+                                    level={level}
+                                    status={status}
+                                    search={search}
+                                />
                             </div>
                         </div>
                         <div className="col-2"></div>
