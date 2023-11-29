@@ -29,18 +29,20 @@ function Header() {
     };
 
     useEffect(() => {
-        let handler = (e) => {
-            // if (e.target) {
-            if (!userMenuRef.current.contains(e.target)) {
-                setOpen(false);
-            }
-        };
+        if (currentUser) {
+            let handler = (e) => {
+                // if (e.target) {
+                if (!userMenuRef.current.contains(e.target)) {
+                    setOpen(false);
+                }
+            };
 
-        document.addEventListener('mousedown', handler);
+            document.addEventListener('mousedown', handler);
 
-        return () => {
-            document.removeEventListener('mousedown', handler);
-        };
+            return () => {
+                document.removeEventListener('mousedown', handler);
+            };
+        }
     });
 
     useEffect(() => {

@@ -14,7 +14,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
         '/contribute',
         '/contribute/reason',
         '/contribute/question',
-        '/contribute/solutions',
+        '/contribute/instruction',
         '/contribute/codes',
         '/contribute/testcases',
         '/contribute/success',
@@ -25,7 +25,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
     const clearStorage = () => {
         localStorage.setItem('reason', '');
         localStorage.setItem('question', '');
-        localStorage.setItem('solutions', '');
+        localStorage.setItem('instruction', '');
         localStorage.setItem('testcases', '');
         localStorage.setItem('cpp_code', '');
         localStorage.setItem('python_code', '');
@@ -35,6 +35,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
         localStorage.setItem('errorQuestionDescription', '');
         localStorage.setItem('errorQuestionLanguages', '');
         localStorage.setItem('errorQuestionLevel', '');
+        localStorage.setItem('errorInstruction', '');
         localStorage.setItem('errorPythonInitialCode', '');
         localStorage.setItem('errorPythonSolutionCode', '');
         localStorage.setItem('errorPythonFullCode', '');
@@ -101,13 +102,13 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
             }
         }
 
-        var solutions = localStorage.getItem('solutions');
-        if (!solutions) {
-            errors.push('solutions');
-            localStorage.setItem('errorSolution', 'Missing solution');
-        } else {
-            localStorage.setItem('errorSolution', '');
-        }
+        var instruction = localStorage.getItem('instruction');
+        // if (!instruction) {
+        //     errors.push('instruction');
+        //     localStorage.setItem('errorInstruction', 'Missing instruction');
+        // } else {
+        //     localStorage.setItem('errorInstruction', '');
+        // }
 
         var testcases = localStorage.getItem('testcases');
         if (!testcases) {
@@ -207,7 +208,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                 description: question.description,
                 languages: question.languages,
                 level_id: question.level.id,
-                solutions: solutions,
+                instruction: instruction,
                 validate: validate,
                 problem_languages: problem_languages,
                 testcases: testcases,
@@ -328,14 +329,14 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                                 </div>
                             </div>
                         </Link>
-                        <Link to="/contribute/solutions">
+                        <Link to="/contribute/instruction">
                             <div className="contribute-navbar-step">
                                 <div
                                     className={`contribute-navbar-step-label ${
                                         contributeStep === 3 ? 'contribute-navbar-step-label-active' : ''
                                     }`}
                                 >
-                                    Solutions
+                                    Instruction
                                 </div>
                                 <div
                                     className={`contribute-navbar-step-circle ${

@@ -1,9 +1,9 @@
 // Layouts
 import {
     ContributeCodes,
+    ContributeInstruction,
     ContributeQuestion,
     ContributeReason,
-    ContributeSolutions,
     ContributeSuccess,
     ContributeTestcases,
 } from '~/components/Contribute';
@@ -48,8 +48,8 @@ const publicRoutes = [
         layout: OnlyHeader,
     },
     {
-        path: '/contribute/solutions',
-        component: ContributeSolutions,
+        path: '/contribute/instruction',
+        component: ContributeInstruction,
         layout: OnlyHeader,
     },
     {

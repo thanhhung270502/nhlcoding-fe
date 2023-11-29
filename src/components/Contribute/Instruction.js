@@ -10,42 +10,42 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
-const MainChild = ({ solutionData, setSolutionData }) => {
-    const placeholder = `Describe your thoughts and possible solutions`;
+const MainChild = ({ instructionData, setInstructionData }) => {
+    const placeholder = `Describe your thoughts and possible instruction`;
 
     const [text, setText] = useState('');
 
     const handleChange = (event) => {
         const inputValue = event.target.value;
         if (inputValue.length <= 5000) {
-            setSolutionData(inputValue);
-            localStorage.setItem('solutions', inputValue);
+            setInstructionData(inputValue);
+            localStorage.setItem('instruction', inputValue);
         }
     };
 
     useEffect(() => {
-        const savedValue = localStorage.getItem('solutions');
+        const savedValue = localStorage.getItem('instruction');
         if (savedValue) {
-            setSolutionData(savedValue);
+            setInstructionData(savedValue);
         }
     }, []);
 
     return (
         <div className="contribute-body-main-content">
-            <div className="title">Share your solution *</div>
+            <div className="title">Share your instruction</div>
             <textarea
                 className="form-control textarea"
                 placeholder={placeholder}
-                value={solutionData}
+                value={instructionData}
                 onChange={handleChange}
-                name="solutions"
+                name="instruction"
             />
-            <div className="d-flex justify-content-end pt-2">{solutionData.length}/5000</div>
+            <div className="d-flex justify-content-end pt-2">{instructionData.length}/5000</div>
         </div>
     );
 };
 
-const RightChild = ({ solutionData }) => {
+const RightChild = ({ instructionData }) => {
     return (
         <div className="contribute-border-box preview-description">
             <div className="hint">
@@ -57,11 +57,11 @@ const RightChild = ({ solutionData }) => {
                     </strong>
                 </p>
                 <p>
-                    <b className="hint-title">Displayed solutions</b>
+                    <b className="hint-title">Displayed instruction</b>
                 </p>
             </div>
             <ReactMarkdown
-                children={solutionData}
+                children={instructionData}
                 remarkPlugins={[remarkMath]}
                 rehypePlugins={[rehypeKatex]}
                 components={{
@@ -78,19 +78,19 @@ const RightChild = ({ solutionData }) => {
     );
 };
 
-const Solutions = () => {
-    const [solutionData, setSolutionData] = useState('');
+const Instruction = () => {
+    const [instructionData, setInstructionData] = useState('');
     return (
         <div>
             <form method="POST" action="/contribute/store" />
             <Contribute
                 contributeStep={3}
-                mainChild={<MainChild solutionData={solutionData} setSolutionData={setSolutionData} />}
-                rightChild={<RightChild solutionData={solutionData} />}
+                mainChild={<MainChild instructionData={instructionData} setInstructionData={setInstructionData} />}
+                rightChild={<RightChild instructionData={instructionData} />}
             />
             ;
         </div>
     );
 };
 
-export default Solutions;
+export default Instruction;
