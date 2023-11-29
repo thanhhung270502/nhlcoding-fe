@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Contribute from './Contribute';
 // import CustomEditor from '../CKEditor';
 import { faCaretDown, faCheck, faLightbulb } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +32,41 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
     const [errorDescription, setErrorDescription] = useState(undefined);
     const [errorLanguages, setErrorLanguages] = useState(undefined);
     const [errorLevel, setErrorLevel] = useState(undefined);
+    const [languagesOpen, setLanguagesOpen] = useState(false);
+    const [levelOpen, setLevelOpen] = useState(false);
+
+    let languagesRef = useRef();
+    let levelRef = useRef();
+
+    useEffect(() => {
+        let handler = (e) => {
+            // if (e.target) {
+            if (!languagesRef.current.contains(e.target)) {
+                setLanguagesOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handler);
+
+        return () => {
+            document.removeEventListener('mousedown', handler);
+        };
+    });
+
+    useEffect(() => {
+        let handler = (e) => {
+            // if (e.target) {
+            if (!levelRef.current.contains(e.target)) {
+                setLevelOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handler);
+
+        return () => {
+            document.removeEventListener('mousedown', handler);
+        };
+    });
 
     const dropdownToggle = (index) => {
         // console.log(event);
@@ -294,11 +329,12 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                             </label>
                         )}
                     </div>
-                    <div class={clsx(styles.dropdown, `${errorLanguages ? 'errorInput' : ''}`)}>
+                    <div className={clsx(styles.dropdown, `${errorLanguages ? 'errorInput' : ''}`)} ref={languagesRef}>
                         <div
                             className="dropdownToggleQuestion"
                             onClick={() => {
-                                dropdownToggle(0);
+                                // dropdownToggle(0);
+                                setLanguagesOpen(!languagesOpen);
                                 handleCheckEmpty('languages');
                             }}
                         >
@@ -309,7 +345,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                             </div>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
-                        <div className="dropdownHide dropdownQuestion">
+                        <div className={`${languagesOpen ? '' : 'dropdownHide'} dropdownQuestion`}>
                             {languages.map((language) => {
                                 if (checkLanguage(currentLanguages, language))
                                     return (
@@ -355,11 +391,12 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                             </label>
                         )}
                     </div>
-                    <div class={clsx(styles.dropdown, `${errorLevel ? 'errorInput' : ''}`)}>
+                    <div class={clsx(styles.dropdown, `${errorLevel ? 'errorInput' : ''}`)} ref={levelRef}>
                         <div
                             className="dropdownToggleQuestion"
                             onClick={() => {
-                                dropdownToggle(1);
+                                // dropdownToggle(1);
+                                setLevelOpen(!levelOpen);
                                 handleCheckEmpty('level');
                             }}
                         >
@@ -368,7 +405,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                             </div>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
-                        <div className="dropdownHide dropdownQuestion">
+                        <div className={`${levelOpen ? '' : 'dropdownHide'} dropdownQuestion`}>
                             {levels.map((curLevel) => {
                                 if (level && curLevel.id === level.id)
                                     return (
