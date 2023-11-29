@@ -24,7 +24,7 @@ const RightChild = () => {
 
 const Success = () => {
     // disable header bar -> not allow to go back
-    return <Contribute contributeStep={5} mainChild={<MainChild />} rightChild={<RightChild />} />;
+    return <Contribute contributeStep={6} mainChild={<MainChild />} rightChild={<RightChild />} />;
 };
 
 export default Success;
