@@ -110,6 +110,7 @@
     --hnl-error-text-border: var(--purple);
     --hnl-subtitle-color: white;
 }
+
 * {
     padding: 0;
     margin: 0;
@@ -238,6 +239,7 @@ html {
     pointer-events: none;
     user-select: none;
 }
+
 .Toastify__toast-container--top-right {
     top: unset;
     bottom: 1em;
@@ -250,4 +252,18 @@ html {
     align-items: center;
     font-size: 1.25em;
     color: var(--gray-dark);
+}
+
+.slide-in {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+    transition: all 1s ease;
+}
+
+.slide-out {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateX(100%);
+
 }
