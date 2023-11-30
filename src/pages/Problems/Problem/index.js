@@ -53,32 +53,6 @@ function Problem() {
         split[0].style.overflow = 'hidden auto';
     }, []);
 
-    // const handleSidebar = (e) => {
-    //     var items = $('.problem-item');
-    //     for (var i = 0; i < items.length; i++) {
-    //         items[i].classList.remove('problem-item-active');
-    //     }
-    //     e.target.classList.add('problem-item-active');
-    //     setSidebar(e.target.innerText);
-    // };
-
-    // ---------------------------------------------------------------- //
-    // File: code.js
-    // const initialCode = `def add(a, b):
-    // return a + b
-    //     `;
-    // const initialCode = `def twoSum(nums, target):
-    // """
-    // :type nums: List[int]
-    // :type target: int
-    // :rtype: List[int]
-    // """
-    // # return [0,1]
-    // for i in range(len(nums)):
-    //     for j in range(i+1, len(nums)):
-    //         if nums[i] + nums[j] == target:
-    //             return [i,j]`;
-
     const [code, setCode] = useState('');
     const [languages, setLanguages] = useState([]);
     const [activeLanguage, setActiveLanguage] = useState({
@@ -210,67 +184,6 @@ function Problem() {
         }
     };
 
-    useEffect(() => {
-        const problemConsoleCaseNum = $('.problemConsoleCaseNum');
-        console.log(problemConsoleCaseNum);
-        // eslint-disable-next-line array-callback-return
-        problemConsoleCaseNum.map((index, value) => {
-            console.log(index);
-            if (currentConsoleNav === 0) {
-                // eslint-disable-next-line array-callback-return
-                problemConsoleCaseNum.map((i, v) => {
-                    if (i === currentCaseTest) {
-                        problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
-                    } else {
-                        problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
-                    }
-                });
-            } else {
-                // eslint-disable-next-line array-callback-return
-                problemConsoleCaseNum.map((i, v) => {
-                    if (i === currentCaseResult) {
-                        problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
-                    } else {
-                        problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
-                    }
-                });
-            }
-            value.addEventListener('click', () => {
-                if (currentConsoleNav === 0) {
-                    setCurrentCaseTest(index);
-                } else {
-                    setCurrentCaseResult(index);
-                }
-                // eslint-disable-next-line array-callback-return
-                problemConsoleCaseNum.map((i, v) => {
-                    if (i === index) {
-                        problemConsoleCaseNum[i].classList.add('problemConsoleCaseNumActive');
-                    } else {
-                        problemConsoleCaseNum[i].classList.remove('problemConsoleCaseNumActive');
-                    }
-                });
-            });
-        });
-    }, [currentCaseResult, currentCaseTest, currentConsoleNav, currentResult]);
-
-    useEffect(() => {
-        const problemConsoleNavItem = $('.problemConsoleNavItem');
-        // eslint-disable-next-line array-callback-return
-        problemConsoleNavItem.map((index, value) => {
-            value.addEventListener('click', () => {
-                setCurrentConsoleNav(index);
-                // eslint-disable-next-line array-callback-return
-                problemConsoleNavItem.map((i, v) => {
-                    if (i === index) {
-                        problemConsoleNavItem[i].classList.add('problemConsoleNavItemActive');
-                    } else {
-                        problemConsoleNavItem[i].classList.remove('problemConsoleNavItemActive');
-                    }
-                });
-            });
-        });
-    }, []);
-
     const handleOpenConsole = () => {
         var gridRow = $('.grid-row');
         var problemConsoleNav = $('.problemConsoleNav');
@@ -294,6 +207,7 @@ function Problem() {
     const handleRunCode = async () => {
         handleOpenConsole();
         setRun(true);
+        setCurrentConsoleNav(1);
         setCurrentCaseResult(0);
         setIsLoading(true);
 
@@ -319,6 +233,7 @@ function Problem() {
         e.preventDefault();
         handleOpenConsole();
         setRun(true);
+        setCurrentConsoleNav(1);
         setCurrentCaseResult(0);
         setIsLoading(true);
 
@@ -485,39 +400,7 @@ function Problem() {
                                                                     theme={xcodeLight}
                                                                 />
                                                             )}
-                                                            {activeLanguage.id === 'Java' && (
-                                                                <CodeMirror
-                                                                    value={code}
-                                                                    extensions={[langs.java()]}
-                                                                    onChange={onChange}
-                                                                    theme={xcodeLight}
-                                                                />
-                                                            )}
-                                                            {activeLanguage.id === 'C' && (
-                                                                <CodeMirror
-                                                                    value={code}
-                                                                    extensions={[langs.c()]}
-                                                                    onChange={onChange}
-                                                                    theme={xcodeLight}
-                                                                />
-                                                            )}
-                                                            {activeLanguage.id === 'C#' && (
-                                                                <CodeMirror
-                                                                    value={code}
-                                                                    extensions={[langs.csharp()]}
-                                                                    onChange={onChange}
-                                                                    theme={xcodeLight}
-                                                                />
-                                                            )}
-                                                            {activeLanguage.id === 'JavaScript' && (
-                                                                <CodeMirror
-                                                                    value={code}
-                                                                    extensions={[langs.javascript()]}
-                                                                    onChange={onChange}
-                                                                    theme={xcodeLight}
-                                                                />
-                                                            )}
-                                                        </div>
+                                                        </>
                                                     )}
                                                 </div>
                                             </div>
@@ -526,14 +409,17 @@ function Problem() {
                                             <div className={clsx('d-flex', 'flex-column', styles.problemConsole)}>
                                                 <div className="d-flex align-items-center problemConsoleNav hide">
                                                     <div
-                                                        className={clsx(
-                                                            'problemConsoleNavItem',
-                                                            'problemConsoleNavItemActive',
-                                                        )}
-                                                    >
-                                                        Testcase
-                                                    </div>
-                                                    <div className={clsx('problemConsoleNavItem', 'ms-4')}>Result</div>
+                                                        className={`problemConsoleNavItem ${currentConsoleNav === 0 ? 'problemConsoleNavItemActive' : ''}`}
+                                                        onClick={() => {
+                                                            setCurrentConsoleNav(0);
+                                                        }}
+                                                    >Testcase</div>
+                                                    <div
+                                                        className={`problemConsoleNavItem ${currentConsoleNav === 1 ? 'problemConsoleNavItemActive' : ''} ms-4`}
+                                                        onClick={() => {
+                                                            setCurrentConsoleNav(1);
+                                                        }}
+                                                    >Result</div>
                                                 </div>
                                                 <div className={clsx('problemConsoleBody', 'hide')}>
                                                     {currentConsoleNav === 0 && (
@@ -547,11 +433,11 @@ function Problem() {
                                                             >
                                                                 {testcases.map((testcase, index) => (
                                                                     <div
-                                                                        className={clsx(
-                                                                            'problemConsoleCaseNum',
-                                                                            'me-2',
-                                                                        )}
-                                                                        key={index}
+                                                                        className={`problemConsoleCaseNum me-2
+                                                                            ${currentCaseTest === index ? 'problemConsoleCaseNumActive' : ''}`}
+                                                                        onClick={() => {
+                                                                            setCurrentCaseTest(index);
+                                                                        }}
                                                                     >
                                                                         Case {index + 1}
                                                                     </div>
@@ -637,9 +523,14 @@ function Problem() {
                                                                     >
                                                                         {testcases.map((testcase, index) => (
                                                                             <div
-                                                                                className={clsx(
-                                                                                    'problemConsoleCaseNum',
-                                                                                    'me-2',
+                                                                                className={` problemConsoleCaseNum me-2
+                                                                                    ${currentCaseResult === index ? 'problemConsoleCaseNumActive' : ''}`}
+                                                                                onClick={() => {
+                                                                                    setCurrentCaseResult(index);
+                                                                                }}
+                                                                            >
+                                                                                {currentResult && currentResult[index] && (
+                                                                                    <span className={`round-result ${currentResult[index].success ? "result-success" : "result-failure"}`}></span>
                                                                                 )}
                                                                                 key={index}
                                                                             >
@@ -647,9 +538,9 @@ function Problem() {
                                                                                     currentResult[index] && (
                                                                                         <span
                                                                                             className={`round-result ${currentResult[index]
-                                                                                                    .success
-                                                                                                    ? 'result-success'
-                                                                                                    : 'result-failure'
+                                                                                                .success
+                                                                                                ? 'result-success'
+                                                                                                : 'result-failure'
                                                                                                 }`}
                                                                                         ></span>
                                                                                     )}
@@ -658,9 +549,14 @@ function Problem() {
                                                                         ))}
                                                                         {wrongCase !== null && (
                                                                             <div
-                                                                                className={clsx(
-                                                                                    'problemConsoleCaseNum',
-                                                                                    'me-2',
+                                                                                className={` problemConsoleCaseNum me-2
+                                                                                    ${currentCaseResult === testcases.length ? 'problemConsoleCaseNumActive' : ''}`}
+                                                                                onClick={() => {
+                                                                                    setCurrentCaseResult(testcases.length);
+                                                                                }}
+                                                                            >
+                                                                                {currentResult && currentResult[testcases.length] && (
+                                                                                    <span className={`round-result result-failure`}></span>
                                                                                 )}
                                                                             >
                                                                                 {currentResult &&
