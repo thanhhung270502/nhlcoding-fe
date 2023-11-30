@@ -19,38 +19,34 @@ const MarkDown = ({ text }) => {
     // }, []);
 
     return (
-        <ReactMarkdown
-            children={text}
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex]}
-            components={{
-                code({ node, className, children, ...props }) {
-                    const match = /language-(\w+)/.exec(className || '');
-                    return match ? (
-                        <div style={{ overflowY: 'auto' }}>
-                            <div className={style.subtitle}>{match[1]}</div>
-                            <SyntaxHighlighter
-                                {...props}
-                                children={String(children).replace(/\n$/, '')}
-                                language={match[1]}
-                                className={`${style.code_block} ${className}`}
-                                PreTag="div"
-                            />
-                        </div>
-                    ) : (
-                        <code {...props} className={className}>
-                            {children}
-                        </code>
-                    );
-                },
-                h1({ node, children }) {
-                    return <h1 className={style.subtitle}>{children}</h1>;
-                },
-                p({ node, children }) {
-                    return <p className={style.normal_text}>{children}</p>;
-                },
-            }}
-        />
+        <div style={{ paddingBottom: '4rem' }}>
+            <ReactMarkdown
+                children={text}
+                remarkPlugins={[remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+                components={{
+                    code({ node, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '');
+                        return match ? (
+                            <div style={{ overflowY: 'auto' }}>
+                                {/* <h5>{match[1]}</h5> */}
+                                <SyntaxHighlighter
+                                    {...props}
+                                    children={String(children).replace(/\n$/, '')}
+                                    language={match[1]}
+                                    className={`${style.code_block} ${className}`}
+                                    PreTag="div"
+                                />
+                            </div>
+                        ) : (
+                            <code {...props} className={className}>
+                                {children}
+                            </code>
+                        );
+                    },
+                }}
+            />
+        </div>
     );
 }
 

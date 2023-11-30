@@ -91,11 +91,10 @@ function Problem() {
     useEffect(() => {
         async function fetchProblemLanguagesByProblemID(problem_id) {
             const res = await getProblemLanguagesByProblemID(problem_id);
-            console.log(res);
+            // console.log(res);
             setLanguages(res.body);
-            // Default language and code as cpp
-            const { language_id, name, initial_code, solution_code, full_code } = res.body.find(
-                (item) => item.problem_id === parseInt(id) && item.language_id === 2,
+            const { language_id, name, initial_code } = res.body.find(
+                (item) => item.problem_id === parseInt(id)
             );
             const lang_obj = { id: language_id, name: name, initialcode: convertCode(initial_code) };
             if (!localStorage.getItem('active_language')) {
@@ -114,7 +113,7 @@ function Problem() {
     // Handle change language
     const handleLanguageChange = (e) => {
         const lang_name = e.target.innerText;
-        const { language_id, name, initial_code, solution_code, full_code } = languages.find(
+        const { language_id, name, initial_code } = languages.find(
             (item) => item.name === lang_name && item.problem_id === parseInt(id),
         );
         const lang_obj = { id: language_id, name: name, initialcode: convertCode(initial_code) };
@@ -382,42 +381,35 @@ function Problem() {
                                     <div className="problem-sidebar">
                                         <div className="problem-sidebar-items">
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'description' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'description' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=description`);
                                                 }}
                                             >
                                                 Description
                                             </div>
-                                            <div
-                                                className={`problem-item ${
-                                                    tab === 'solutions' ? 'problem-item-active' : ''
-                                                }`}
+                                            {/* <div
+                                                className={`problem-item ${tab === 'solutions' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=solutions`);
                                                 }}
                                             >
                                                 Solutions
-                                            </div>
+                                            </div> */}
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'submissions' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'submissions' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=submissions`);
                                                 }}
                                             >
                                                 Submissions
                                             </div>
-                                            {/* <div className="problem-item" onClick={handleSidebar}>
-                                                Discussion
-                                            </div> */}
                                             <div
-                                                className={`problem-item ${
-                                                    tab === 'editorial' ? 'problem-item-active' : ''
-                                                }`}
+                                                className={`problem-item ${tab === 'editorial' ? 'problem-item-active' : ''
+                                                    }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=editorial`);
                                                 }}
@@ -449,7 +441,7 @@ function Problem() {
                                                             data-bs-toggle="dropdown"
                                                             aria-expanded="false"
                                                         >
-                                                            {activeLanguage !== null ? activeLanguage.name : 'cpp'}
+                                                            {activeLanguage && activeLanguage.name}
                                                         </div>
                                                         <ul className="dropdown-menu">
                                                             {languages.map((value, index) => {
@@ -623,11 +615,10 @@ function Problem() {
                                                                     <div className="d-flex gap-4 align-items-center mb-4">
                                                                         <div
                                                                             className={` problemConsoleResult
-                                                                        ${
-                                                                            status === 'Accepted'
-                                                                                ? 'problemConsoleResultSuccess'
-                                                                                : 'problemConsoleResultFailure'
-                                                                        }
+                                                                        ${status === 'Accepted'
+                                                                                    ? 'problemConsoleResultSuccess'
+                                                                                    : 'problemConsoleResultFailure'
+                                                                                }
                                                                     `}
                                                                         >
                                                                             {status}
@@ -655,12 +646,11 @@ function Problem() {
                                                                                 {currentResult &&
                                                                                     currentResult[index] && (
                                                                                         <span
-                                                                                            className={`round-result ${
-                                                                                                currentResult[index]
+                                                                                            className={`round-result ${currentResult[index]
                                                                                                     .success
                                                                                                     ? 'result-success'
                                                                                                     : 'result-failure'
-                                                                                            }`}
+                                                                                                }`}
                                                                                         ></span>
                                                                                     )}
                                                                                 <span>Case {index + 1}</span>

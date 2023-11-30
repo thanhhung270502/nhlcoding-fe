@@ -1,10 +1,4 @@
-import { useCallback, useState } from 'react';
 import './problem.scss';
-import Split from 'react-split-grid';
-import { langs } from '@uiw/codemirror-extensions-langs';
-import Description from './description';
-import Code from './code';
-import images from '~/assets/images';
 
 function Solution() {
     return (
