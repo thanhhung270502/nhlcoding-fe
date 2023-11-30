@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
-import ReactSelect from 'react-select';
+import { useCallback, useEffect, useState } from 'react';
 import Contribute from './Contribute';
 // import CustomEditor from '../CKEditor';
-import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCheck, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'katex/dist/katex.min.css';
 import ReactMarkdown from 'react-markdown';
@@ -10,93 +9,430 @@ import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import { getAllLanguages } from '~/api/languages';
 
+import clsx from 'clsx';
+import styles from './contribute.module.scss';
+import { Link } from 'react-router-dom';
+import $ from 'jquery';
+// import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
+import { langs } from '@uiw/codemirror-extensions-langs';
+import { xcodeLight } from '@uiw/codemirror-theme-xcode';
+import CodeMirror from '@uiw/react-codemirror';
+import { getAllLevels } from '~/api/levels';
+import { validateDescription } from '~/api/problems';
+
 const MainChild = ({ descriptionData, setDescriptionData }) => {
+    // State
     const [titleText, setTitleText] = useState('');
-    const handleChangeTitle = (event) => {
-        const inputValue = event.target.value;
-        if (inputValue.length <= 150) {
-            setTitleText(inputValue);
-            localStorage.setItem('title', inputValue);
+    const [levels, setLevels] = useState([]);
+    const [level, setLevel] = useState(undefined);
+    const [languages, setLanguages] = useState([]);
+    const [currentLanguages, setCurrentLanguages] = useState([]);
+    const [isChecked, setIsChecked] = useState(false);
+    const [errorTitle, setErrorTitle] = useState(undefined);
+    const [errorDescription, setErrorDescription] = useState(undefined);
+    const [errorLanguages, setErrorLanguages] = useState(undefined);
+    const [errorLevel, setErrorLevel] = useState(undefined);
+
+    const dropdownToggle = (index) => {
+        // console.log(event);
+        var dropdownMenu = $('.dropdownQuestion');
+        if (dropdownMenu[index].classList.contains('dropdownHide')) {
+            dropdownMenu[index].classList.remove('dropdownHide');
+        } else {
+            dropdownMenu[index].classList.add('dropdownHide');
         }
     };
 
-    const [languages, setLanguages] = useState([]);
-    useEffect(() => {
-        (async () => {
-            const res = await getAllLanguages();
-            console.log(res);
-            let p = [];
-            for (let i = 0; i < res.data.length; i++) {
-                p.push({
-                    value: res.data[i].id,
-                    label: res.data[i].name,
-                });
+    const handleChangeTitle = (event) => {
+        const inputValue = event.target.value;
+        if (inputValue.length === 0) {
+            setErrorTitle('Missing question title');
+            localStorage.setItem('errorQuestionTitle', 'Missing question title');
+        }
+        if (inputValue.length <= 150) {
+            setTitleText(inputValue);
+            var question = localStorage.getItem('question');
+            if (question) {
+                question = JSON.parse(question);
+                question['title'] = inputValue;
+                localStorage.setItem('question', JSON.stringify(question));
+            } else {
+                localStorage.setItem(
+                    'question',
+                    JSON.stringify({
+                        title: inputValue,
+                        languages: [],
+                        description: '',
+                        level: '',
+                    }),
+                );
             }
-            setLanguages(p);
-        })();
-    }, []);
+        }
+    };
 
-    const options = [
-        { value: 'cpp_function', label: 'Cpp Function' },
-        { value: 'cpp_program', label: 'Cpp Program' },
-        { value: 'python3', label: 'Python3 Program' },
-    ];
-    const [selectedOption, setSelectedOption] = useState(null);
-    const handleSelectChange = (option) => {
-        setSelectedOption(option);
-        localStorage.setItem('selectedOption', JSON.stringify(option));
+    const checkLanguage = (languages, language) => {
+        for (let i = 0; i < languages.length; i++) {
+            if (languages[i].id === language.id) return true;
+        }
+        return false;
+    };
+
+    const handleCheckboxChange = () => {
+        const updatedCheckedState = !isChecked;
+        setIsChecked(updatedCheckedState);
+        localStorage.setItem('validate', updatedCheckedState.toString());
+    };
+
+    const handleSelectLanguages = (language) => {
+        var newCurrentLanguage;
+        if (checkLanguage(currentLanguages, language)) {
+            newCurrentLanguage = currentLanguages.filter((element) => element.id !== language.id);
+            setCurrentLanguages(newCurrentLanguage);
+        } else {
+            newCurrentLanguage = [...currentLanguages, language];
+            setCurrentLanguages(newCurrentLanguage);
+        }
+        var question = localStorage.getItem('question');
+        if (question) {
+            question = JSON.parse(question);
+            question['languages'] = newCurrentLanguage;
+            localStorage.setItem('question', JSON.stringify(question));
+        } else {
+            localStorage.setItem(
+                'question',
+                JSON.stringify({
+                    title: '',
+                    languages: newCurrentLanguage,
+                    level: '',
+                    description: '',
+                }),
+            );
+        }
     };
 
     const handleChangeDescription = (e) => {
         const inputValue = e.target.value;
+        if (inputValue.length === 0) {
+            setErrorDescription('Missing question description');
+            localStorage.setItem('errorQuestionDescription', 'Missing question description');
+        }
         if (inputValue.length <= 5000) {
             setDescriptionData(inputValue);
-            localStorage.setItem('desc', inputValue);
+
+            var question = localStorage.getItem('question');
+            if (question) {
+                question = JSON.parse(question);
+                question['description'] = inputValue;
+                localStorage.setItem('question', JSON.stringify(question));
+            } else {
+                localStorage.setItem(
+                    'question',
+                    JSON.stringify({
+                        title: '',
+                        languages: [],
+                        level: '',
+                        description: inputValue,
+                    }),
+                );
+            }
+        }
+    };
+
+    const handleSelectLevels = (level) => {
+        setLevel(level);
+
+        var question = localStorage.getItem('question');
+        if (question) {
+            question = JSON.parse(question);
+            question['level'] = level;
+            localStorage.setItem('question', JSON.stringify(question));
+        } else {
+            localStorage.setItem(
+                'question',
+                JSON.stringify({
+                    title: '',
+                    languages: [],
+                    level: level,
+                    description: '',
+                }),
+            );
+        }
+    };
+
+    const convertLanguages = (languages) => {
+        if (languages.length > 0) {
+            var stringLanguages = languages[0]['name'];
+            for (var i = 1; i < languages.length; i++) {
+                stringLanguages = stringLanguages + ', ' + languages[i]['name'];
+            }
+            return stringLanguages;
+        }
+    };
+
+    const handleValidateDescription = async () => {
+        const res = await validateDescription(descriptionData);
+    };
+
+    const handleCheckEmpty = (type) => {
+        if (type === 'languages') {
+            if (currentLanguages.length === 0) {
+                setErrorLanguages('Required languages');
+                localStorage.setItem('errorQuestionLanguages', 'Missing question languages');
+            }
+        }
+        if (type === 'level') {
+            // console.log(level);
+            if (level === undefined) {
+                setErrorLevel('Required level');
+                localStorage.setItem('errorQuestionLevel', 'Missing question level');
+            }
         }
     };
 
     useEffect(() => {
-        const savedTitle = localStorage.getItem('title');
-        const savedOption = localStorage.getItem('selectedOption');
-        const savedDesc = localStorage.getItem('desc');
+        (async () => {
+            const res = await getAllLanguages();
+            console.log(res.data);
+            setLanguages(res.data);
+            const res2 = await getAllLevels();
+            setLevels(res2);
+            var question = localStorage.getItem('question');
 
-        savedTitle && setTitleText(savedTitle);
-        savedOption && setSelectedOption(JSON.parse(savedOption));
-        savedDesc && setDescriptionData(savedDesc);
-    }, [setDescriptionData]);
+            if (question) {
+                question = JSON.parse(question);
+                setTitleText(question['title']);
+                setCurrentLanguages(question['languages']);
+                setDescriptionData(question['description']);
+                setLevel(question['level']);
+            }
+
+            const savedCheckedState = localStorage.getItem('validate');
+            if (savedCheckedState !== null) {
+                setIsChecked(savedCheckedState === 'true');
+            }
+
+            const savedErrorTitle = localStorage.getItem('errorQuestionTitle');
+            const savedErrorDescription = localStorage.getItem('errorQuestionDescription');
+            const savedErrorLanguages = localStorage.getItem('errorQuestionLanguages');
+            const savedErrorLevel = localStorage.getItem('errorQuestionLevel');
+
+            savedErrorTitle && setErrorTitle(savedErrorTitle);
+            savedErrorDescription && setErrorDescription(savedErrorDescription);
+            savedErrorLanguages && setErrorLanguages(savedErrorLanguages);
+            savedErrorLevel && setErrorLevel(savedErrorLevel);
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        console.log(typeof level);
+        if (titleText.length > 0) {
+            setErrorTitle(undefined);
+            localStorage.setItem('errorQuestionTitle', '');
+        }
+
+        if (descriptionData.length > 0) {
+            setErrorDescription(undefined);
+            localStorage.setItem('errorQuestionDescription', '');
+        }
+
+        if (level !== undefined && !(typeof level === 'string')) {
+            console.log('here');
+            setErrorLevel(undefined);
+            localStorage.setItem('errorQuestionLevel', '');
+        }
+
+        if (currentLanguages.length > 0) {
+            setErrorLanguages(undefined);
+            localStorage.setItem('errorQuestionLanguages', '');
+        }
+    }, [currentLanguages.length, descriptionData.length, level, titleText.length]);
 
     return (
         <div className="contribute-body-main-content">
             <div className="title">Please describe your question.</div>
-            <div className="d-flex gap-4 mb-3">
-                <div className="question-title">
-                    <div className="subtitle">Title *</div>
+            <div className="d-flex gap-4">
+                <div className="col-12">
+                    <div className="d-flex align-items-center justify-content-between">
+                        <div className="subtitle">Title *</div>
+                        {errorTitle && (
+                            <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                                - {errorTitle}
+                            </label>
+                        )}
+                    </div>
                     <input
                         type="text"
-                        className="form-control w-100"
+                        className={clsx('form-control', styles.input, 'w-100', `${errorTitle ? 'errorInput' : ''}`)}
                         id="question-title"
                         name="question-title"
                         value={titleText}
                         onChange={handleChangeTitle}
+                        onClick={handleChangeTitle}
                     />
-                    <div className="char-counter">{titleText.length}/150</div>
-                </div>
-                <div className="question-category">
-                    <div className="subtitle">Category *</div>
-                    <ReactSelect value={selectedOption} onChange={handleSelectChange} options={options} />
+                    <div
+                        className={clsx(
+                            'd-flex',
+                            'align-items-center',
+                            'justify-content-end',
+                            `${errorTitle ? 'errorText' : ''}`,
+                            'pt-2',
+                        )}
+                    >
+                        {titleText.length}/150
+                    </div>
                 </div>
             </div>
-            <div className="subtitle">Description *</div>
-            {/* <CustomEditor data={descriptionData} handleChange={handleChangeDescription} /> */}
+
+            <div className="d-flex mb-3">
+                <div className="col-6 pe-2">
+                    <div className="d-flex align-items-center justify-content-between">
+                        <div className="subtitle">Languages *</div>
+                        {errorLanguages && (
+                            <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                                - {errorLanguages}
+                            </label>
+                        )}
+                    </div>
+                    <div class={clsx(styles.dropdown, `${errorLanguages ? 'errorInput' : ''}`)}>
+                        <div
+                            className="dropdownToggleQuestion"
+                            onClick={() => {
+                                dropdownToggle(0);
+                                handleCheckEmpty('languages');
+                            }}
+                        >
+                            <div className={clsx(styles.name, `${errorLanguages ? 'errorText' : ''}`)}>
+                                {currentLanguages.length > 0
+                                    ? convertLanguages(currentLanguages)
+                                    : 'Select one or languages ...'}
+                            </div>
+                            <FontAwesomeIcon icon={faCaretDown} />
+                        </div>
+                        <div className="dropdownHide dropdownQuestion">
+                            {languages.map((language) => {
+                                if (checkLanguage(currentLanguages, language))
+                                    return (
+                                        <div
+                                            className={clsx(
+                                                styles.dropdownItem,
+                                                'd-flex',
+                                                'align-items-center',
+                                                'justify-content-between',
+                                            )}
+                                            onClick={() => {
+                                                handleSelectLanguages(language);
+                                            }}
+                                        >
+                                            {language.name}
+                                            <span>
+                                                <FontAwesomeIcon icon={faCheck} />
+                                            </span>
+                                        </div>
+                                    );
+                                else {
+                                    return (
+                                        <div
+                                            className={clsx(styles.dropdownItem, 'd-flex', 'align-items-center')}
+                                            onClick={() => {
+                                                handleSelectLanguages(language);
+                                            }}
+                                        >
+                                            {language.name}
+                                        </div>
+                                    );
+                                }
+                            })}
+                        </div>
+                    </div>
+                </div>
+                <div className="col-6 ps-2">
+                    <div className="d-flex align-items-center justify-content-between">
+                        <div className="subtitle">Level *</div>
+                        {errorLevel && (
+                            <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                                - {errorLevel}
+                            </label>
+                        )}
+                    </div>
+                    <div class={clsx(styles.dropdown, `${errorLevel ? 'errorInput' : ''}`)}>
+                        <div
+                            className="dropdownToggleQuestion"
+                            onClick={() => {
+                                dropdownToggle(1);
+                                handleCheckEmpty('level');
+                            }}
+                        >
+                            <div className={clsx(styles.name, `${errorLevel ? 'errorText' : ''}`)}>
+                                {level ? level.name : 'Select level ...'}
+                            </div>
+                            <FontAwesomeIcon icon={faCaretDown} />
+                        </div>
+                        <div className="dropdownHide dropdownQuestion">
+                            {levels.map((curLevel) => {
+                                if (level && curLevel.id === level.id)
+                                    return (
+                                        <div
+                                            className={clsx(
+                                                styles.dropdownItem,
+                                                'd-flex',
+                                                'align-items-center',
+                                                'justify-content-between',
+                                            )}
+                                            onClick={() => {
+                                                handleSelectLevels(curLevel);
+                                            }}
+                                        >
+                                            {curLevel.name}
+                                            <span>
+                                                <FontAwesomeIcon icon={faCheck} />
+                                            </span>
+                                        </div>
+                                    );
+                                else {
+                                    return (
+                                        <div
+                                            className={clsx(styles.dropdownItem, 'd-flex', 'align-items-center')}
+                                            onClick={() => {
+                                                handleSelectLevels(curLevel);
+                                            }}
+                                        >
+                                            {curLevel.name}
+                                        </div>
+                                    );
+                                }
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="d-flex align-items-center justify-content-between">
+                <div className="subtitle">Description *</div>
+                {errorDescription && (
+                    <label for="exampleFormControlInput1" className={clsx('form-label', styles.errorText)}>
+                        - {errorDescription}
+                    </label>
+                )}
+            </div>
             <textarea
-                className="textarea"
+                className={clsx('textarea', 'form-control', `${errorDescription ? 'errorInput' : ''}`)}
                 value={descriptionData}
                 onChange={handleChangeDescription}
+                onClick={handleChangeDescription}
                 name="description"
                 placeholder="Type your decription about the question here."
             ></textarea>
-            <div className="char-counter">{descriptionData.length}/5000</div>
-            <form method="POST" action="/contribute/store" />
+            <div
+                className={clsx(
+                    'd-flex',
+                    'align-items-center',
+                    'justify-content-end',
+                    `${errorDescription ? 'errorText' : ''}`,
+                    'pt-2',
+                )}
+            >
+                {descriptionData.length}/5000
+            </div>
         </div>
     );
 };

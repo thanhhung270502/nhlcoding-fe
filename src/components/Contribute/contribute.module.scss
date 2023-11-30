@@ -1,0 +1,196 @@
+.contributeContainer {
+    background-color: var(--primary-background);
+    min-height: 100vh;
+}
+
+.navbar {
+    height: 60px;
+    background-color: var(--blue-dark-3);
+    color: var(--white);
+    padding: 0 3rem;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.navbarBrand {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.logoImage {
+    height: 40px;
+}
+
+.logoName {
+    // color: var(--white);
+    // font-weight: bold;
+    padding-left: 1rem;
+}
+
+.navbarSeparator {
+    padding: 0 2rem;
+    color: var(--gray-dark-2);
+}
+
+.navbarNav {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    flex-grow: 1;
+}
+
+.navbarItem {
+    padding: 1rem 2rem;
+    border-bottom: 4px solid var(--blue-dark-3);
+}
+
+.navbarLink {
+    color: var(--white);
+    font-weight: bold;
+
+    &:hover {
+        color: var(--white);
+    }
+}
+
+.navbarActive {
+    border-color: var(--blue);
+}
+
+.dropdown {
+    position: relative;
+    border: 2px solid var(--hnl-input-border);
+    background-color: var(--hnl-input-bg);
+    // border-radius: 8px;
+}
+
+.dropdownItem {
+    padding: 0.5rem 1.5rem;
+    color: var(--black);
+    cursor: pointer;
+    // border-bottom: 1px solid var(--gray-light);
+    // border-top: 1px solid var(--gray-light);
+    // border-radius: 8px;
+    &:hover {
+        background-color: var(--hnl-select-bg);
+    }
+}
+
+.dropdownDivider {
+    margin: 0.3rem 0;
+    height: 1px;
+    background-color: var(--gray);
+}
+
+// question
+.validation {
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    background-color: var(--orange);
+    color: white;
+}
+
+// Codes
+.codeDropdown {
+    // border-bottom: 2px solid var(--gray-light);
+    padding: 0.5rem 0;
+}
+
+.codeItem {
+    padding: 10px 0px 10px 28px;
+}
+
+.codeItemTitle {
+    font-weight: bold;
+    padding-bottom: 12px;
+}
+
+.codeScript {
+    border: 1px solid var(--gray-light);
+    height: 300px;
+    overflow: hidden scroll;
+    background-color: var(--hnl-code-bg);
+}
+
+.sampleCodeContainer {
+    background-color: var(--hnl-sample-code-bg);
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+
+    pre {
+        margin-bottom: 0;
+    }
+}
+
+.testcasesSample {
+    .testcaseTitle {
+        font-weight: bold;
+    }
+    .testcaseSubTitle {
+        padding: 0.75rem 0;
+    }
+    .testcaseContainer {
+        background-color: var(--white);
+        border: 1px solid var(--gray);
+        padding: 0.5rem 1rem;
+    }
+}
+
+//
+.testcaseToggle {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 1.25rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+.testcaseContainer {
+    background-color: var(--hnl-testcase-container-bg);
+    padding: 1.5rem 2rem;
+    // margin-top: 1rem;
+    border-radius: 10px;
+
+    .title {
+        font-weight: bold;
+        padding-bottom: 1rem;
+    }
+
+    .testcaseSubmit {
+        background-color: var(--orange);
+        color: var(--white);
+        width: fit-content;
+        padding: 8px 32px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+}
+.testcaseItem {
+    background-color: var(--hnl-testcase-container-bg);
+}
+.errorText {
+    color: var(--hnl-error-text-color);
+    font-size: 0.8rem;
+}
+
+.trash {
+    cursor: pointer;
+}
+
+.input {
+    border: 2px solid var(--hnl-input-border);
+    background-color: var(--hnl-input-bg);
+    color: var(--hnl-input-color);
+
+    &:focus {
+        background-color: var(--hnl-input-bg);
+        border-color: var(--hnl-input-border);
+        color: var(--hnl-input-color);
+    }
+}

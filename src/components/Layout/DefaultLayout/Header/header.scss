@@ -143,3 +143,39 @@
 .border-none {
     border: none;
 }
+
+//
+.dropdownCheck {
+    display: block;
+}
+
+.dropdownHide {
+    display: none;
+}
+
+.dropdownToggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dropdownMenu {
+    position: absolute;
+    right: 0;
+    top: 120%;
+    width: 250px;
+    padding: 0.25rem 0;
+    border-radius: 2px;
+    background-color: var(--hnl-dropdown-bg);
+    border: 1px solid var(--hnl-dropdown-border);
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+.navbarActive {
+    border-color: var(--blue);
+}
+.navbarItem {
+    padding: 1rem 2rem;
+    // border-bottom: 4px solid var(--blue-dark-3);
+}

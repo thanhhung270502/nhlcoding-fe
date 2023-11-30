@@ -46,9 +46,9 @@ export const getLanguageByID = async (language_id) => {
         });
 };
 
-export const getProblemForPagination = async (user_id, limit, offset) => {
+export const getProblemForPagination = async (user_id, level, status, search) => {
     return await axios
-        .get(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${user_id}/${limit}/${offset}`)
+        .get(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${user_id}/${level}/${status}/${search}`)
         .then((response) => response.data)
         .catch((error) => {
             console.log(error);
@@ -66,5 +66,18 @@ export const createProblem = async (problem) => {
         .catch(function (error) {
             console.log(error);
             return error;
+        });
+};
+
+export const validateDescription = async (description) => {
+    return await axios
+        .post(`http://127.0.0.1:5000/api/v1/validate-description`, { description })
+        .then(function (response) {
+            console.log(response.data);
+            return response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+            return error.response;
         });
 };

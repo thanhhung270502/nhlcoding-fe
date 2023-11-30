@@ -1,8 +1,8 @@
-import { faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
+import { checkAuth, getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
 import { getCookie, setCookie } from '~/api/cookie';
 import {
     LoginModal,
@@ -12,56 +12,15 @@ import {
     SignupModalTrigger,
 } from '~/components/Modals/Auth';
 import './header.scss';
+import clsx from 'clsx';
+import styles from './header.module.scss';
+
+import $ from 'jquery';
 
 function Header() {
-    const googleAuth = () => {
-        window.open(`${process.env.REACT_APP_LOCAL_API_URL}/auth/google/callback`, '_self');
-    };
-
-    const [dataLogin, setDataLogin] = useState({
-        email: null,
-        password: null,
-    });
-
-    const handleDataLoginChange = (event) => {
-        const { name, value } = event.target;
-        setDataLogin((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmitLogin = async (event) => {
-        event.preventDefault();
-        const res = await login(dataLogin);
-        // console.log(res);
-        window.location.href = '../';
-    };
-
-    const [dataSignUp, setDataSignUp] = useState({
-        email: null,
-        password: null,
-        name: null,
-        provider: 'manual',
-        avatar: 'https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg',
-        role: 0,
-    });
-
-    const handleDataSignUpChange = (event) => {
-        const { name, value } = event.target;
-        setDataSignUp((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmitSignUp = async (event) => {
-        event.preventDefault();
-        const res = await signup(dataSignUp);
-        window.location.href = '../';
-    };
-
     const [currentUser, setCurrentUser] = useState();
+    const [currentLocation, setCurrentLocation] = useState('');
+    const [isChecked, setIsChecked] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -69,114 +28,154 @@ function Header() {
     };
 
     useEffect(() => {
-        (async () => {
-            const user_id = getCookie('user_id');
-            if (user_id) {
-                await getUserByID(user_id).then((data) => {
-                    console.log(data.data.body.user);
-                    setCurrentUser(data.data.body.user);
-                });
+        var navbarItem = $('.navbarItem');
+        for (let i = 0; i < navbarItem.length; i++) {
+            navbarItem[i].classList.remove('navbarActive');
+        }
+        const dropdownToggle = () => {
+            var dropdownMenu = $('.dropdownMenu');
+            if (dropdownMenu[0].classList.contains('dropdownHide')) {
+                dropdownMenu[0].classList.remove('dropdownHide');
             } else {
-                const res = await getUserGoogle();
-                if (res.code === 200) {
-                    await getUserByID(res.body.data.body.user.id).then(async (data) => {
-                        await logoutGoogle();
-                        console.log(data.data.body.user);
-                        setCookie('user_id', data.data.body.user.id);
-                        setCurrentUser(data.data.body.user);
-                    });
-                } else {
-                    console.log('Not');
-                    setCurrentUser(null);
+                dropdownMenu[0].classList.add('dropdownHide');
+            }
+        };
+        if (window.location.href === `${process.env.REACT_APP_LOCAL_WEB_URL}/`) {
+            navbarItem[0].classList.add('navbarActive');
+            // setCurrentLocation('home');
+        } else if (window.location.href.indexOf(`/problems`) !== 0) {
+            navbarItem[1].classList.add('navbarActive');
+            // setCurrentLocation('problems');
+        } else if (window.location.href.indexOf(`/contribute`) !== 0) {
+            navbarItem[2].classList.add('navbarActive');
+            // setCurrentLocation('contribute');
+        }
+        console.log(window.location.href);
+        // setCurrentLocation();
+    });
+
+    const handleChangeDarkMode = () => {
+        var currentTheme = localStorage.getItem('theme');
+        if (currentTheme && currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            setIsChecked(false);
+        } else if (!currentTheme || currentTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            setIsChecked(true);
+        }
+    };
+
+    useEffect(() => {
+        const savedCheckedState = localStorage.getItem('theme');
+        if (savedCheckedState && savedCheckedState === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            setIsChecked(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            var session = localStorage.getItem('session');
+            if (session) {
+                session = JSON.parse(session);
+                const authen = await checkAuth(session.accessToken);
+                console.log(authen);
+                if (authen.login === true) {
+                    setCurrentUser(session.user);
+                }
+            } else {
+                console.log('Here');
+                await getUserGoogle();
+                session = localStorage.getItem('session');
+                if (session) {
+                    await logoutGoogle();
+                    session = JSON.parse(session);
+                    const authen = await checkAuth(session.accessToken);
+                    if (authen.login === true) {
+                        setCurrentUser(session.user);
+                    }
                 }
             }
         })();
     }, []);
 
+    const dropdownToggle = () => {
+        var dropdownMenu = $('.dropdownMenu');
+        if (dropdownMenu[0].classList.contains('dropdownHide')) {
+            dropdownMenu[0].classList.remove('dropdownHide');
+        } else {
+            dropdownMenu[0].classList.add('dropdownHide');
+        }
+    };
+
     return (
-        <>
-            <nav className="navbar navbar-expand-lg">
-                <div className="container">
-                    <Link className="navbar-brand" to="/">
-                        <img className="logo-image" src="/images/logo.png" alt="logo" />
+        <div>
+            <div className={clsx(styles.navbar)}>
+                <div className={clsx(styles.container)}>
+                    <Link className={clsx(styles.navbarBrand, styles.navbarLink)} to="/">
+                        <img className={clsx('img-fluid', styles.logoImage)} src="/images/logo.png" alt="logo" />
+                        <span className={clsx(styles.logoName)}>HNLCoding</span>
                     </Link>
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/problems">
-                                    Problems
-                                </Link>
-                            </li>
-                            {/*<li className="nav-item">
-                                <Link className="nav-link" to="/problem">
-                                    Problem
-                                </Link>
-    </li>*/}
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/contribute">
-                                    Contribute
-                                </Link>
-                            </li>
-                            {/* <li className="nav-item">
-                                <Link className="nav-link" to="/discuss">
-                                    Discuss
-                                </Link>
-                            </li> */}
-                        </ul>
+                    <div className={clsx(styles.navbarSeparator)}>|</div>
+                    <div className={clsx(styles.navbarNav)}>
+                        <div className="navbarItem">
+                            <Link className={clsx(styles.navbarLink)} to="/">
+                                Home
+                            </Link>
+                        </div>
+                        <div className="navbarItem">
+                            <Link className={clsx(styles.navbarLink)} to="/problems">
+                                Problems
+                            </Link>
+                        </div>
+                        <div className="navbarItem">
+                            <Link className={clsx(styles.navbarLink)} to="/contribute">
+                                Contribute
+                            </Link>
+                        </div>
                     </div>
                     {currentUser && (
-                        <div className="d-flex gap-3">
-                            <div className="dropdown">
-                                <div
-                                    className="d-flex align-items-center dropdown-toggle"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    <div className="top-header__username">{currentUser.name}</div>
-                                    <div className="top-header__avatar">
-                                        {currentUser.avatar && <img src={currentUser.avatar} alt="avt"></img>}
-                                        {!currentUser.avatar && (
-                                            <img
-                                                src="https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg"
-                                                alt="avt"
-                                            ></img>
-                                        )}
-                                    </div>
+                        <div class={clsx(styles.dropdown)}>
+                            <div className="dropdownToggle" onClick={dropdownToggle}>
+                                {currentUser.avatar && (
+                                    <img src={currentUser.avatar} alt="avt" className={clsx(styles.logoImage)}></img>
+                                )}
+                                {!currentUser.avatar && (
+                                    <img
+                                        src="https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg"
+                                        alt="avt"
+                                        className={clsx(styles.logoImage)}
+                                    ></img>
+                                )}
+                                <div className={clsx(styles.name)}>{currentUser.name}</div>
+                                <FontAwesomeIcon icon={faCaretDown} />
+                            </div>
+                            <div className="dropdownMenu dropdownHide">
+                                <div className={clsx(styles.dropdownItem)}>
+                                    <Link className={clsx(styles.dropdownLink)} to="">
+                                        Profile
+                                    </Link>
                                 </div>
-
-                                <ul className="dropdown-menu">
-                                    <li>
-                                        <a className="d-flex align-items-center dropdown-item" href="/user">
-                                            <div className="top-header__icon col-2">
-                                                <FontAwesomeIcon icon={faUser} />
-                                            </div>
-                                            <div className="col-10">My Profile</div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr className="dropdown-divider" />
-                                    </li>
-                                    <li>
-                                        <button className="d-flex align-items-center dropdown-item" onClick={handleLogout}>
-                                            <div className="top-header__icon col-2">
-                                                <FontAwesomeIcon icon={faRightFromBracket} />
-                                            </div>
-                                            <div className="col-10">Log out</div>
-                                        </button>
-                                    </li>
-                                </ul>
+                                <div
+                                    className={clsx(
+                                        styles.dropdownItem,
+                                        'd-flex',
+                                        'align-items-center',
+                                        'justify-content-between',
+                                    )}
+                                >
+                                    <div>Dark mode</div>
+                                    <label class={clsx(styles.switch)}>
+                                        <input type="checkbox" onChange={handleChangeDarkMode} checked={isChecked} />
+                                        <span class={clsx(styles.slider, styles.round)}></span>
+                                    </label>
+                                </div>
+                                <div className={clsx(styles.dropdownDivider)}></div>
+                                <div className={clsx(styles.dropdownItem)} onClick={handleLogout}>
+                                    Logout
+                                </div>
                             </div>
                         </div>
                     )}
@@ -191,12 +190,11 @@ function Header() {
                         </div>
                     )}
                 </div>
-            </nav>
-
+            </div>
             <LoginModal />
             <SignupModal />
             <ResetPasswordModal />
-        </>
+        </div>
     );
 }
 

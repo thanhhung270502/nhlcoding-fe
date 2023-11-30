@@ -1,38 +1,37 @@
-import './home.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { SignupModalTrigger } from '~/components/Modals/Auth';
-import { getCookie, setCookie } from '~/api/cookie';
-import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
-import { useEffect, useState } from 'react';
+import useInView from '~/hooks/useInView';
+import './home.scss';
 
 function Home() {
     const [currentUser, setCurrentUser] = useState();
-    useEffect(() => {
-        (async () => {
-            const user_id = getCookie('user_id');
-            if (user_id) {
-                await getUserByID(user_id).then((data) => {
-                    console.log(data.data.body.user);
-                    setCurrentUser(data.data.body.user);
-                });
-            } else {
-                const res = await getUserGoogle();
-                if (res.code === 200) {
-                    await getUserByID(res.body.data.body.user.id).then(async (data) => {
-                        await logoutGoogle();
-                        console.log(data.data.body.user);
-                        setCookie('user_id', data.data.body.user.id);
-                        setCurrentUser(data.data.body.user);
-                    });
-                } else {
-                    console.log('Not');
-                    setCurrentUser(null);
-                }
-            }
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         const user_id = getCookie('user_id');
+    //         if (user_id) {
+    //             await getUserByID(user_id).then((data) => {
+    //                 console.log(data.data.body.user);
+    //                 setCurrentUser(data.data.body.user);
+    //             });
+    //         } else {
+    //             const res = await getUserGoogle();
+    //             if (res.code === 200) {
+    //                 await getUserByID(res.body.data.body.user.id).then(async (data) => {
+    //                     await logoutGoogle();
+    //                     console.log(data.data.body.user);
+    //                     setCookie('user_id', data.data.body.user.id);
+    //                     setCurrentUser(data.data.body.user);
+    //                 });
+    //             } else {
+    //                 console.log('Not');
+    //                 setCurrentUser(null);
+    //             }
+    //         }
+    //     })();
+    // }, []);
     const navigate = useNavigate();
     const handleClickStart = () => {
         if (currentUser) {
@@ -41,6 +40,8 @@ function Home() {
             SignupModalTrigger.open();
         }
     };
+
+    const { ref: homeIntro, inView: isHomeIntroVisible } = useInView();
 
     return (
         <div className="container-fluid p-0 m-0">
@@ -58,7 +59,13 @@ function Home() {
                         Get started
                     </div>
                 </div>
-                <img src="/images/home-intro.png" className="intro-img skeleton" />
+                <div className="intro-img-container">
+                    <img
+                        src="/images/home-intro.png"
+                        className={`intro-img skeleton`}
+                        alt=""
+                    />
+                </div>
             </div>
             <div className="wwd-container">
                 <div className="wwd-title">What We Do</div>
@@ -77,10 +84,15 @@ function Home() {
                             Try a question now
                         </Link>
                     </div>
-                    <img src="/images/question-solve.png" alt="" className="wwd-img skeleton" />
+                    <img
+                        ref={homeIntro}
+                        src="/images/question-solve.png" alt=""
+                        className={`wwd-img skeleton ${isHomeIntroVisible ? 'slide-in' : 'slide-out'}`}
+                        loading="lazy"
+                    />
                 </div>
                 <div className="wwd-subcontainer">
-                    <img src="/images/question-contribute.png" alt="" className="wwd-img skeleton" />
+                    <img src="/images/question-contribute.png" alt="" className="wwd-img skeleton slide-in-image" loading="lazy" />
                     <div className="wwd-content">
                         <div className="wwd-content-title">Contribute your own questions</div>
                         <div className="wwd-content-info">

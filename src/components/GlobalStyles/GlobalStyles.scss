@@ -5,7 +5,15 @@
 
 // Color
 :root {
+    --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20);
+    --vp-home-title-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f38120);
+    --vp-home-btn-name-background: -webkit-linear-gradient(120deg, #f38120 30%, #f3eb20);
+    --vp-home-hero-name-color: transparent;
     --black: #000;
+    --black-blue: #202127;
+    --black-blue-light: #2e2e32;
+    --black-blue-light-2: #2b2f36;
+    --black-blue-light-3: #282a36;
     --white: #ffffff;
 
     --brown: #5a373f;
@@ -15,6 +23,11 @@
     --blue-dark: #1a4979;
     --blue-dark-4: #207bf3;
     --blue: #20c0f3;
+    --blue-light: #9ae7ff;
+    --blue-white: #d1f4ff;
+    --blue-white-light: #e7f9ff;
+
+    --purple: #966fd6;
 
     --green-dark-2: #157347;
     --green-dark: #48bf69;
@@ -22,6 +35,8 @@
 
     --red-dark: #bf4848;
     --red: #f32020;
+
+    --pink-red: #e23b3b;
 
     --orange-light: #f0b67f;
     --orange: #f38120;
@@ -34,6 +49,66 @@
     --gray-dark-2: #696969;
     --gray-dark-3: #bdbdbd;
     --gray-light: #f0f0f0;
+
+    --navbar: var(--blue-dark);
+    --navbar-text: var(--white);
+    --navbar-border: var(--gray);
+    --primary-background: var(--white);
+    --hnl-input-bg: #fff;
+    --hnl-input-border: var(--gray-light);
+    --hnl-input-color: var(--black);
+    --hnl-box-bg: var(--gray-light);
+    --hnl-box-color: var(--gray-dark-2);
+    --hnl-icon-1: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20);
+    --hnl-dropdown-bg: var(--white);
+    --hnl-dropdown-border: var(--gray-light);
+    --hnl-select-bg: var(--gray-light);
+    --hnl-code-bg: white;
+    --hnl-sample-code-bg: var(--gray);
+    --hnl-sample-code-color: var(--red);
+    --hnl-testcase-container-bg: var(--gray-light);
+    --hnl-problems-dropdown-toggle-bg: var(--gray-light);
+    --hnl-problems-dropdown-toggle-color: black;
+    --hnl-problem-search-bg: white;
+    --hnl-problem-search-color: black;
+    --hnl-problem-search-border: #ddd;
+    --hnl-error-text-color: var(--red);
+    --hnl-error-text-border: var(--red);
+    --hnl-subtitle-color: var(--gray-dark-2);
+}
+
+[data-theme='dark'] {
+    --white: black;
+    --black: white;
+    --primary-dark: #ffc174;
+    --beige-light: #3a3b3c;
+    --primary-light: #424140;
+    --white-2: #23201b;
+    --navbar: var(--blue-dark-3);
+    --navbar-text: white;
+    --navbar-border: var(--white);
+    --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20);
+    --primary-background: #1b1b1f;
+    --hnl-input-bg: var(--black-blue-light);
+    --hnl-input-border: var(--black-blue-light);
+    --hnl-input-color: white;
+    --hnl-box-bg: var(--black-blue-light);
+    --hnl-box-color: white;
+    --hnl-dropdown-bg: var(--black-blue);
+    --hnl-dropdown-border: var(--black-blue-light);
+    --hnl-select-bg: var(--black-blue-light);
+    --hnl-code-bg: var(--black-blue-light-3);
+    --hnl-sample-code-bg: var(--black-blue);
+    --hnl-sample-code-color: var(--purple);
+    --hnl-testcase-container-bg: var(--black-blue-light);
+    --hnl-problems-dropdown-toggle-bg: var(--black-blue-light);
+    --hnl-problems-dropdown-toggle-color: white;
+    --hnl-problem-search-bg: var(--black-blue-light);
+    --hnl-problem-search-color: white;
+    --hnl-problem-search-border: var(--black-blue-light);
+    --hnl-error-text-color: var(--purple);
+    --hnl-error-text-border: var(--purple);
+    --hnl-subtitle-color: white;
 }
 
 * {
@@ -44,6 +119,10 @@
 
 html {
     font-family: 'Nunito', sans-serif;
+}
+
+.content {
+    background-color: var(--primary-background);
 }
 
 .gutter {
@@ -161,6 +240,11 @@ html {
     user-select: none;
 }
 
+.Toastify__toast-container--top-right {
+    top: unset;
+    bottom: 1em;
+}
+
 .secondary-text {
     height: 100%;
     display: flex;
@@ -168,4 +252,18 @@ html {
     align-items: center;
     font-size: 1.25em;
     color: var(--gray-dark);
+}
+
+.slide-in {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+    transition: all 1s ease;
+}
+
+.slide-out {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateX(100%);
+
 }

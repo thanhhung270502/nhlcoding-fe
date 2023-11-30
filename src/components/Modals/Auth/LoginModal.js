@@ -10,6 +10,9 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
 import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
 import { getCookie, setCookie } from '~/api/cookie';
+import clsx from 'clsx';
+import styles from '../../Contribute/contribute.module.scss';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 const ee = new EventEmitter();
 
@@ -59,7 +62,7 @@ const LoginModal = () => {
                     <div className="mb-3">
                         <input
                             type="email"
-                            className="form-control"
+                            className={clsx('form-control', styles.input)}
                             name="email"
                             placeholder="Địa chỉ email"
                             autoComplete="off"
@@ -103,11 +106,12 @@ const LoginModal = () => {
                     </div>
                 </div>
                 <div className="login-alter-text">hoặc có thể đăng nhập với</div>
-                <div className="d-flex justify-content-center gap-2 mb-4">
-                    <button onClick={googleAuth} className="border-none">
-                        <ImageChangeOnHover defaultSrc={'/images/google.svg'} hoverSrc={'/images/google-hover.svg'} />
-                    </button>
-                    {/*<ImageChangeOnHover defaultSrc={'/images/github.svg'} hoverSrc={'/images/github-hover.svg'} /> */}
+                <div className="d-flex justify-content-center align-items-end ">
+                    <div className="d-flex justify-content-center align-items-center btn-google" onClick={googleAuth}>
+                        <FontAwesomeIcon icon={faGoogle} />
+                        <span>Google</span>
+                        {/*<ImageChangeOnHover defaultSrc={'/images/github.svg'} hoverSrc={'/images/github-hover.svg'} /> */}
+                    </div>
                 </div>
             </div>
         </Modal>

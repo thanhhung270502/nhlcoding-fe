@@ -31,11 +31,16 @@ export const getUserGoogle = async () => {
         .then(function (response) {
             console.log({
                 code: 200,
-                body: response,
+                body: response.data,
             });
+            var newSession = {
+                accessToken: response.data.body.accessToken,
+                user: response.data.body.user,
+            };
+            localStorage.setItem('session', JSON.stringify(newSession));
             return {
                 code: 200,
-                body: response,
+                body: response.data,
             };
         })
         .catch(function (err) {
@@ -63,12 +68,40 @@ export const login = async (info) => {
         .then(function (response) {
             console.log(response);
             setCookie('user_id', response.data.body.user.id);
+            const session = {
+                accessToken: response.data.body.accessToken,
+                user: response.data.body.user,
+            };
+            localStorage.setItem('session', JSON.stringify(session));
             return response.data.body.user;
         })
         .catch(function (error) {
             console.log(error);
             return error.response;
         });
+    return res;
+};
+
+export const checkAuth = async (accessToken) => {
+    const res = await axios
+        .get(`${process.env.REACT_APP_LOCAL_API_URL}/auth/checkAuthentication`, {
+            headers: {
+                'access-token': accessToken,
+            },
+        })
+        .then((res) => {
+            var session = JSON.parse(localStorage.getItem('session'));
+            if (res.data.login === false) {
+                localStorage.setItem('session', '');
+            } else {
+                session['login'] = res.data.login;
+                session['message'] = res.data.message;
+                localStorage.setItem('session', JSON.stringify(session));
+                console.log(res);
+            }
+            return res.data;
+        })
+        .catch((error) => console.log(error));
     return res;
 };
 
@@ -79,6 +112,7 @@ export const getUserByID = async (user_id) => {
 
 export const logout = () => {
     setCookie('user_id', '', 0);
+    localStorage.setItem('session', '');
 };
 
 export const loginWithGoogle = () => {

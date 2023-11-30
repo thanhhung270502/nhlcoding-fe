@@ -7,28 +7,34 @@
 .intro-content {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    // gap: 1rem;
     justify-content: center;
     width: 550px;
 
     .intro-subtitle {
-        font-size: 24px;
+        font-size: 48px;
+        font-weight: bold;
+        background: var(--vp-home-title-name-background);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: var(--vp-home-hero-name-color);
     }
 
     .intro-title {
-        font-size: 40px;
+        font-size: 48px;
     }
 
     .intro-info {
         color: var(--gray-dark-2);
         font-size: 18px;
+        padding: 1rem 0 2rem;
     }
 
     .intro-btn {
         width: fit-content;
         color: var(--white);
-        background-color: var(--green-dark);
-        font-weight: 500;
+        // background-color: var(--green-dark);
+        background: var(--vp-home-btn-name-background);
+        font-weight: bold;
     }
 
     .intro-btn:hover {
@@ -42,8 +48,12 @@
     height: 400px;
 }
 
+// .intro-img-container {
+//     background: var(--vp-home-btn-name-background);
+// }
+
 .wwd-container {
-    background-color: var(--blue-dark);
+    background-color: var(--blue-dark-2);
     padding-inline: 8rem;
 
     .wwd-title {
@@ -84,6 +94,7 @@
     width: fit-content;
     color: var(--white);
     background-color: var(--blue);
+    font-weight: bold !important;
 }
 
 .wwd-content-btn:hover {

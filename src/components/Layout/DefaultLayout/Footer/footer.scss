@@ -1,5 +1,8 @@
+.footer {
+    background-color: var(--blue-dark-3);
+}
 .footer-container {
-    border-top: solid 1px var(--gray);
+    // border-top: solid 1px var(--gray);
     font-size: 16px;
     display: flex;
     justify-content: space-between;
@@ -11,13 +14,16 @@
 }
 
 .footer-secondary {
-    color: var(--gray-dark);
+    color: var(--white);
+    font-weight: bold;
 }
 
 .footer-nav {
     padding-inline: 1rem;
     margin-block: 1rem;
     border-inline-start: solid 1px var(--gray);
+    color: var(--white);
+    font-weight: bold;
 }
 
 .footer-contacts {
@@ -28,4 +34,31 @@
 
 .footer-contact {
     height: 32px;
+}
+
+.footer-icon {
+    color: var(--white);
+    font-size: 1.5rem;
+}
+
+.icon-facebook {
+    color: var(--blue-dark-4);
+
+    &:hover {
+        color: var(--blue-dark-4);
+    }
+}
+
+.icon-linkedin {
+    color: var(--blue);
+    &:hover {
+        color: var(--blue);
+    }
+}
+
+.icon-instagram {
+    color: var(--pink-red);
+    &:hover {
+        color: var(--pink-red);
+    }
 }

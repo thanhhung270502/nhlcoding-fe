@@ -1,3 +1,8 @@
+.problems {
+    min-height: calc(100vh - 116px);
+    padding-bottom: 8rem;
+}
+
 .problems-categories {
     width: 100%;
     overflow: scroll hidden;
@@ -15,8 +20,16 @@
 }
 
 .problems-dropdown-toggle {
-    background-color: var(--gray-light);
-    padding: 12px 24px;
+    background-color: var(--hnl-problems-dropdown-toggle-bg);
+    color: var(--hnl-problems-dropdown-toggle-color);
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: none;
+
+    &:disabled {
+        color: var(--gray-light);
+        opacity: 50%;
+    }
 }
 
 .problems-dropdown-menu {
@@ -35,11 +48,34 @@
     }
 }
 
+.problem-dropdown-menu {
+    border: unset !important;
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.1);
+    background-color: var(--hnl-dropdown-bg);
+    border: 1px solid var(--hnl-dropdown-border);
+
+    .dropdown-item {
+        color: var(--black);
+        padding: 8px 24px;
+
+        &:hover {
+            background-color: var(--hnl-select-bg);
+        }
+    }
+}
+
 .problems-right {
 }
 
 .problems-head {
     font-weight: bold;
+    // background: var(--vp-home-hero-name-background);
+    background-color: var(--blue-dark-2);
+    color: var(--white);
+}
+
+.problems-row {
+    background-color: var(--gray-light);
 }
 
 .problems-status-accept {
@@ -57,25 +93,41 @@
 .pagination {
 }
 
-.page-item {
-    padding: 6px 12px;
+// Filters
+.filter-item {
     background-color: var(--gray-light);
-    margin: 0 4px;
-    color: var(--gray-dark);
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 5px;
+    margin-right: 6px;
+}
+
+.filter-item-delete {
+    background-color: var(--gray-dark);
+    color: var(--white);
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    border-radius: 50%;
     cursor: pointer;
+}
+
+.dropdown-item {
+    span {
+        color: var(--blue);
+    }
+}
+
+// .dropdown-item-active {
+//     background-color: var();
+//     color: var(--white);
+// }
+
+.problem-solution-search-submit {
     border: none;
-
-    &:hover {
-        color: var(--black);
-    }
-}
-
-.page-item:disabled {
-    &:hover {
-        color: var(--gray-dark);
-    }
-}
-
-.page-item-active {
-    color: var(--black);
+    background-color: var(--blue-dark);
+    color: var(--white);
+    position: absolute;
+    right: 12px;
+    padding: 0 12px;
 }
