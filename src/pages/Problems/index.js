@@ -1,12 +1,11 @@
+import { faCaretDown, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import './problems.scss';
-import $ from 'jquery';
-import { getProblemForPagination } from '~/api/problems';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getAllLevels } from '~/api/levels';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { getProblemForPagination } from '~/api/problems';
 import ProblemsTable from '~/components/ProblemsTable';
+import './problems.scss';
 
 const statusData = [
     {

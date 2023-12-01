@@ -1,64 +1,35 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getProblemById } from "~/api/problems";
+import MarkDown from "~/components/MarkDown";
+
 function Description() {
+    const { id } = useParams();
+    const [problem, setProblem] = useState({
+        id: 0,
+        title: "",
+        level_id: 0,
+        level_name: "",
+        description: ""
+    });
+
+    useEffect(() => {
+        async function fetchProblemByID(id) {
+            const res = await getProblemById(id);
+            setProblem(res.body);
+        }
+
+        fetchProblemByID(id);
+    }, [id]);
+
     return (
         <div className="problem-description px-5 py-4">
-            <div className="title pb-4 fw-bold">1. Two Sum</div>
-            <div className="level fw-bold pb-4">
-                Level: <span>Easy</span>
+            <div className="title">{`${problem.id}. ${problem.title}`}</div>
+            <div className="level">
+                Level: <span className={`level-${problem.level_id}`}>{problem.level_name}</span>
             </div>
             <div className="description">
-                Given an array of integers nums and an integer target, return indices of the two numbers such that they
-                add up to target. You may assume that each input would have exactly one solution, and you may not use
-                the same element twice. You can return the answer in any order.
-            </div>
-            <div className="examples">
-                <div className="example pt-4">
-                    <div className="example-title pb-3">Example 1:</div>
-                    <div className="example-description py-3 px-4">
-                        <span>Input:</span> nums = [2, 7, 11, 15], target = 9 <br />
-                        <span>Output:</span> [0, 1] <br />
-                        <span>Explanation:</span> Because nums[0] + nums[1] == 9, we return [0, 1].
-                    </div>
-                </div>
-                <div className="example pt-4">
-                    <div className="example-title pb-3">Example 2:</div>
-                    <div className="example-description py-3 px-4">
-                        <span>Input:</span> nums = [3,2,4], target = 6 <br />
-                        <span>Output:</span> [1, 2]
-                    </div>
-                </div>
-                <div className="example pt-4">
-                    <div className="example-title pb-3">Example 3:</div>
-                    <div className="example-description py-3 px-4">
-                        <span>Input:</span> nums = [3,3], target = 6 <br />
-                        <span>Output:</span> [0, 1]
-                    </div>
-                </div>
-            </div>
-            <div className="constraints">
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
-                <li>a</li>
+                <MarkDown text={problem.description} />
             </div>
         </div>
     );

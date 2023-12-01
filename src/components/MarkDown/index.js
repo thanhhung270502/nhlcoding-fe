@@ -7,17 +7,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import style from './markdown.module.scss';
 
 const MarkDown = ({ text }) => {
-    // const [markdown, setMarkdown] = useState('');
-
-    // useEffect(() => {
-    //     import('./solution.md').then((res) => {
-    //         fetch(res.default)
-    //             .then((res) => res.text())
-    //             .then((res) => setMarkdown(res))
-    //             .catch((err) => console.log(err));
-    //     });
-    // }, []);
-
     return (
         <div style={{ paddingBottom: '4rem' }}>
             <ReactMarkdown

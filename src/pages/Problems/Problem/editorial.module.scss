@@ -2,8 +2,8 @@
     padding: 2rem;
 
     .title {
-        font-size: 30px;
-        font-weight: 700;
+        font-size: 1.75rem;
+        font-weight: 500;
         padding-bottom: 1rem;
     }
 
@@ -11,18 +11,4 @@
         border-top: solid 2px var(--gray);
         padding-block: 1rem;
     }
-}
-
-.subtitle {
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.code_block {
-    font-size: 16px !important;
-    border-radius: 10px;
-}
-
-.normal_text {
-    font-size: 20px;
 }

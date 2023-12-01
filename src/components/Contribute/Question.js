@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Contribute from './Contribute';
 // import CustomEditor from '../CKEditor';
 import { faCaretDown, faCheck, faLightbulb } from '@fortawesome/free-solid-svg-icons';
@@ -10,13 +10,9 @@ import remarkMath from 'remark-math';
 import { getAllLanguages } from '~/api/languages';
 
 import clsx from 'clsx';
-import styles from './contribute.module.scss';
-import { Link } from 'react-router-dom';
 import $ from 'jquery';
+import styles from './contribute.module.scss';
 // import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
-import { langs } from '@uiw/codemirror-extensions-langs';
-import { xcodeLight } from '@uiw/codemirror-theme-xcode';
-import CodeMirror from '@uiw/react-codemirror';
 import { getAllLevels } from '~/api/levels';
 import { validateDescription } from '~/api/problems';
 

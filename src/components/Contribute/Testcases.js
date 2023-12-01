@@ -1,19 +1,11 @@
-import { langs } from '@uiw/codemirror-extensions-langs';
-import { xcodeLight } from '@uiw/codemirror-theme-xcode';
-import CodeMirror from '@uiw/react-codemirror';
-import { useCallback, useEffect, useState } from 'react';
-import Help from '../Help';
-import Contribute from './Contribute';
-import clsx from 'clsx';
-import styles from './contribute.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleRight, faLightbulb, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { getAllLanguages } from '~/api/languages';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
 import $ from 'jquery';
-import ReactMarkdown from 'react-markdown';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
+import { useEffect, useState } from 'react';
+import Contribute from './Contribute';
+import styles from './contribute.module.scss';
 
 const MainChild = () => {
     const [input, setInput] = useState('');

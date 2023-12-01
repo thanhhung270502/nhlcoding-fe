@@ -1,31 +1,30 @@
+import { faChevronDown, faGear, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { langs } from '@uiw/codemirror-extensions-langs';
+import { xcodeLight } from '@uiw/codemirror-theme-xcode';
+import CodeMirror from '@uiw/react-codemirror';
+import $ from 'jquery';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import $ from 'jquery';
 import Split from 'react-split-grid';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faRotateLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import CodeMirror from '@uiw/react-codemirror';
-import { xcodeLight } from '@uiw/codemirror-theme-xcode';
-import { langs } from '@uiw/codemirror-extensions-langs';
 
+import Loading from '~/components/Loading';
 import Description from './description';
 import Editorial from './editorial';
 import Solution from './solutions';
 import Submission from './submission';
-import Loading from '~/components/Loading';
 
 import clsx from 'clsx';
 import styles from './console.module.scss';
 import './console.scss';
 import './problem.scss';
 
-import { getCookie } from '~/api/cookie';
 import { getProblemLanguagesByProblemID } from '~/api/problem_languages';
 import { problemRunCode } from '~/api/problems';
 import { createSubmission } from '~/api/submissions';
 import { getTestcaseByProblemID } from '~/api/testcases';
-import { getCurrentTimeFormatted } from '~/utils';
 import { insertUserProblem } from '~/api/user_problems';
+import { getCurrentTimeFormatted } from '~/utils';
 
 function Problem() {
     const { id } = useParams();
@@ -304,15 +303,6 @@ function Problem() {
                                             >
                                                 Description
                                             </div>
-                                            {/* <div
-                                                className={`problem-item ${tab === 'solutions' ? 'problem-item-active' : ''
-                                                    }`}
-                                                onClick={() => {
-                                                    navigate(`/problems/${id}?tab=solutions`);
-                                                }}
-                                            >
-                                                Solutions
-                                            </div> */}
                                             <div
                                                 className={`problem-item ${tab === 'submissions' ? 'problem-item-active' : ''
                                                     }`}
@@ -323,13 +313,13 @@ function Problem() {
                                                 Submissions
                                             </div>
                                             <div
-                                                className={`problem-item ${tab === 'editorial' ? 'problem-item-active' : ''
+                                                className={`problem-item ${tab === 'instruction' ? 'problem-item-active' : ''
                                                     }`}
                                                 onClick={() => {
-                                                    navigate(`/problems/${id}?tab=editorial`);
+                                                    navigate(`/problems/${id}?tab=instruction`);
                                                 }}
                                             >
-                                                Editorial
+                                                Instruction
                                             </div>
                                         </div>
                                     </div>
@@ -337,7 +327,7 @@ function Problem() {
                                         {tab === 'description' && <Description />}
                                         {tab === 'solutions' && <Solution />}
                                         {tab === 'submissions' && renderSubmissions && <Submission problem_id={id} />}
-                                        {tab === 'editorial' && <Editorial />}
+                                        {tab === 'instruction' && <Editorial />}
                                     </div>
                                 </div>
                             </div>
@@ -400,7 +390,7 @@ function Problem() {
                                                                     theme={xcodeLight}
                                                                 />
                                                             )}
-                                                        </>
+                                                        </div>
                                                     )}
                                                 </div>
                                             </div>
@@ -529,11 +519,6 @@ function Problem() {
                                                                                     setCurrentCaseResult(index);
                                                                                 }}
                                                                             >
-                                                                                {currentResult && currentResult[index] && (
-                                                                                    <span className={`round-result ${currentResult[index].success ? "result-success" : "result-failure"}`}></span>
-                                                                                )}
-                                                                                key={index}
-                                                                            >
                                                                                 {currentResult &&
                                                                                     currentResult[index] && (
                                                                                         <span
@@ -554,10 +539,6 @@ function Problem() {
                                                                                 onClick={() => {
                                                                                     setCurrentCaseResult(testcases.length);
                                                                                 }}
-                                                                            >
-                                                                                {currentResult && currentResult[testcases.length] && (
-                                                                                    <span className={`round-result result-failure`}></span>
-                                                                                )}
                                                                             >
                                                                                 {currentResult &&
                                                                                     currentResult[testcases.length] && (

@@ -1,13 +1,12 @@
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx';
 import { Link, useNavigate } from 'react-router-dom';
-import './contribute.scss';
-import { createProblem, validateDescription } from '~/api/problems';
-import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import clsx from 'clsx';
+import { createProblem, validateDescription } from '~/api/problems';
 import styles from './contribute.module.scss';
+import './contribute.scss';
 
 const Contribute = ({ contributeStep, mainChild, rightChild }) => {
     const routeStep = [
@@ -124,7 +123,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
         var python_code = localStorage.getItem('python_code');
 
         if (question)
-            for (var i = 0; i < question.languages.length; i++) {
+            for (let i = 0; i < question.languages.length; i++) {
                 // python
                 if (question.languages[i].id === 1) {
                     if (python_code) {
@@ -184,7 +183,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
 
         if (errors.length === 0 && errorValidate.length === 0) {
             var problem_languages = [];
-            for (var i = 0; i < question.languages.length; i++) {
+            for (let i = 0; i < question.languages.length; i++) {
                 // python
                 if (question.languages[i].id === 1) {
                     problem_languages.push({
@@ -247,37 +246,32 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                     </div>
                     <div className="contribute-navbar-line-segment-container">
                         <div
-                            className={`contribute-navbar-line-segment ${
-                                contributeStep >= 2 ? 'contribute-navbar-line-segment-entered' : ''
-                            }`}
+                            className={`contribute-navbar-line-segment ${contributeStep >= 2 ? 'contribute-navbar-line-segment-entered' : ''
+                                }`}
                         ></div>
                     </div>
                     <div className="contribute-navbar-line-segment-container">
                         <div
-                            className={`contribute-navbar-line-segment ${
-                                contributeStep >= 3 ? 'contribute-navbar-line-segment-entered' : ''
-                            }`}
+                            className={`contribute-navbar-line-segment ${contributeStep >= 3 ? 'contribute-navbar-line-segment-entered' : ''
+                                }`}
                         ></div>
                     </div>
                     <div className="contribute-navbar-line-segment-container">
                         <div
-                            className={`contribute-navbar-line-segment ${
-                                contributeStep >= 4 ? 'contribute-navbar-line-segment-entered' : ''
-                            }`}
+                            className={`contribute-navbar-line-segment ${contributeStep >= 4 ? 'contribute-navbar-line-segment-entered' : ''
+                                }`}
                         ></div>
                     </div>
                     <div className="contribute-navbar-line-segment-container">
                         <div
-                            className={`contribute-navbar-line-segment ${
-                                contributeStep >= 5 ? 'contribute-navbar-line-segment-entered' : ''
-                            }`}
+                            className={`contribute-navbar-line-segment ${contributeStep >= 5 ? 'contribute-navbar-line-segment-entered' : ''
+                                }`}
                         ></div>
                     </div>
                     <div className="contribute-navbar-line-segment-container">
                         <div
-                            className={`contribute-navbar-line-segment ${
-                                contributeStep >= 6 ? 'contribute-navbar-line-segment-entered' : ''
-                            }`}
+                            className={`contribute-navbar-line-segment ${contributeStep >= 6 ? 'contribute-navbar-line-segment-entered' : ''
+                                }`}
                         ></div>
                     </div>
                 </div>
@@ -286,23 +280,20 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                         <Link to="/contribute/reason">
                             <div className="contribute-navbar-step">
                                 <div
-                                    className={`contribute-navbar-step-label ${
-                                        contributeStep === 1 ? 'contribute-navbar-step-label-active' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-label ${contributeStep === 1 ? 'contribute-navbar-step-label-active' : ''
+                                        }`}
                                 >
                                     Reason
                                 </div>
                                 <div
-                                    className={`contribute-navbar-step-circle ${
-                                        contributeStep >= 1 ? 'contribute-navbar-step-circle-entered' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-circle ${contributeStep >= 1 ? 'contribute-navbar-step-circle-entered' : ''
+                                        }`}
                                 >
                                     <svg
                                         height="36"
                                         width="36"
-                                        className={`contribute-navbar-step-svg ${
-                                            contributeStep >= 1 ? 'contribute-navbar-step-svg-entered' : ''
-                                        }`}
+                                        className={`contribute-navbar-step-svg ${contributeStep >= 1 ? 'contribute-navbar-step-svg-entered' : ''
+                                            }`}
                                     >
                                         <circle cx="18" cy="18" r="12.5"></circle>
                                     </svg>
@@ -312,23 +303,20 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                         <Link to="/contribute/question">
                             <div className="contribute-navbar-step">
                                 <div
-                                    className={`contribute-navbar-step-label ${
-                                        contributeStep === 2 ? 'contribute-navbar-step-label-active' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-label ${contributeStep === 2 ? 'contribute-navbar-step-label-active' : ''
+                                        }`}
                                 >
                                     Question
                                 </div>
                                 <div
-                                    className={`contribute-navbar-step-circle ${
-                                        contributeStep >= 2 ? 'contribute-navbar-step-circle-entered' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-circle ${contributeStep >= 2 ? 'contribute-navbar-step-circle-entered' : ''
+                                        }`}
                                 >
                                     <svg
                                         height="36"
                                         width="36"
-                                        className={`contribute-navbar-step-svg ${
-                                            contributeStep >= 2 ? 'contribute-navbar-step-svg-entered' : ''
-                                        }`}
+                                        className={`contribute-navbar-step-svg ${contributeStep >= 2 ? 'contribute-navbar-step-svg-entered' : ''
+                                            }`}
                                     >
                                         <circle cx="18" cy="18" r="12.5"></circle>
                                     </svg>
@@ -338,23 +326,20 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                         <Link to="/contribute/instruction">
                             <div className="contribute-navbar-step">
                                 <div
-                                    className={`contribute-navbar-step-label ${
-                                        contributeStep === 3 ? 'contribute-navbar-step-label-active' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-label ${contributeStep === 3 ? 'contribute-navbar-step-label-active' : ''
+                                        }`}
                                 >
                                     Instruction
                                 </div>
                                 <div
-                                    className={`contribute-navbar-step-circle ${
-                                        contributeStep >= 3 ? 'contribute-navbar-step-circle-entered' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-circle ${contributeStep >= 3 ? 'contribute-navbar-step-circle-entered' : ''
+                                        }`}
                                 >
                                     <svg
                                         height="36"
                                         width="36"
-                                        className={`contribute-navbar-step-svg ${
-                                            contributeStep >= 3 ? 'contribute-navbar-step-svg-entered' : ''
-                                        }`}
+                                        className={`contribute-navbar-step-svg ${contributeStep >= 3 ? 'contribute-navbar-step-svg-entered' : ''
+                                            }`}
                                     >
                                         <circle cx="18" cy="18" r="12.5"></circle>
                                     </svg>
@@ -364,23 +349,20 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                         <Link to="/contribute/codes">
                             <div className="contribute-navbar-step">
                                 <div
-                                    className={`contribute-navbar-step-label ${
-                                        contributeStep === 4 ? 'contribute-navbar-step-label-active' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-label ${contributeStep === 4 ? 'contribute-navbar-step-label-active' : ''
+                                        }`}
                                 >
                                     Codes
                                 </div>
                                 <div
-                                    className={`contribute-navbar-step-circle ${
-                                        contributeStep >= 4 ? 'contribute-navbar-step-circle-entered' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-circle ${contributeStep >= 4 ? 'contribute-navbar-step-circle-entered' : ''
+                                        }`}
                                 >
                                     <svg
                                         height="36"
                                         width="36"
-                                        className={`contribute-navbar-step-svg ${
-                                            contributeStep >= 4 ? 'contribute-navbar-step-svg-entered' : ''
-                                        }`}
+                                        className={`contribute-navbar-step-svg ${contributeStep >= 4 ? 'contribute-navbar-step-svg-entered' : ''
+                                            }`}
                                     >
                                         <circle cx="18" cy="18" r="12.5"></circle>
                                     </svg>
@@ -390,23 +372,20 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                         <Link to="/contribute/testcases">
                             <div className="contribute-navbar-step">
                                 <div
-                                    className={`contribute-navbar-step-label ${
-                                        contributeStep === 5 ? 'contribute-navbar-step-label-active' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-label ${contributeStep === 5 ? 'contribute-navbar-step-label-active' : ''
+                                        }`}
                                 >
                                     Testcases
                                 </div>
                                 <div
-                                    className={`contribute-navbar-step-circle ${
-                                        contributeStep >= 5 ? 'contribute-navbar-step-circle-entered' : ''
-                                    }`}
+                                    className={`contribute-navbar-step-circle ${contributeStep >= 5 ? 'contribute-navbar-step-circle-entered' : ''
+                                        }`}
                                 >
                                     <svg
                                         height="36"
                                         width="36"
-                                        className={`contribute-navbar-step-svg ${
-                                            contributeStep >= 5 ? 'contribute-navbar-step-svg-entered' : ''
-                                        }`}
+                                        className={`contribute-navbar-step-svg ${contributeStep >= 5 ? 'contribute-navbar-step-svg-entered' : ''
+                                            }`}
                                     >
                                         <circle cx="18" cy="18" r="12.5"></circle>
                                     </svg>

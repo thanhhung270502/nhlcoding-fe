@@ -1,19 +1,13 @@
-import { langs } from '@uiw/codemirror-extensions-langs';
-import { xcodeLight } from '@uiw/codemirror-theme-xcode';
-import CodeMirror from '@uiw/react-codemirror';
-import { useCallback, useEffect, useState } from 'react';
-import Help from '../Help';
-import Contribute from './Contribute';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
+import Contribute from './Contribute';
 
 const MainChild = ({ instructionData, setInstructionData }) => {
     const placeholder = `Describe your thoughts and possible instruction`;
-
-    const [text, setText] = useState('');
 
     const handleChange = (event) => {
         const inputValue = event.target.value;

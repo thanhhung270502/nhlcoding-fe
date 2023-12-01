@@ -1,9 +1,9 @@
 import { faFacebook, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link, useNavigate } from 'react-router-dom';
-import { SignupModalTrigger } from '~/components/Modals/Auth';
-import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
 import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { getUserByID } from '~/api/api';
+import { SignupModalTrigger } from '~/components/Modals/Auth';
 import useInView from '~/hooks/useInView';
 import './home.scss';
 
