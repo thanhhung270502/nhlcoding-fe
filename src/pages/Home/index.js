@@ -1,10 +1,11 @@
-import './home.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link, useNavigate } from 'react-router-dom';
 import { SignupModalTrigger } from '~/components/Modals/Auth';
 import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
 import { useEffect, useState } from 'react';
+import useInView from '~/hooks/useInView';
+import './home.scss';
 
 function Home() {
     const [currentUser, setCurrentUser] = useState();
@@ -30,6 +31,8 @@ function Home() {
         }
     };
 
+    const { ref: homeIntro, inView: isHomeIntroVisible } = useInView();
+
     return (
         <div className="container-fluid p-0 m-0">
             <div className="intro-container">
@@ -47,7 +50,7 @@ function Home() {
                     </div>
                 </div>
                 <div className="intro-img-container">
-                    <img src="/images/home-intro.png" className="intro-img skeleton" alt="home-pic" />
+                    <img src="/images/home-intro.png" className={`intro-img skeleton`} alt="" />
                 </div>
             </div>
             <div className="wwd-container">
@@ -67,10 +70,21 @@ function Home() {
                             Try a question now
                         </Link>
                     </div>
-                    <img src="/images/question-solve.png" alt="" className="wwd-img skeleton" />
+                    <img
+                        ref={homeIntro}
+                        src="/images/question-solve.png"
+                        alt=""
+                        className={`wwd-img skeleton ${isHomeIntroVisible ? 'slide-in' : 'slide-out'}`}
+                        loading="lazy"
+                    />
                 </div>
                 <div className="wwd-subcontainer">
-                    <img src="/images/question-contribute.png" alt="" className="wwd-img skeleton" />
+                    <img
+                        src="/images/question-contribute.png"
+                        alt=""
+                        className="wwd-img skeleton slide-in-image"
+                        loading="lazy"
+                    />
                     <div className="wwd-content">
                         <div className="wwd-content-title">Contribute your own questions</div>
                         <div className="wwd-content-info">
