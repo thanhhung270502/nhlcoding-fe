@@ -183,6 +183,14 @@ function Problem() {
         },
     ]);
 
+    useEffect(() => {
+        async function fetchTestcaseByProblemID(problem_id) {
+            const res = await getTestcaseByProblemID(problem_id);
+            setTestcases(res.body.testcases.slice(0, 3));
+        }
+        fetchTestcaseByProblemID(id);
+    }, [id]);
+
     const handleToggleConsole = () => {
         var gridRow = $('.grid-row');
         var problemConsoleNav = $('.problemConsoleNav');
@@ -205,8 +213,10 @@ function Problem() {
 
     useEffect(() => {
         const problemConsoleCaseNum = $('.problemConsoleCaseNum');
+        console.log(problemConsoleCaseNum);
         // eslint-disable-next-line array-callback-return
         problemConsoleCaseNum.map((index, value) => {
+            console.log(index);
             if (currentConsoleNav === 0) {
                 // eslint-disable-next-line array-callback-return
                 problemConsoleCaseNum.map((i, v) => {
@@ -303,12 +313,7 @@ function Problem() {
             alert('Try running the code again!');
         }
     };
-    var session = localStorage.getItem('session');
-    var user_id = undefined;
-    if (session) {
-        session = JSON.parse(session);
-        user_id = session.user.id;
-    }
+
     const [renderSubmissions, setRenderSubmissions] = useState(true);
 
     const handleSubmitCode = async (e) => {
@@ -317,6 +322,14 @@ function Problem() {
         setRun(true);
         setCurrentCaseResult(0);
         setIsLoading(true);
+
+        var session = localStorage.getItem('session');
+        var user_id = undefined;
+        if (session) {
+            session = JSON.parse(session);
+            user_id = session.user.id;
+            console.log(user_id);
+        }
 
         const res = await problemRunCode(id, code, activeLanguage.name);
 
@@ -333,6 +346,7 @@ function Problem() {
 
             // Need to create the user_problems first
             const problem_status = res.body.status === 'Accepted' ? 'Solved' : 'Attempted';
+            console.log(id);
             await insertUserProblem(id, user_id, problem_status);
 
             const props = {
@@ -356,14 +370,6 @@ function Problem() {
             alert('Try running the code again!');
         }
     };
-
-    useEffect(() => {
-        async function fetchTestcaseByProblemID(problem_id) {
-            const res = await getTestcaseByProblemID(problem_id);
-            setTestcases(res.body.testcases.slice(0, 3));
-        }
-        fetchTestcaseByProblemID(id);
-    }, [id]);
 
     return (
         <div className="problem-body">
@@ -470,7 +476,7 @@ function Problem() {
                                                 </div>
                                                 <div className="mt-1">
                                                     {activeLanguage && (
-                                                        <>
+                                                        <div>
                                                             {activeLanguage.id === 1 && (
                                                                 <CodeMirror
                                                                     value={code}
@@ -519,7 +525,7 @@ function Problem() {
                                                                     theme={xcodeLight}
                                                                 />
                                                             )}
-                                                        </>
+                                                        </div>
                                                     )}
                                                 </div>
                                             </div>
@@ -553,6 +559,7 @@ function Problem() {
                                                                             'problemConsoleCaseNum',
                                                                             'me-2',
                                                                         )}
+                                                                        key={index}
                                                                     >
                                                                         Case {index + 1}
                                                                     </div>
@@ -596,9 +603,9 @@ function Problem() {
                                                     )}
 
                                                     {!isLoading && currentConsoleNav === 1 && run === true && (
-                                                        <>
+                                                        <div>
                                                             {status !== 'Accepted' && status !== 'Wrong answer' && (
-                                                                <>
+                                                                <div>
                                                                     <div
                                                                         className={` problemConsoleResult mb-4 problemConsoleResultFailure`}
                                                                     >
@@ -608,7 +615,7 @@ function Problem() {
                                                                     {!!compileInfo && (
                                                                         <pre className="mt-4">{compileInfo}</pre>
                                                                     )}
-                                                                </>
+                                                                </div>
                                                             )}
 
                                                             {(status === 'Accepted' || status === 'Wrong answer') && (
@@ -643,6 +650,7 @@ function Problem() {
                                                                                     'problemConsoleCaseNum',
                                                                                     'me-2',
                                                                                 )}
+                                                                                key={index}
                                                                             >
                                                                                 {currentResult &&
                                                                                     currentResult[index] && (
@@ -760,7 +768,7 @@ function Problem() {
                                                                     </div>
                                                                 </div>
                                                             )}
-                                                        </>
+                                                        </div>
                                                     )}
                                                 </div>
                                                 <div

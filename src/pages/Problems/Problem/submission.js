@@ -5,7 +5,14 @@ import { getCookie } from '~/api/cookie';
 
 function Submission({ problem_id }) {
     const [submissions, setSubmissions] = useState([]);
-    const user_id = getCookie('user_id');
+    // const user_id = getCookie('user_id');
+    var session = localStorage.getItem('session');
+    var user_id = undefined;
+    if (session) {
+        session = JSON.parse(session);
+        user_id = session.user.id;
+        console.log(user_id);
+    }
 
     useEffect(() => {
         async function fetchSubmissionsByUserProblemId(user_id, problem_id) {
@@ -15,7 +22,6 @@ function Submission({ problem_id }) {
 
         fetchSubmissionsByUserProblemId(user_id, problem_id);
     }, [user_id, problem_id]);
-
 
     return (
         <div className="py-4 px-5 h-100">
@@ -29,29 +35,32 @@ function Submission({ problem_id }) {
                 </div>
             </div>
             <div className="submission-body">
-                {!submissions && (
-                    <div className="secondary-text">
-                        You don't have any submissions yet
-                    </div>
-                )}
-                {submissions && [...submissions].reverse().map((submission, index) => {
-                    return (
-                        <div className="d-flex align-items-center py-2" key={index}>
-                            <div className="col-1-1">
-                                <div className="d-flex flex-column submission-body-status">
-                                    <div className={`status ${submission.status === "Accepted" ? "accept" : "denied"}`}>{submission.status}</div>
-                                    <div className="date">{submission.datetime}</div>
+                {!submissions && <div className="secondary-text">You don't have any submissions yet</div>}
+                {submissions &&
+                    [...submissions].reverse().map((submission, index) => {
+                        return (
+                            <div className="d-flex align-items-center py-2" key={index}>
+                                <div className="col-1-1">
+                                    <div className="d-flex flex-column submission-body-status">
+                                        <div
+                                            className={`status ${
+                                                submission.status === 'Accepted' ? 'accept' : 'denied'
+                                            }`}
+                                        >
+                                            {submission.status}
+                                        </div>
+                                        <div className="date">{submission.datetime}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-1-2">
-                                <div className="language">{submission.language_id === 1 ? 'Python' : 'C++'}</div>
-                            </div>
-                            <div className="col-1-2">{submission.runtime} ms</div>
-                            {/* <div className="col-1-2">14.2MB</div>
+                                <div className="col-1-2">
+                                    <div className="language">{submission.language_id === 1 ? 'Python' : 'C++'}</div>
+                                </div>
+                                <div className="col-1-2">{submission.runtime} ms</div>
+                                {/* <div className="col-1-2">14.2MB</div>
                                 <div className="col-1-3">...</div> */}
-                        </div>
-                    );
-                })}
+                            </div>
+                        );
+                    })}
                 {/* <div className="d-flex align-items-center py-2">
                     <div className="col-1-1">
                         <div className="d-flex flex-column submission-body-status">
