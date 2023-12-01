@@ -66,13 +66,7 @@ export const login = async (info) => {
     const res = await axios
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/sessions/login`, info)
         .then(function (response) {
-            console.log(response);
-            const session = {
-                accessToken: response.data.body.accessToken,
-                user: response.data.body.user,
-            };
-            localStorage.setItem('session', JSON.stringify(session));
-            return response.data.body.user;
+            return response.data;
         })
         .catch(function (error) {
             console.log(error);
@@ -119,16 +113,11 @@ export const loginWithGoogle = () => {
 };
 
 export const signup = async (info) => {
-    const res = await axios
+    return await axios
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/users`, info)
         .then(function (response) {
             console.log(response);
-            const session = {
-                accessToken: response.data.body.accessToken,
-                user: response.data.body.user,
-            };
-            localStorage.setItem('session', JSON.stringify(session));
-            return response.data.body.user;
+            return response.data;
         })
         .catch(function (error) {
             console.log(error);

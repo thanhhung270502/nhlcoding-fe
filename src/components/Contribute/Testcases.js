@@ -25,10 +25,10 @@ const MainChild = () => {
     const [review, setReview] = useState(false);
 
     const handleAddTestcase = () => {
-        if (!input) {
-            setErrorInput('Missing standard input');
-            return;
-        }
+        // if (!input) {
+        //     setErrorInput('Missing standard input');
+        //     return;
+        // }
         setErrorInput(undefined);
         if (!output) {
             setErrorOutput('Missing expected output');

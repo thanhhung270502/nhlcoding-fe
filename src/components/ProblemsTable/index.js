@@ -90,14 +90,21 @@ function ProblemsTable({ problems, page, level, status, search }) {
                                 )}
                             </div>
                             <div
-                                className="text-center col-2"
+                                className="text-center col-2 cursor-pointer"
                                 onClick={() => {
                                     handleLinkToProblem(problem.id);
                                 }}
                             >
                                 {problem.id}
                             </div>
-                            <div className="px-3 col-6">{problem.title}</div>
+                            <div
+                                className="px-3 col-6 cursor-pointer"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.title}
+                            </div>
                             <div className="text-center col-2">
                                 {problem.name === 'Easy' && <div className="problems-status-accept">Easy</div>}
                                 {problem.name === 'Medium' && <div className="problems-status-progress">Medium</div>}
@@ -118,14 +125,21 @@ function ProblemsTable({ problems, page, level, status, search }) {
                                 )}
                             </div>
                             <div
-                                className="text-center col-2"
+                                className="text-center col-2 cursor-pointer"
                                 onClick={() => {
                                     handleLinkToProblem(problem.id);
                                 }}
                             >
                                 {problem.id}
                             </div>
-                            <div className="px-3 col-6">{problem.title}</div>
+                            <div
+                                className="px-3 col-6 cursor-pointer"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.title}
+                            </div>
                             <div className="text-center col-2">
                                 {problem.name === 'Easy' && <div className="problems-status-accept">Easy</div>}
                                 {problem.name === 'Medium' && <div className="problems-status-progress">Medium</div>}

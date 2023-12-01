@@ -47,6 +47,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
     const handleSubmit = async () => {
         // validate form data
         var errors = [];
+        var errorValidate = '';
 
         var reason = localStorage.getItem('reason');
         if (!reason) {
@@ -80,7 +81,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                 localStorage.setItem('errorQuestionDescription', '');
                 const res = await validateDescription(question.description);
                 if (res.isValid === false) {
-                    errors.push('question.description is invalid');
+                    errorValidate = 'question.description is invalid';
                     localStorage.setItem('errorQuestionDescription', 'Question.description is invalid');
                 } else {
                     localStorage.setItem('errorQuestionDescription', '');
@@ -181,7 +182,7 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                 }
             }
 
-        if (errors.length === 0) {
+        if (errors.length === 0 && errorValidate.length === 0) {
             var problem_languages = [];
             for (var i = 0; i < question.languages.length; i++) {
                 // python
@@ -227,7 +228,12 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
                     textError += errors[i];
                 } else textError += errors[i] + ', ';
             }
-            textError += ' are empty';
+            if (errors.length === 1) textError += ' is empty';
+            else textError += ' are empty';
+
+            if (errorValidate.length > 0) {
+                textError += '; ' + errorValidate;
+            }
             toast(textError);
         }
     };

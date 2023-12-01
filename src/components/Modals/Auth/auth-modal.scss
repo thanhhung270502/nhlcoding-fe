@@ -18,11 +18,13 @@
 
 .login-submit {
     text-align: center;
-    background-color: var(--blue-dark);
+    background-color: var(--hnl-button-bg) !important;
     border-radius: 5px;
     padding: 0.5rem;
     margin-bottom: 1rem;
-    color: var(--white);
+    color: var(--hnl-button-color) !important;
+    border: none;
+    font-weight: bold;
 }
 
 .reset-pasword-submit {
@@ -36,18 +38,18 @@
 
 .modal-text {
     cursor: pointer;
-    color: var(--blue-dark);
-    font-weight: 500;
+    color: var(--hnl-link-color) !important;
+    font-weight: bold !important;
 }
 
 .login-alter-text {
     text-align: center;
-    color: var(--gray-dark);
+    color: var(--hnl-signup-alter-text) !important;
     margin-bottom: 0.5rem;
 }
 
 .signup-alter-text {
-    color: var(--gray-dark);
+    color: var(--hnl-signup-alter-text) !important;
     margin-right: 0.25rem;
 }
 
@@ -71,4 +73,22 @@
         padding-right: 1rem;
         font-weight: bold;
     }
+}
+
+.errorInput {
+    border-color: var(--hnl-error-text-border) !important;
+}
+
+.errorText {
+    color: var(--hnl-error-text-color) !important;
+}
+
+.relative {
+    position: relative;
+}
+
+.errorPositionText {
+    position: absolute;
+    right: 16px;
+    top: 22%;
 }
