@@ -1,4 +1,5 @@
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
@@ -11,7 +12,7 @@ const MarkDown = ({ text }) => {
         <div style={{ paddingBottom: '4rem' }}>
             <ReactMarkdown
                 children={text}
-                remarkPlugins={[remarkMath]}
+                remarkPlugins={[remarkMath, remarkGfm]}
                 rehypePlugins={[rehypeKatex]}
                 components={{
                     code({ node, className, children, ...props }) {
@@ -33,6 +34,31 @@ const MarkDown = ({ text }) => {
                             </code>
                         );
                     },
+                    table({ children }) {
+                        return (
+                            <table className={style.table}>{children}</table>
+                        )
+                    },
+                    th({ children }) {
+                        return (
+                            <th className={style.th}>{children}</th>
+                        )
+                    },
+                    td({ children }) {
+                        return (
+                            <td className={style.td}>{children}</td>
+                        )
+                    },
+                    tr({ children }) {
+                        return (
+                            <tr className={style.tr}>{children}</tr>
+                        )
+                    },
+                    a({ href, children }) {
+                        return (
+                            <a href={href} className={style.a}>{children}</a>
+                        )
+                    }
                 }}
             />
         </div>
