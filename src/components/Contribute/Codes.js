@@ -1,20 +1,15 @@
+import { faAngleRight, faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { langs } from '@uiw/codemirror-extensions-langs';
+import { dracula } from '@uiw/codemirror-theme-dracula';
 import { xcodeLight } from '@uiw/codemirror-theme-xcode';
 import CodeMirror from '@uiw/react-codemirror';
-import { useCallback, useEffect, useState } from 'react';
-import Help from '../Help';
-import Contribute from './Contribute';
 import clsx from 'clsx';
-import styles from './contribute.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight, faLightbulb } from '@fortawesome/free-solid-svg-icons';
-import { getAllLanguages } from '~/api/languages';
 import $ from 'jquery';
-import ReactMarkdown from 'react-markdown';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import 'katex/dist/katex.min.css';
-import { dracula } from '@uiw/codemirror-theme-dracula';
+import { useCallback, useEffect, useState } from 'react';
+import MarkDown from '../MarkDown';
+import Contribute from './Contribute';
+import styles from './contribute.module.scss';
 
 const MainChild = () => {
     const [language, setLanguage] = useState();
@@ -475,58 +470,19 @@ const RightChild = () => {
                     <strong>Initial Code</strong>
                 </p>
                 <div className={clsx(styles.sampleCodeContainer)}>
-                    <ReactMarkdown
-                        children={initialCode}
-                        remarkPlugins={[remarkMath]}
-                        rehypePlugins={[rehypeKatex]}
-                        components={{
-                            code({ node, inline, children, ...rest }) {
-                                return (
-                                    <code {...rest} className="preview-code">
-                                        {children}
-                                    </code>
-                                );
-                            },
-                        }}
-                    />
+                    <MarkDown text={initialCode} />
                 </div>
                 <p>
                     <strong>Solution Code</strong>
                 </p>
                 <div className={clsx(styles.sampleCodeContainer)}>
-                    <ReactMarkdown
-                        children={solutionCode}
-                        remarkPlugins={[remarkMath]}
-                        rehypePlugins={[rehypeKatex]}
-                        components={{
-                            code({ node, inline, children, ...rest }) {
-                                return (
-                                    <code {...rest} className="preview-code">
-                                        {children}
-                                    </code>
-                                );
-                            },
-                        }}
-                    />
+                    <MarkDown text={solutionCode} />
                 </div>
                 <p>
                     <strong>Full Code</strong>
                 </p>
                 <div className={clsx(styles.sampleCodeContainer)}>
-                    <ReactMarkdown
-                        children={fullCode}
-                        remarkPlugins={[remarkMath]}
-                        rehypePlugins={[rehypeKatex]}
-                        components={{
-                            code({ node, inline, children, ...rest }) {
-                                return (
-                                    <code {...rest} className="preview-code">
-                                        {children}
-                                    </code>
-                                );
-                            },
-                        }}
-                    />
+                    <MarkDown text={fullCode} />
                 </div>
             </div>
         </div>

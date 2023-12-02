@@ -1,9 +1,7 @@
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import rehypeKatex from 'rehype-katex';
-import remarkMath from 'remark-math';
+import MarkDown from '../MarkDown';
 import Contribute from './Contribute';
 
 const MainChild = ({ instructionData, setInstructionData }) => {
@@ -54,20 +52,7 @@ const RightChild = ({ instructionData }) => {
                     <b className="hint-title">Displayed instruction</b>
                 </p>
             </div>
-            <ReactMarkdown
-                children={instructionData}
-                remarkPlugins={[remarkMath]}
-                rehypePlugins={[rehypeKatex]}
-                components={{
-                    code({ node, inline, children, ...rest }) {
-                        return (
-                            <code {...rest} className="preview-code">
-                                {children}
-                            </code>
-                        );
-                    },
-                }}
-            />
+            <MarkDown text={instructionData} />
         </div>
     );
 };

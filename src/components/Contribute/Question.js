@@ -3,18 +3,14 @@ import Contribute from './Contribute';
 // import CustomEditor from '../CKEditor';
 import { faCaretDown, faCheck, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import 'katex/dist/katex.min.css';
-import ReactMarkdown from 'react-markdown';
-import rehypeKatex from 'rehype-katex';
-import remarkMath from 'remark-math';
 import { getAllLanguages } from '~/api/languages';
 
 import clsx from 'clsx';
 import $ from 'jquery';
 import styles from './contribute.module.scss';
-// import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
 import { getAllLevels } from '~/api/levels';
 import { validateDescription } from '~/api/problems';
+import MarkDown from '../MarkDown';
 
 const MainChild = ({ descriptionData, setDescriptionData }) => {
     // State
@@ -485,20 +481,7 @@ const RightChild = ({ descriptionData }) => {
                     <b className="hint-title">Displayed decription</b>
                 </p>
             </div>
-            <ReactMarkdown
-                children={descriptionData}
-                remarkPlugins={[remarkMath]}
-                rehypePlugins={[rehypeKatex]}
-                components={{
-                    code({ node, inline, children, ...rest }) {
-                        return (
-                            <code {...rest} className="preview-code">
-                                {children}
-                            </code>
-                        );
-                    },
-                }}
-            />
+            <MarkDown text={descriptionData} />
         </div>
     );
 };
