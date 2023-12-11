@@ -270,8 +270,14 @@ html {
     transition: all 1s ease;
 }
 
-.slide-out {
+.slide-out-left {
     opacity: 0;
     filter: blur(5px);
-    transform: translateX(100%);
+    transform: translateX(-100%);
+}
+
+.slide-out-right {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateX(+100%);
 }
