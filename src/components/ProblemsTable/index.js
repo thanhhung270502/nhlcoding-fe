@@ -9,7 +9,7 @@ import { faCaretDown, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const limits = [5, 10, 15, 20];
 
-function ProblemsTable({ problems }) {
+function ProblemsTable({ problems, page, level, status, search }) {
     const navigate = useNavigate();
 
     const [limit, setLimit] = useState(10);
@@ -30,19 +30,44 @@ function ProblemsTable({ problems }) {
         // Simulate fetching items from another resources.
         // (This could be items from props; or items loaded in a local state
         // from an API endpoint with useEffect and useState)
-        const endOffset = itemOffset + limit;
-        const currentItems = problems.slice(itemOffset, endOffset);
+        var newItemOffset = (page - 1) * limit;
+        setItemOffset(newItemOffset);
+
+        const endOffset = newItemOffset + limit;
+        const currentItems = problems.slice(newItemOffset, endOffset);
         const pageCount = Math.ceil(problems.length / limit);
         setPaginateInfo({
             currentItems,
             pageCount,
         });
-    }, [itemOffset, limit, problems]);
+    }, [itemOffset, limit, problems, page]);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
         const newOffset = (event.selected * limit) % problems.length;
         setItemOffset(newOffset);
+        if (!search) {
+            if (level && status) {
+                navigate(`/problems/?page=${event.selected + 1}&level=${level}&status=${status}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${event.selected + 1}&status=${status}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${event.selected + 1}&level=${level}`);
+            } else {
+                navigate(`/problems/?page=${event.selected + 1}`);
+            }
+        } else {
+            if (level && status) {
+                navigate(`/problems/?page=${event.selected + 1}&level=${level}&status=${status}&search=${search}`);
+            } else if (!level && status) {
+                navigate(`/problems/?page=${event.selected + 1}&status=${status}&search=${search}`);
+            } else if (level && !status) {
+                navigate(`/problems/?page=${event.selected + 1}&level=${level}&search=${search}`);
+            } else {
+                navigate(`/problems/?page=${event.selected + 1}&search=${search}`);
+            }
+        }
+        // navigate(`/problems/?page=${event.selected + 1}`);
     };
 
     const handleChangeLimit = (lim) => {
@@ -65,14 +90,21 @@ function ProblemsTable({ problems }) {
                                 )}
                             </div>
                             <div
-                                className="text-center col-2"
+                                className="text-center col-2 cursor-pointer"
                                 onClick={() => {
                                     handleLinkToProblem(problem.id);
                                 }}
                             >
                                 {problem.id}
                             </div>
-                            <div className="px-3 col-6">{problem.title}</div>
+                            <div
+                                className="px-3 col-6 cursor-pointer"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.title}
+                            </div>
                             <div className="text-center col-2">
                                 {problem.name === 'Easy' && <div className="problems-status-accept">Easy</div>}
                                 {problem.name === 'Medium' && <div className="problems-status-progress">Medium</div>}
@@ -93,14 +125,21 @@ function ProblemsTable({ problems }) {
                                 )}
                             </div>
                             <div
-                                className="text-center col-2"
+                                className="text-center col-2 cursor-pointer"
                                 onClick={() => {
                                     handleLinkToProblem(problem.id);
                                 }}
                             >
                                 {problem.id}
                             </div>
-                            <div className="px-3 col-6">{problem.title}</div>
+                            <div
+                                className="px-3 col-6 cursor-pointer"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.title}
+                            </div>
                             <div className="text-center col-2">
                                 {problem.name === 'Easy' && <div className="problems-status-accept">Easy</div>}
                                 {problem.name === 'Medium' && <div className="problems-status-progress">Medium</div>}
@@ -163,6 +202,7 @@ function ProblemsTable({ problems }) {
                     pageRangeDisplayed={1}
                     pageCount={paginateInfo.pageCount}
                     previousLabel="< Previous"
+                    forcePage={page - 1}
                     renderOnZeroPageCount={null}
                 />
             </div>

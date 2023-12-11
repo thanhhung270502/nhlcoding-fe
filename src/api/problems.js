@@ -81,3 +81,15 @@ export const validateDescription = async (description) => {
             return error.response;
         });
 };
+
+export const getProblemById = async (problem_id) => {
+    return await axios
+        .get(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${problem_id}`)
+        .then(function (response) {
+            return response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+            return error;
+        });
+};

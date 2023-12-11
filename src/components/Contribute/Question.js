@@ -1,24 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Contribute from './Contribute';
 // import CustomEditor from '../CKEditor';
 import { faCaretDown, faCheck, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import 'katex/dist/katex.min.css';
-import ReactMarkdown from 'react-markdown';
-import rehypeKatex from 'rehype-katex';
-import remarkMath from 'remark-math';
 import { getAllLanguages } from '~/api/languages';
 
 import clsx from 'clsx';
-import styles from './contribute.module.scss';
-import { Link } from 'react-router-dom';
 import $ from 'jquery';
-// import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
-import { langs } from '@uiw/codemirror-extensions-langs';
-import { xcodeLight } from '@uiw/codemirror-theme-xcode';
-import CodeMirror from '@uiw/react-codemirror';
+import styles from './contribute.module.scss';
 import { getAllLevels } from '~/api/levels';
 import { validateDescription } from '~/api/problems';
+import MarkDown from '../MarkDown';
 
 const MainChild = ({ descriptionData, setDescriptionData }) => {
     // State
@@ -32,6 +24,41 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
     const [errorDescription, setErrorDescription] = useState(undefined);
     const [errorLanguages, setErrorLanguages] = useState(undefined);
     const [errorLevel, setErrorLevel] = useState(undefined);
+    const [languagesOpen, setLanguagesOpen] = useState(false);
+    const [levelOpen, setLevelOpen] = useState(false);
+
+    let languagesRef = useRef();
+    let levelRef = useRef();
+
+    useEffect(() => {
+        let handler = (e) => {
+            // if (e.target) {
+            if (!languagesRef.current.contains(e.target)) {
+                setLanguagesOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handler);
+
+        return () => {
+            document.removeEventListener('mousedown', handler);
+        };
+    });
+
+    useEffect(() => {
+        let handler = (e) => {
+            // if (e.target) {
+            if (!levelRef.current.contains(e.target)) {
+                setLevelOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handler);
+
+        return () => {
+            document.removeEventListener('mousedown', handler);
+        };
+    });
 
     const dropdownToggle = (index) => {
         // console.log(event);
@@ -294,11 +321,12 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                             </label>
                         )}
                     </div>
-                    <div class={clsx(styles.dropdown, `${errorLanguages ? 'errorInput' : ''}`)}>
+                    <div className={clsx(styles.dropdown, `${errorLanguages ? 'errorInput' : ''}`)} ref={languagesRef}>
                         <div
                             className="dropdownToggleQuestion"
                             onClick={() => {
-                                dropdownToggle(0);
+                                // dropdownToggle(0);
+                                setLanguagesOpen(!languagesOpen);
                                 handleCheckEmpty('languages');
                             }}
                         >
@@ -309,7 +337,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                             </div>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
-                        <div className="dropdownHide dropdownQuestion">
+                        <div className={`${languagesOpen ? '' : 'dropdownHide'} dropdownQuestion`}>
                             {languages.map((language) => {
                                 if (checkLanguage(currentLanguages, language))
                                     return (
@@ -355,11 +383,12 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                             </label>
                         )}
                     </div>
-                    <div class={clsx(styles.dropdown, `${errorLevel ? 'errorInput' : ''}`)}>
+                    <div class={clsx(styles.dropdown, `${errorLevel ? 'errorInput' : ''}`)} ref={levelRef}>
                         <div
                             className="dropdownToggleQuestion"
                             onClick={() => {
-                                dropdownToggle(1);
+                                // dropdownToggle(1);
+                                setLevelOpen(!levelOpen);
                                 handleCheckEmpty('level');
                             }}
                         >
@@ -368,7 +397,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                             </div>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
-                        <div className="dropdownHide dropdownQuestion">
+                        <div className={`${levelOpen ? '' : 'dropdownHide'} dropdownQuestion`}>
                             {levels.map((curLevel) => {
                                 if (level && curLevel.id === level.id)
                                     return (
@@ -452,20 +481,7 @@ const RightChild = ({ descriptionData }) => {
                     <b className="hint-title">Displayed decription</b>
                 </p>
             </div>
-            <ReactMarkdown
-                children={descriptionData}
-                remarkPlugins={[remarkMath]}
-                rehypePlugins={[rehypeKatex]}
-                components={{
-                    code({ node, inline, children, ...rest }) {
-                        return (
-                            <code {...rest} className="preview-code">
-                                {children}
-                            </code>
-                        );
-                    },
-                }}
-            />
+            <MarkDown text={descriptionData} />
         </div>
     );
 };

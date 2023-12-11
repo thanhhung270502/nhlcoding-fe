@@ -1,6 +1,6 @@
 .problems {
     min-height: calc(100vh - 116px);
-    padding-bottom: 8rem;
+    // padding-bottom: 8rem;
 }
 
 .problems-categories {
@@ -27,7 +27,7 @@
     border: none;
 
     &:disabled {
-        color: var(--gray-light);
+        color: var(--hnl-problems-dropdown-toggle-disable-color);
         opacity: 50%;
     }
 }
@@ -64,8 +64,7 @@
     }
 }
 
-.problems-right {
-}
+.problems-right {}
 
 .problems-head {
     font-weight: bold;
@@ -90,8 +89,7 @@
     color: var(--red-dark);
 }
 
-.pagination {
-}
+.pagination {}
 
 // Filters
 .filter-item {

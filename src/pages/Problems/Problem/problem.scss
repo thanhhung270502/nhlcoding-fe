@@ -57,23 +57,28 @@
 
 .problem-description {
     .title {
-        font-size: 1.25rem;
+        font-size: 1.75rem;
+        font-weight: 500;
+        padding-bottom: 1rem;
     }
 
     .level {
-        span {
+        font-size: 1.5rem;
+        font-weight: 500;
+        padding-bottom: 1rem;
+
+        .level-1 {
             color: var(--green-dark);
         }
+
+        .level-2 {
+            color: var(--orange);
+        }
+
+        .level-3 {
+            color: var(--red);
+        }
     }
-
-    .description {
-    }
-}
-
-.examples {
-}
-
-.example {
 }
 
 .example-title {

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { getCookie, setCookie } from './cookie';
 
 const URL = 'http://localhost:3000';
 

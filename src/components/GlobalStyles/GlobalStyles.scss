@@ -69,12 +69,17 @@
     --hnl-testcase-container-bg: var(--gray-light);
     --hnl-problems-dropdown-toggle-bg: var(--gray-light);
     --hnl-problems-dropdown-toggle-color: black;
+    --hnl-problems-dropdown-toggle-disable-color: black;
     --hnl-problem-search-bg: white;
     --hnl-problem-search-color: black;
     --hnl-problem-search-border: #ddd;
     --hnl-error-text-color: var(--red);
     --hnl-error-text-border: var(--red);
     --hnl-subtitle-color: var(--gray-dark-2);
+    --hnl-button-bg: var(--blue-dark);
+    --hnl-button-color: white;
+    --hnl-link-color: var(--blue-dark);
+    --hnl-signup-alter-text: var(--gray-dark);
 }
 
 [data-theme='dark'] {
@@ -103,12 +108,16 @@
     --hnl-testcase-container-bg: var(--black-blue-light);
     --hnl-problems-dropdown-toggle-bg: var(--black-blue-light);
     --hnl-problems-dropdown-toggle-color: white;
+    --hnl-problems-dropdown-toggle-disable-color: var(--gray-light);
     --hnl-problem-search-bg: var(--black-blue-light);
     --hnl-problem-search-color: white;
     --hnl-problem-search-border: var(--black-blue-light);
     --hnl-error-text-color: var(--purple);
     --hnl-error-text-border: var(--purple);
     --hnl-subtitle-color: white;
+    --hnl-button-bg: var(--orange);
+    --hnl-link-color: var(--orange);
+    --hnl-signup-alter-text: white;
 }
 
 * {
@@ -265,5 +274,4 @@ html {
     opacity: 0;
     filter: blur(5px);
     transform: translateX(100%);
-
 }

@@ -1,9 +1,8 @@
 import { faCaretDown, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { checkAuth, getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
-import { getCookie, setCookie } from '~/api/cookie';
 import {
     LoginModal,
     LoginModalTrigger,
@@ -21,11 +20,30 @@ function Header() {
     const [currentUser, setCurrentUser] = useState();
     const [currentLocation, setCurrentLocation] = useState('');
     const [isChecked, setIsChecked] = useState(false);
+    const [open, setOpen] = useState(false);
+    let userMenuRef = useRef();
 
     const handleLogout = () => {
         logout();
         window.location.href = '/';
     };
+
+    useEffect(() => {
+        if (currentUser) {
+            let handler = (e) => {
+                // if (e.target) {
+                if (!userMenuRef.current.contains(e.target)) {
+                    setOpen(false);
+                }
+            };
+
+            document.addEventListener('mousedown', handler);
+
+            return () => {
+                document.removeEventListener('mousedown', handler);
+            };
+        }
+    });
 
     useEffect(() => {
         var navbarItem = $('.navbarItem');
@@ -137,8 +155,8 @@ function Header() {
                         </div>
                     </div>
                     {currentUser && (
-                        <div class={clsx(styles.dropdown)}>
-                            <div className="dropdownToggle" onClick={dropdownToggle}>
+                        <div class={clsx(styles.dropdown)} ref={userMenuRef}>
+                            <div className="dropdownToggle" onClick={() => setOpen(!open)}>
                                 {currentUser.avatar && (
                                     <img src={currentUser.avatar} alt="avt" className={clsx(styles.logoImage)}></img>
                                 )}
@@ -152,7 +170,7 @@ function Header() {
                                 <div className={clsx(styles.name)}>{currentUser.name}</div>
                                 <FontAwesomeIcon icon={faCaretDown} />
                             </div>
-                            <div className="dropdownMenu dropdownHide">
+                            <div className={`${open ? '' : 'dropdownHide'} dropdownMenu`}>
                                 <div className={clsx(styles.dropdownItem)}>
                                     <Link className={clsx(styles.dropdownLink)} to="">
                                         Profile

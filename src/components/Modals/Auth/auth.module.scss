@@ -1,0 +1,34 @@
+.headerContainer {
+    border: 2px solid var(--blue);
+    border-radius: 100px;
+}
+
+.buttonCustom {
+    padding: 0.5rem 3rem;
+    background-color: transparent;
+    border-radius: 100px;
+    color: var(--blue);
+    font-weight: bold;
+    // border: 2px solid var(--blue);
+    border: none;
+}
+
+.buttonActive {
+    background-color: var(--blue);
+    color: white;
+}
+
+.buttonSubmit {
+    padding: 0.5rem 5rem;
+}
+
+.inputCustom {
+    // // border: none;
+    // // border-bottom: 2px solid var(--gray-light);
+    // width: 100%;
+    // padding: 0.25rem 0;
+
+    // &:focus-visible {
+    //     outline: none;
+    // }
+}

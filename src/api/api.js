@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie, setCookie } from './cookie';
+import { setCookie } from './cookie';
 
 export const submitCode = async (problem_id, code, language) => {
     return await axios
@@ -58,22 +58,15 @@ export const getUserGoogle = async () => {
 export const logoutGoogle = async () => {
     return await axios
         .get(`${process.env.REACT_APP_LOCAL_API_URL}/auth/logout`, { withCredentials: true })
-        .then(function (response) {})
-        .catch(function (err) {});
+        .then(function (response) { })
+        .catch(function (err) { });
 };
 
 export const login = async (info) => {
     const res = await axios
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/sessions/login`, info)
         .then(function (response) {
-            console.log(response);
-            setCookie('user_id', response.data.body.user.id);
-            const session = {
-                accessToken: response.data.body.accessToken,
-                user: response.data.body.user,
-            };
-            localStorage.setItem('session', JSON.stringify(session));
-            return response.data.body.user;
+            return response.data;
         })
         .catch(function (error) {
             console.log(error);
@@ -120,12 +113,11 @@ export const loginWithGoogle = () => {
 };
 
 export const signup = async (info) => {
-    const res = await axios
+    return await axios
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/users`, info)
         .then(function (response) {
             console.log(response);
-            setCookie('user_id', response.data.body.user.id);
-            return response.data.body.user;
+            return response.data;
         })
         .catch(function (error) {
             console.log(error);

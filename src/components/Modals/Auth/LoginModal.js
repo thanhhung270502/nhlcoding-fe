@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
 import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
-import { getCookie, setCookie } from '~/api/cookie';
 import clsx from 'clsx';
 import styles from '../../Contribute/contribute.module.scss';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
@@ -18,6 +17,10 @@ const ee = new EventEmitter();
 
 const LoginModal = () => {
     const loginModal = useModal();
+
+    const [errorEmail, setErrorEmail] = useState('');
+    const [errorPassword, setErrorPassword] = useState('');
+    const [errorLogin, setErrorLogin] = useState('');
 
     useEffect(() => {
         ee.on('open', () => loginModal.open());
@@ -36,6 +39,23 @@ const LoginModal = () => {
 
     const handleDataLoginChange = (event) => {
         const { name, value } = event.target;
+
+        if (name === 'email' && value.length === 0) {
+            localStorage.setItem('loginErrorEmail', 'Missing email');
+            setErrorEmail('Missing email');
+        } else if (name === 'email' && value.length > 0) {
+            localStorage.setItem('loginErrorEmail', '');
+            setErrorEmail('');
+        }
+
+        if (name === 'password' && value.length === 0) {
+            localStorage.setItem('loginErrorPassword', 'Missing password');
+            setErrorPassword('Missing password');
+        } else if (name === 'password' && value.length > 0) {
+            localStorage.setItem('loginErrorPassword', '');
+            setErrorPassword('');
+        }
+
         setDataLogin((prev) => ({
             ...prev,
             [name]: value,
@@ -44,10 +64,33 @@ const LoginModal = () => {
 
     const handleSubmitLogin = async (event) => {
         event.preventDefault();
+        if (errorEmail.length > 0 || errorPassword.length > 0) {
+            console.log('Missing');
+            return;
+        }
+
         const res = await login(dataLogin);
+        if (res.code === 401) {
+            setErrorLogin('Incorrect password or User is not existed');
+        } else {
+            var session = {
+                accessToken: res.body.accessToken,
+                user: res.body.user,
+            };
+            localStorage.setItem('session', JSON.stringify(session));
+            window.location.href = '../';
+        }
+
         // console.log(res);
-        window.location.href = '../';
     };
+
+    useEffect(() => {
+        const savedErrorEmail = localStorage.getItem('loginErrorEmail');
+        const savedErrorPassword = localStorage.getItem('loginErrorPassword');
+
+        savedErrorEmail && setErrorEmail(savedErrorEmail);
+        savedErrorPassword && setErrorPassword(savedErrorPassword);
+    }, []);
 
     return (
         <Modal register={loginModal} className="header-modal">
@@ -59,26 +102,35 @@ const LoginModal = () => {
                     <img src="/images/logo_v2.png" alt="" height={75} />
                 </div>
                 <form method="POST" action="" onSubmit={handleSubmitLogin}>
-                    <div className="mb-3">
+                    <div className="mb-3 relative">
                         <input
                             type="email"
-                            className={clsx('form-control', styles.input)}
+                            className={clsx('form-control', styles.input, `${errorEmail ? 'errorInput' : ''}`)}
                             name="email"
                             placeholder="Địa chỉ email"
                             autoComplete="off"
                             onChange={handleDataLoginChange}
                         />
+                        {errorEmail && (
+                            <div className="d-flex justify-content-end errorText errorPositionText">- {errorEmail}</div>
+                        )}
                     </div>
-                    <div className="mb-3">
+                    <div className="mb-3 relative">
                         <input
                             type="password"
-                            className="form-control"
+                            className={clsx('form-control', styles.input, `${errorPassword ? 'errorInput' : ''}`)}
                             name="password"
                             placeholder="Mật khẩu"
                             autoComplete="off"
                             onChange={handleDataLoginChange}
                         />
+                        {errorPassword && (
+                            <div className="d-flex justify-content-end errorText errorPositionText">
+                                - {errorPassword}
+                            </div>
+                        )}
                     </div>
+                    {errorLogin && <div className="d-flex justify-content-center errorText mb-3">{errorLogin}</div>}
                     <div className="d-flex justify-content-center">
                         <button className="login-submit" type="submit">
                             Đăng nhập
