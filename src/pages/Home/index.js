@@ -32,11 +32,13 @@ function Home() {
     };
 
     const { ref: homeIntro, inView: isHomeIntroVisible } = useInView();
+    const { ref: solve, inView: isSolveVisible } = useInView();
+    const { ref: contribute, inView: isContributeVisible } = useInView();
 
     return (
         <div className="container-fluid p-0 m-0">
             <div className="intro-container">
-                <div className="intro-content">
+                <div className={`intro-content ${isHomeIntroVisible ? 'slide-in' : 'slide-out-left'}`}>
                     <div className="intro-subtitle">GOAL CODING</div>
                     <div className="intro-title">
                         <strong>Questions solving and contributing platform</strong>
@@ -49,14 +51,14 @@ function Home() {
                         Get started
                     </div>
                 </div>
-                <div className="intro-img-container">
-                    <img src="/images/home-intro.png" className={`intro-img skeleton`} alt="" />
+                <div className={`intro-img-container ${isHomeIntroVisible ? 'slide-in' : 'slide-out-right'}`}>
+                    <img ref={homeIntro} src="/images/home-intro.png" className={`intro-img skeleton `} alt="Home Introduction" loading='lazy' />
                 </div>
             </div>
             <div className="wwd-container">
                 <div className="wwd-title">What We Do</div>
                 <div className="wwd-subcontainer">
-                    <div className="wwd-content">
+                    <div className={`wwd-content ${isSolveVisible ? 'slide-in' : 'slide-out-left'}`}>
                         <div className="wwd-content-title">Practice coding challenges</div>
                         <div className="wwd-content-info">
                             Take your coding skills to the next level with our platform's curated collection of
@@ -71,21 +73,22 @@ function Home() {
                         </Link>
                     </div>
                     <img
-                        ref={homeIntro}
+                        ref={solve}
                         src="/images/question-solve.png"
-                        alt=""
-                        className={`wwd-img skeleton ${isHomeIntroVisible ? 'slide-in' : 'slide-out'}`}
+                        alt="Question solving"
+                        className={`wwd-img skeleton ${isSolveVisible ? 'slide-in' : 'slide-out-left'}`}
                         loading="lazy"
                     />
                 </div>
                 <div className="wwd-subcontainer">
                     <img
+                        ref={contribute}
                         src="/images/question-contribute.png"
-                        alt=""
-                        className="wwd-img skeleton slide-in-image"
+                        alt="Question"
+                        className={`wwd-img skeleton ${isContributeVisible ? 'slide-in' : 'slide-out-right'}`}
                         loading="lazy"
                     />
-                    <div className="wwd-content">
+                    <div className={`wwd-content ${isContributeVisible ? 'slide-in' : 'slide-out-right'}`}>
                         <div className="wwd-content-title">Contribute your own questions</div>
                         <div className="wwd-content-info">
                             Empower the coding community by contributing your own coding challenges to our platform.
@@ -101,8 +104,8 @@ function Home() {
                     </div>
                 </div>
             </div>
-            <div className="team-container">
-                <div className="team-title">Meet The Team</div>
+            <div className="team-container" style={{ height: 300 }}>
+                {/* <div className="team-title">Meet The Team</div>
                 <div className="team-members-container">
                     <div className="team-member-container">
                         <div className="team-member-avt border-blue"></div>
@@ -161,9 +164,9 @@ function Home() {
                             </a>
                         </div>
                     </div>
-                </div>
+        </div> */}
             </div>
-        </div>
+        </div >
     );
 }
 
