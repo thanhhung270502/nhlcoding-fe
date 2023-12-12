@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:3000';
-
 export const getAllLanguages = async () => {
     return await axios
-        .get(`${URL}/languages`)
+        .get(`${process.env.REACT_APP_API}/languages`)
         .then(function (res) {
             return res;
         })

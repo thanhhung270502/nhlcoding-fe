@@ -29,7 +29,7 @@ const LoginModal = () => {
     });
 
     const googleAuth = () => {
-        window.open(`${process.env.REACT_APP_LOCAL_API_URL}/auth/google/callback`, '_self');
+        window.open(`${process.env.REACT_APP_API}/auth/google/callback`, '_self');
     };
 
     const [dataLogin, setDataLogin] = useState({

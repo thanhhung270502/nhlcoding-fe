@@ -3,7 +3,7 @@ import { setCookie } from './cookie';
 
 export const submitCode = async (problem_id, code, language) => {
     return await axios
-        .post(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${problem_id}/${language}/code`, { code: code })
+        .post(`${process.env.REACT_APP_API}/problems/${problem_id}/${language}/code`, { code: code })
         .then(function (response) {
             return response.data;
         })
@@ -15,7 +15,7 @@ export const submitCode = async (problem_id, code, language) => {
 
 export const getUsers = async () => {
     return await axios
-        .get(`${process.env.REACT_APP_LOCAL_API_URL}/users`)
+        .get(`${process.env.REACT_APP_API}/users`)
         .then(function (res) {
             return res;
         })
@@ -26,7 +26,7 @@ export const getUsers = async () => {
 
 export const getUserGoogle = async () => {
     return await axios
-        .get(`${process.env.REACT_APP_LOCAL_API_URL}/auth/login/success`, { withCredentials: true })
+        .get(`${process.env.REACT_APP_API}/auth/login/success`, { withCredentials: true })
         .then(function (response) {
             // console.log({
             //     code: 200,
@@ -56,14 +56,14 @@ export const getUserGoogle = async () => {
 
 export const logoutGoogle = async () => {
     return await axios
-        .get(`${process.env.REACT_APP_LOCAL_API_URL}/auth/logout`, { withCredentials: true })
-        .then(function (response) { })
-        .catch(function (err) { });
+        .get(`${process.env.REACT_APP_API}/auth/logout`, { withCredentials: true })
+        .then(function (response) {})
+        .catch(function (err) {});
 };
 
 export const login = async (info) => {
     const res = await axios
-        .post(`${process.env.REACT_APP_LOCAL_API_URL}/sessions/login`, info)
+        .post(`${process.env.REACT_APP_API}/sessions/login`, info)
         .then(function (response) {
             return response.data;
         })
@@ -76,7 +76,7 @@ export const login = async (info) => {
 
 export const checkAuth = async (accessToken) => {
     const res = await axios
-        .get(`${process.env.REACT_APP_LOCAL_API_URL}/auth/checkAuthentication`, {
+        .get(`${process.env.REACT_APP_API}/auth/checkAuthentication`, {
             headers: {
                 'access-token': accessToken,
             },
@@ -98,7 +98,7 @@ export const checkAuth = async (accessToken) => {
 };
 
 export const getUserByID = async (user_id) => {
-    const response = await axios.get(`${process.env.REACT_APP_LOCAL_API_URL}/users/${user_id}`);
+    const response = await axios.get(`${process.env.REACT_APP_API}/users/${user_id}`);
     return response;
 };
 
@@ -108,12 +108,12 @@ export const logout = () => {
 };
 
 export const loginWithGoogle = () => {
-    window.open(`${process.env.REACT_APP_LOCAL_API_URL}/auth/google/callback`, '_self');
+    window.open(`${process.env.REACT_APP_API}/auth/google/callback`, '_self');
 };
 
 export const signup = async (info) => {
     return await axios
-        .post(`${process.env.REACT_APP_LOCAL_API_URL}/users`, info)
+        .post(`${process.env.REACT_APP_API}/users`, info)
         .then(function (response) {
             // console.log(response);
             return response.data;

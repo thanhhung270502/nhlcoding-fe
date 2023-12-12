@@ -58,7 +58,7 @@ function Header() {
                 dropdownMenu[0].classList.add('dropdownHide');
             }
         };
-        if (window.location.href === `${process.env.REACT_APP_LOCAL_WEB_URL}/`) {
+        if (window.location.href === '/') {
             navbarItem[0].classList.add('navbarActive');
             // setCurrentLocation('home');
         } else if (window.location.href.indexOf(`/problems`) !== 0) {
