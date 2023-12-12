@@ -241,7 +241,7 @@ function Problem() {
         if (session) {
             session = JSON.parse(session);
             user_id = session.user.id;
-            console.log(user_id);
+            // console.log(user_id);
         }
 
         const res = await problemRunCode(id, code, activeLanguage.name);
@@ -259,7 +259,7 @@ function Problem() {
 
             // Need to create the user_problems first
             const problem_status = res.body.status === 'Accepted' ? 'Solved' : 'Attempted';
-            console.log(id);
+            // console.log(id);
             await insertUserProblem(id, user_id, problem_status);
 
             const props = {

@@ -5,7 +5,7 @@ import axios from 'axios';
 function Test() {
     const getAllUsers = async (e) => {
         const res = await getUsers();
-        console.log(res);
+        // console.log(res);
     };
 
     const googleAuth = () => {
@@ -16,7 +16,7 @@ function Test() {
         try {
             const response = await axios.get(`${process.env.REACT_APP_LOCAL_API_URL}/auth/google`);
             // window.location.href = response.data;
-            console.log(response);
+            // console.log(response);
         } catch (error) {
             console.error(error);
         }

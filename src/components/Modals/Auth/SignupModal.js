@@ -42,7 +42,7 @@ const SignupModal = () => {
 
     const handleDataSignUpChange = (event) => {
         const { name, value } = event.target;
-        console.log(name, value.length);
+        // console.log(name, value.length);
 
         if (name === 'email' && value.length === 0) {
             localStorage.setItem('signupErrorEmail', 'Missing email');
@@ -85,7 +85,7 @@ const SignupModal = () => {
     const handleSubmitSignUp = async (event) => {
         event.preventDefault();
         if (errorEmail.length > 0 || errorName.length > 0) {
-            console.log('Missing');
+            // console.log('Missing');
             return;
         }
         if (dataSignUp.password !== dataSignUp.confirmPassword) {

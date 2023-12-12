@@ -215,10 +215,10 @@ const Contribute = ({ contributeStep, mainChild, rightChild }) => {
             };
 
             // run code if "validate" is "true"
-            console.log(submitData);
+            // console.log(submitData);
             clearStorage();
             const res = await createProblem(submitData);
-            console.log(res);
+            // console.log(res);
             navigate('/contribute/success');
         } else {
             var textError = 'Fields ';

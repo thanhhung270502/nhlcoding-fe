@@ -16,7 +16,7 @@ function Home() {
                 session = JSON.parse(session);
                 const user_id = session.user.id;
                 await getUserByID(user_id).then((data) => {
-                    console.log(data.data.body.user);
+                    // console.log(data.data.body.user);
                     setCurrentUser(data.data.body.user);
                 });
             }

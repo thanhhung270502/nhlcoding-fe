@@ -68,7 +68,7 @@ function Header() {
             navbarItem[2].classList.add('navbarActive');
             // setCurrentLocation('contribute');
         }
-        console.log(window.location.href);
+        // console.log(window.location.href);
         // setCurrentLocation();
     });
 
@@ -99,12 +99,12 @@ function Header() {
             if (session) {
                 session = JSON.parse(session);
                 const authen = await checkAuth(session.accessToken);
-                console.log(authen);
+                // console.log(authen);
                 if (authen.login === true) {
                     setCurrentUser(session.user);
                 }
             } else {
-                console.log('Here');
+                // console.log('Here');
                 await getUserGoogle();
                 session = localStorage.getItem('session');
                 if (session) {

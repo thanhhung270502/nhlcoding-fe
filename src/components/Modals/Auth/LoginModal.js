@@ -65,7 +65,7 @@ const LoginModal = () => {
     const handleSubmitLogin = async (event) => {
         event.preventDefault();
         if (errorEmail.length > 0 || errorPassword.length > 0) {
-            console.log('Missing');
+            // console.log('Missing');
             return;
         }
 

@@ -11,6 +11,7 @@ const limits = [5, 10, 15, 20];
 
 function ProblemsTable({ problems, page, level, status, search }) {
     const navigate = useNavigate();
+    problems = problems ? problems : []; // handle if problems is undefined
 
     const [limit, setLimit] = useState(10);
     const handleLinkToProblem = (problem_id) => {
@@ -40,7 +41,7 @@ function ProblemsTable({ problems, page, level, status, search }) {
             currentItems,
             pageCount,
         });
-    }, [itemOffset, limit, problems, page]);
+    }, [limit]);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {

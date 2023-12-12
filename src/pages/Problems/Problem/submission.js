@@ -11,7 +11,7 @@ function Submission({ problem_id }) {
     if (session) {
         session = JSON.parse(session);
         user_id = session.user.id;
-        console.log(user_id);
+        // console.log(user_id);
     }
 
     useEffect(() => {
@@ -43,9 +43,8 @@ function Submission({ problem_id }) {
                                 <div className="col-1-1">
                                     <div className="d-flex flex-column submission-body-status">
                                         <div
-                                            className={`status ${
-                                                submission.status === 'Accepted' ? 'accept' : 'denied'
-                                            }`}
+                                            className={`status ${submission.status === 'Accepted' ? 'accept' : 'denied'
+                                                }`}
                                         >
                                             {submission.status}
                                         </div>

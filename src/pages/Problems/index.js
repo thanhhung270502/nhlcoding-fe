@@ -126,7 +126,7 @@ function Problems() {
     };
 
     const handleSubmitSearch = () => {
-        console.log(text);
+        // console.log(text);
         if (!text) {
             if (level && status) {
                 navigate(`/problems/?page=${page}&level=${level}&status=${status}`);
@@ -165,7 +165,7 @@ function Problems() {
             var curStatus = status ? status : 'empty';
             var curText = search ? search : 'empty';
             var response = await getProblemForPagination(user_id, curLevel, curStatus, curText);
-            var newProblems = response.body;
+            var newProblems = response?.body;
             if (status && status !== 'Todo') {
                 newProblems = response.body.filter((problem) => problem.status === status);
             } else if (status && status === 'Todo') {
@@ -173,7 +173,7 @@ function Problems() {
                     (problem) => problem.status !== 'Attempted' && problem.status !== 'Solved',
                 );
             }
-            console.log(newProblems);
+            // console.log(newProblems);
             setProblems(newProblems);
         })();
     }, [search, level, page, status]);
@@ -209,7 +209,7 @@ function Problems() {
                                                     </span>
                                                 </div>
                                                 <ul className="dropdown-menu problem-dropdown-menu">
-                                                    {levels.map((lel) => {
+                                                    {levels?.map((lel) => {
                                                         if (lel.name === level) {
                                                             return (
                                                                 <li
@@ -252,7 +252,7 @@ function Problems() {
                                                         </span>
                                                     </div>
                                                     <ul className="dropdown-menu problem-dropdown-menu">
-                                                        {statuses.map((sta) => {
+                                                        {statuses?.map((sta) => {
                                                             if (sta.name === status) {
                                                                 return (
                                                                     <li

@@ -5,7 +5,6 @@ export const submitCode = async (problem_id, code, language) => {
     return await axios
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${problem_id}/${language}/code`, { code: code })
         .then(function (response) {
-            console.log(response.data);
             return response.data;
         })
         .catch(function (error) {
@@ -29,10 +28,10 @@ export const getUserGoogle = async () => {
     return await axios
         .get(`${process.env.REACT_APP_LOCAL_API_URL}/auth/login/success`, { withCredentials: true })
         .then(function (response) {
-            console.log({
-                code: 200,
-                body: response.data,
-            });
+            // console.log({
+            //     code: 200,
+            //     body: response.data,
+            // });
             var newSession = {
                 accessToken: response.data.body.accessToken,
                 user: response.data.body.user,
@@ -44,10 +43,10 @@ export const getUserGoogle = async () => {
             };
         })
         .catch(function (err) {
-            console.log({
-                code: 403,
-                body: err,
-            });
+            // console.log({
+            //     code: 403,
+            //     body: err,
+            // });
             return {
                 code: 403,
                 body: err,
@@ -90,7 +89,7 @@ export const checkAuth = async (accessToken) => {
                 session['login'] = res.data.login;
                 session['message'] = res.data.message;
                 localStorage.setItem('session', JSON.stringify(session));
-                console.log(res);
+                // console.log(res);
             }
             return res.data;
         })
@@ -116,7 +115,7 @@ export const signup = async (info) => {
     return await axios
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/users`, info)
         .then(function (response) {
-            console.log(response);
+            // console.log(response);
             return response.data;
         })
         .catch(function (error) {

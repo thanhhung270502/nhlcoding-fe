@@ -219,8 +219,9 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
     useEffect(() => {
         (async () => {
             const res = await getAllLanguages();
-            console.log(res.data);
-            setLanguages(res.data);
+            if (res) {
+                setLanguages(res.data);
+            }
             const res2 = await getAllLevels();
             setLevels(res2);
             var question = localStorage.getItem('question');
@@ -252,7 +253,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
     }, []);
 
     useEffect(() => {
-        console.log(typeof level);
+        // console.log(typeof level);
         if (titleText.length > 0) {
             setErrorTitle(undefined);
             localStorage.setItem('errorQuestionTitle', '');
@@ -264,7 +265,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
         }
 
         if (level !== undefined && !(typeof level === 'string')) {
-            console.log('here');
+            // console.log('here');
             setErrorLevel(undefined);
             localStorage.setItem('errorQuestionLevel', '');
         }
@@ -398,7 +399,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
                         <div className={`${levelOpen ? '' : 'dropdownHide'} dropdownQuestion`}>
-                            {levels.map((curLevel) => {
+                            {levels && levels.map((curLevel) => {
                                 if (level && curLevel.id === level.id)
                                     return (
                                         <div

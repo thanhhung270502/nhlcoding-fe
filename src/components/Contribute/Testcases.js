@@ -84,7 +84,7 @@ const MainChild = () => {
         savedTestcases && setTestcases(JSON.parse(savedTestcases));
 
         const savedInput = localStorage.getItem('testcase-input');
-        console.log(savedInput);
+        // console.log(savedInput);
         savedInput && setInput(savedInput);
 
         const savedOutput = localStorage.getItem('testcase-output');
@@ -102,10 +102,10 @@ const MainChild = () => {
                             dropdownToggle(0);
                         }}
                     >
-                        <spam className="pe-3">
+                        <span className="pe-3">
                             {manual && <FontAwesomeIcon icon={faAngleDown} />}
                             {!manual && <FontAwesomeIcon icon={faAngleRight} />}
-                        </spam>
+                        </span>
                         <div className={clsx(styles.codeToggleTitle)}>Add manual</div>
                     </div>
                     <div className="codeMenu dropdownCheck dropdownHide">
@@ -170,10 +170,10 @@ const MainChild = () => {
                             dropdownToggle(1);
                         }}
                     >
-                        <spam className="pe-3">
+                        <span className="pe-3">
                             {review && <FontAwesomeIcon icon={faAngleDown} />}
                             {!review && <FontAwesomeIcon icon={faAngleRight} />}
-                        </spam>
+                        </span>
                         <div className={clsx(styles.codeToggleTitle)}>Testcase Review</div>
                     </div>
                     <div className="codeMenu dropdownCheck dropdownHide">

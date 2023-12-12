@@ -4,7 +4,7 @@ export const problemRunCode = async (problem_id, code, language) => {
     return await axios
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${problem_id}/${language}/run-jobe`, { code: code })
         .then(function (response) {
-            console.log(response.data);
+            // console.log(response.data);
             return response.data;
         })
         .catch(function (error) {
@@ -17,7 +17,7 @@ export const problemRunCodeWithJobe = async (problem_id, code, language) => {
     return await axios
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/problems/${problem_id}/${language}/run`, { code: code })
         .then(function (response) {
-            console.log(response.data);
+            // console.log(response.data);
             return response.data;
         })
         .catch(function (error) {
@@ -60,7 +60,7 @@ export const createProblem = async (problem) => {
     return await axios
         .post(`${process.env.REACT_APP_LOCAL_API_URL}/problems`, problem)
         .then(function (response) {
-            console.log(response.data);
+            // console.log(response.data);
             return response.data;
         })
         .catch(function (error) {
@@ -73,7 +73,7 @@ export const validateDescription = async (description) => {
     return await axios
         .post(`http://127.0.0.1:5000/api/v1/validate-description`, { description })
         .then(function (response) {
-            console.log(response.data);
+            // console.log(response.data);
             return response.data;
         })
         .catch(function (error) {

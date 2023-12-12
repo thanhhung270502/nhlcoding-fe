@@ -320,9 +320,9 @@ const MainChild = () => {
                                     dropdownToggle(index, lang.id);
                                 }}
                             >
-                                <spam className="pe-3">
+                                <span className="pe-3">
                                     <FontAwesomeIcon icon={faAngleRight} />
-                                </spam>
+                                </span>
                                 <div className={clsx(styles.codeToggleTitle)}>Code {lang.name}</div>
                             </div>
                             <div className="codeMenu dropdownCheck dropdownHide">
