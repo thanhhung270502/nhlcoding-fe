@@ -51,8 +51,14 @@ function Home() {
                         Get started
                     </div>
                 </div>
-                <div className={`intro-img-container ${isHomeIntroVisible ? 'slide-in' : 'slide-out-right'}`}>
-                    <img ref={homeIntro} src="/images/home-intro.png" className={`intro-img skeleton `} alt="Home Introduction" loading='lazy' />
+                <div className="intro-img-container">
+                    <div ref={homeIntro} className={`intro-img ${isHomeIntroVisible ? 'slide-in' : 'slide-out-right'}`}>
+                        {/* <img ref={homeIntro} src="" className={`intro-img skeleton `} alt="" loading='lazy' /> */}
+                    </div>
+                    <div>
+                        {/* <div className='intro-img-text'>HNL</div> */}
+                        <img src="/images/intro-logo.svg" alt="" className='intro-img-text' width={265} />
+                    </div>
                 </div>
             </div>
             <div className="wwd-container">
@@ -104,67 +110,64 @@ function Home() {
                     </div>
                 </div>
             </div>
-            <div className="team-container" style={{ height: 300 }}>
-                {/* <div className="team-title">Meet The Team</div>
+            <div className="team-container">
+                <div className="team-title">Our Team</div>
                 <div className="team-members-container">
                     <div className="team-member-container">
-                        <div className="team-member-avt border-blue"></div>
-                        <div className="team-member-name">Ly Thanh Hung</div>
-                        <div className="team-member-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut quam auctor, lacinia erat
-                            vel, condimentum.
-                        </div>
-                        <div className="team-member-contacts btn-custom">
-                            <a href="https://www.facebook.com" rel="noreferrer" target="_blank">
-                                <FontAwesomeIcon icon={faFacebook} fontSize={32} />
-                            </a>
-                            <a href="https://www.linkedin.com" rel="noreferrer" target="_blank">
-                                <FontAwesomeIcon icon={faLinkedin} fontSize={32} />
-                            </a>
-                            <a href="https://github.com" rel="noreferrer" target="_blank">
-                                <FontAwesomeIcon icon={faGithub} fontSize={32} />
-                            </a>
-                        </div>
-                    </div>
-                    <div className="team-member-container">
-                        <div className="team-member-avt border-yellow"></div>
-                        <div className="team-member-name">Truong Nguyen Khoi Nguyen</div>
-                        <div className="team-member-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut quam auctor, lacinia erat
-                            vel, condimentum.
-                        </div>
-                        <div className="team-member-contacts btn-custom bg-yellow">
-                            <a href="https://www.facebook.com" rel="noreferrer" target="_blank">
-                                <FontAwesomeIcon icon={faFacebook} fontSize={32} />
-                            </a>
-                            <a href="https://www.linkedin.com" rel="noreferrer" target="_blank">
-                                <FontAwesomeIcon icon={faLinkedin} fontSize={32} />
-                            </a>
-                            <a href="https://github.com" rel="noreferrer" target="_blank">
-                                <FontAwesomeIcon icon={faGithub} fontSize={32} />
-                            </a>
+                        <img src="/images/avt1.jpg" alt="" className='team-member-avt' />
+                        <div className="team-member-card">
+                            <div className="team-member-name">Ly Thanh Hung</div>
+                            <div className="team-member-desc">2010301</div>
+                            <div className="team-member-contact">
+                                <a href="https://www.facebook.com/taledacloc" rel="noreferrer" target="_blank">
+                                    <FontAwesomeIcon icon={faFacebook} fontSize={32} />
+                                </a>
+                                <a href="https://www.linkedin.com/in/daklok/" rel="noreferrer" target="_blank">
+                                    <FontAwesomeIcon icon={faLinkedin} fontSize={32} />
+                                </a>
+                                <a href="https://github.com/locdacknownothing" rel="noreferrer" target="_blank">
+                                    <FontAwesomeIcon icon={faGithub} fontSize={32} />
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div className="team-member-container">
-                        <div className="team-member-avt border-orange"></div>
-                        <div className="team-member-name">Ta Le Dac Loc</div>
-                        <div className="team-member-desc">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut quam auctor, lacinia erat
-                            vel, condimentum.
-                        </div>
-                        <div className="team-member-contacts btn-custom bg-orange">
-                            <a href="https://www.facebook.com/taledacloc" rel="noreferrer" target="_blank">
-                                <FontAwesomeIcon icon={faFacebook} fontSize={32} />
-                            </a>
-                            <a href="https://www.linkedin.com/in/daklok/" rel="noreferrer" target="_blank">
-                                <FontAwesomeIcon icon={faLinkedin} fontSize={32} />
-                            </a>
-                            <a href="https://github.com/locdacknownothing" rel="noreferrer" target="_blank">
-                                <FontAwesomeIcon icon={faGithub} fontSize={32} />
-                            </a>
+                        <img src="/images/avt2.jpg" alt="" className='team-member-avt' />
+                        <div className="team-member-card">
+                            <div className="team-member-name">Ta Le Dac Loc</div>
+                            <div className="team-member-desc">2010396</div>
+                            <div className="team-member-contact">
+                                <a href="https://www.facebook.com/taledacloc" rel="noreferrer" target="_blank">
+                                    <FontAwesomeIcon icon={faFacebook} fontSize={32} />
+                                </a>
+                                <a href="https://www.linkedin.com/in/daklok/" rel="noreferrer" target="_blank">
+                                    <FontAwesomeIcon icon={faLinkedin} fontSize={32} />
+                                </a>
+                                <a href="https://github.com/locdacknownothing" rel="noreferrer" target="_blank">
+                                    <FontAwesomeIcon icon={faGithub} fontSize={32} />
+                                </a>
+                            </div>
                         </div>
                     </div>
-        </div> */}
+                    <div className="team-member-container">
+                        <img src="/images/avt3.jpg" alt="" className='team-member-avt' />
+                        <div className="team-member-card">
+                            <div className="team-member-name">Truong Nguyen Khoi Nguyen</div>
+                            <div className="team-member-desc">201468</div>
+                            <div className="team-member-contact">
+                                <a href="https://www.facebook.com/taledacloc" rel="noreferrer" target="_blank">
+                                    <FontAwesomeIcon icon={faFacebook} fontSize={32} />
+                                </a>
+                                <a href="https://www.linkedin.com/in/daklok/" rel="noreferrer" target="_blank">
+                                    <FontAwesomeIcon icon={faLinkedin} fontSize={32} />
+                                </a>
+                                <a href="https://github.com/locdacknownothing" rel="noreferrer" target="_blank">
+                                    <FontAwesomeIcon icon={faGithub} fontSize={32} />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div >
     );
