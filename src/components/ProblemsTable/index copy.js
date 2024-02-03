@@ -6,8 +6,6 @@ import '~/pages/Problems/problems.scss';
 import './index.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCheck } from '@fortawesome/free-solid-svg-icons';
-import clsx from 'clsx';
-import styles from './problemsTable.module.scss';
 
 const limits = [5, 10, 15, 20];
 
@@ -79,85 +77,82 @@ function ProblemsTable({ problems, page, level, status, search }) {
     return (
         <div>
             {paginateInfo.currentItems.map((problem, index) => {
-                return (
-                    <div className={clsx(styles.problemsBody)}>
-                        <div className={clsx(styles.problemsCol1, styles.textCenter)}>{problem.id}</div>
-                        <div className={clsx(styles.problemsCol5)}>{problem.title}</div>
-                        {problem.categories.length > 2 ? (
-                            <div className={clsx(styles.problemsCol3, styles.problemsCategories)}>
-                                <div className={clsx(styles.problemsCategory)}>{problem.categories[0]}</div>
-                                <div className={clsx(styles.problemsCategory)}>{problem.categories[1]}</div>
-                                <div class="dropend">
-                                    <button
-                                        className={clsx('dropdown-toggle', styles.problemsShowAll)}
-                                        type="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                    >
-                                        ...
-                                    </button>
-                                    <ul className={clsx('dropdown-menu', styles.problemsDropdownMenu)}>
-                                        <div className={clsx(styles.problemsDropdownMenuContainer)}>
-                                            {problem.categories.map((category, index) => {
-                                                return (
-                                                    <li className={clsx('dropdown-item', styles.problemsDropdownItem)}>
-                                                        {category}
-                                                    </li>
-                                                );
-                                            })}
-                                        </div>
-                                    </ul>
-                                </div>
+                if (index % 2 === 0) {
+                    return (
+                        <div className="py-2 d-flex align-items-center">
+                            <div className="text-center col-2">
+                                {problem.status === 'Solved' && <div className="problems-status-accept">Solved</div>}
+                                {problem.status === 'Attempted' && (
+                                    <div className="problems-status-progress">Attempted</div>
+                                )}
+                                {(problem.status === 'Todo' || !problem.status) && (
+                                    <div className="problems-status">-</div>
+                                )}
                             </div>
-                        ) : (
-                            <div className={clsx(styles.problemsCol3, styles.problemsCategories)}>
-                                {problem.categories.map((category, index) => {
-                                    return <div className={clsx(styles.problemsCategory)}>{category}</div>;
-                                })}
+                            <div
+                                className="text-center col-2 cursor-pointer"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.id}
                             </div>
-                        )}
-
-                        <div className={clsx(styles.problemsCol1D5)}>
-                            {problem.level === 'Easy' && (
-                                <div className={clsx(styles.problemsLevel, styles.problemsLevelEasy)}>
-                                    {problem.level}
-                                </div>
-                            )}
-                            {problem.level === 'Medium' && (
-                                <div className={clsx(styles.problemsLevel, styles.problemsLevelMedium)}>
-                                    {problem.level}
-                                </div>
-                            )}
-                            {problem.level === 'Hard' && (
-                                <div className={clsx(styles.problemsLevel, styles.problemsLevelHard)}>
-                                    {problem.level}
-                                </div>
-                            )}
+                            <div
+                                className="px-3 col-6 cursor-pointer"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.title}
+                            </div>
+                            <div className="text-center col-2">
+                                {problem.name === 'Easy' && <div className="problems-status-accept">Easy</div>}
+                                {problem.name === 'Medium' && <div className="problems-status-progress">Medium</div>}
+                                {problem.name === 'Hard' && <div className="problems-status-high">Hard</div>}
+                            </div>
                         </div>
-                        <div className={clsx(styles.problemsCol1D5)}>
-                            {problem.status === 'Todo' && (
-                                <div className={clsx(styles.problemsStatus, styles.problemsStatusTodo)}>
-                                    {problem.status}
-                                </div>
-                            )}
-                            {problem.status === 'Solved' && (
-                                <div className={clsx(styles.problemsStatus, styles.problemsStatusSolved)}>
-                                    {problem.status}
-                                </div>
-                            )}
-                            {problem.status === 'Attempted' && (
-                                <div className={clsx(styles.problemsStatus, styles.problemsStatusAttempted)}>
-                                    {problem.status}
-                                </div>
-                            )}
+                    );
+                } else {
+                    return (
+                        <div className="py-2 d-flex align-items-center problems-row">
+                            <div className="text-center col-2">
+                                {problem.status === 'Solved' && <div className="problems-status-accept">Solved</div>}
+                                {problem.status === 'Attempted' && (
+                                    <div className="problems-status-progress">Attempted</div>
+                                )}
+                                {(problem.status === 'Todo' || !problem.status) && (
+                                    <div className="problems-status">-</div>
+                                )}
+                            </div>
+                            <div
+                                className="text-center col-2 cursor-pointer"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.id}
+                            </div>
+                            <div
+                                className="px-3 col-6 cursor-pointer"
+                                onClick={() => {
+                                    handleLinkToProblem(problem.id);
+                                }}
+                            >
+                                {problem.title}
+                            </div>
+                            <div className="text-center col-2">
+                                {problem.name === 'Easy' && <div className="problems-status-accept">Easy</div>}
+                                {problem.name === 'Medium' && <div className="problems-status-progress">Medium</div>}
+                                {problem.name === 'Hard' && <div className="problems-status-high">Hard</div>}
+                            </div>
                         </div>
-                    </div>
-                );
+                    );
+                }
             })}
-            <div className="d-flex justify-content-between align-items-center mt-4">
+            <div className="d-flex justify-content-between align-items-center mt-5">
                 <div className="dropdown">
                     <div
-                        className={clsx('problem-languages', 'problems-dropdown-toggle', 'me-3', styles.page)}
+                        className="problem-languages problems-dropdown-toggle me-3"
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
@@ -200,14 +195,13 @@ function ProblemsTable({ problems, page, level, status, search }) {
                 <ReactPaginate
                     containerClassName={'pagination'}
                     pageClassName={'page-item'}
-                    // previousClassName="page-previous"
                     activeClassName={'active'}
                     breakLabel="..."
-                    nextLabel=">"
+                    nextLabel="Next >"
                     onPageChange={handlePageClick}
                     pageRangeDisplayed={1}
                     pageCount={paginateInfo.pageCount}
-                    previousLabel="<"
+                    previousLabel="< Previous"
                     forcePage={page - 1}
                     renderOnZeroPageCount={null}
                 />

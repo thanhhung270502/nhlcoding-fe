@@ -10,12 +10,20 @@
     --vp-home-btn-name-background: -webkit-linear-gradient(120deg, #f38120 30%, #f3eb20);
     --vp-home-img-background: -webkit-linear-gradient(120deg, var(--blue-dark) 30%, #6dd0f1);
     --vp-home-hero-name-color: transparent;
+    
     --black: #000;
+    --black-2: #1b1b1f;
     --black-blue: #202127;
     --black-blue-light: #2e2e32;
     --black-blue-light-2: #2b2f36;
     --black-blue-light-3: #282a36;
+
     --white: #ffffff;
+    --while-light: #F5F7FA;
+    --white-dark: #E0E0E0;
+    --white-dark-2: #B9B9B9;
+
+    --dark: #6E6E6E;
 
     --brown: #5a373f;
 
@@ -81,20 +89,34 @@
     --hnl-button-color: white;
     --hnl-link-color: var(--blue-dark);
     --hnl-signup-alter-text: var(--gray-dark);
+    --hnl-footer-bg: var(--blue-dark);
+
+    --hnl-problems-bg: var(--while-light);
+    --hnl-problems-search-border: var(--white-dark);
+    --hnl-problems-search-color: var(--white-dark-2);
+    --hnl-problems-text-color: var(--dark);
+    --hnl-problem-table-bg: var(--white);
+    --hnl-problem-table-head-bg: var(--blue-dark);
+    --hnl-problem-table-head-color: var(--white);
+    --hnl-problem-category-bg: var(--gray);
+    --hnl-problem-level-easy: var(--green-dark-2);
+    --hnl-problem-level-medium: var(--orange-dark);
+    --hnl-problem-level-hard: var(--red);
+    --hnl-problem-pagination-bg: var(--blue-dark);
 }
 
 [data-theme='dark'] {
-    --white: black;
-    --black: white;
-    --primary-dark: #ffc174;
-    --beige-light: #3a3b3c;
-    --primary-light: #424140;
-    --white-2: #23201b;
+    // --white: black;
+    // --black: white;
+    // --primary-dark: #ffc174;
+    // --beige-light: #3a3b3c;
+    // --primary-light: #424140;
+    // --white-2: #23201b;
     --navbar: var(--blue-dark-3);
     --navbar-text: white;
     --navbar-border: var(--white);
     --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20);
-    --primary-background: #1b1b1f;
+    --primary-background: var(--black-2);
     --hnl-input-bg: var(--black-blue-light);
     --hnl-input-border: var(--black-blue-light);
     --hnl-input-color: white;
@@ -119,6 +141,20 @@
     --hnl-button-bg: var(--orange);
     --hnl-link-color: var(--orange);
     --hnl-signup-alter-text: white;
+    --hnl-footer-bg: var(--blue-dark-3);
+
+    --hnl-problems-bg: var(--black-2);
+    --hnl-problems-search-border: var(--white-dark);
+    --hnl-problems-search-color: var(--white-dark-2);
+    --hnl-problems-text-color: var(--dark);
+    --hnl-problem-table-bg: var(--white);
+    --hnl-problem-table-head-bg: var(--blue-dark);
+    --hnl-problem-table-head-color: var(--white);
+    --hnl-problem-category-bg: var(--gray);
+    --hnl-problem-level-easy: var(--green-dark-2);
+    --hnl-problem-level-medium: var(--orange-dark);
+    --hnl-problem-level-hard: var(--red);
+    --hnl-problem-pagination-bg: var(--blue-dark);
 }
 
 * {

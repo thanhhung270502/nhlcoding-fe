@@ -1,0 +1,115 @@
+.problems {
+    background-color: var(--hnl-problems-bg);
+    height: 100vh;    
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 2.5rem 0;
+}
+
+.sortBar {
+    display: flex;
+}
+
+.sortBarSearch {
+    position: relative;;
+}
+
+.sortBarSearchIcon {
+    position: absolute;
+    color: var(--hnl-problems-search-color);
+    top: 10px;
+    left: 18px;
+    font-size: 14px;
+}
+
+.sortBarSearchInput {
+
+}
+
+.sortBarFormControl {
+    border: 1.5px solid var(--hnl-problems-search-border);
+    border-radius: 5px;
+    padding: 0.5rem 1.5rem 0.5rem 2.75rem;
+    height: 40px;
+    color: var(--hnl-problems-search-color);
+    font-size: 14px;
+}
+
+.sortBarOptions {
+    display: flex;
+    margin-left: 2rem;
+}
+
+.sortBarDropDown {
+
+}
+
+.sortBarDropDownToggle {
+    border: 1px solid var(--hnl-problems-search-border);
+    background-color: transparent;
+    width: 150px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--hnl-problems-text-color);
+
+    &::after {
+        border-width: 0;
+        // margin-left: 0.35em;
+    }
+}
+
+.sortBarDropDownIcon {
+    padding-left: 0.5em;
+}
+
+.sortBarDropDownBorderLeft {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.sortBarDropDownBorderRight {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.problemsTable {
+    margin-top: 2.5rem;
+}
+
+.problemsHead {
+    height: 45px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    // background-color: var(--hnl-problem-table-bg);
+    // color: var(--hnl-problems-text-color);
+    background-color: var(--hnl-problem-table-head-bg);
+    color: var(--hnl-problem-table-head-color);
+    border-top: 1px solid var(--hnl-problems-search-border);
+    border-bottom: 1px solid var(--hnl-problems-search-border);
+}
+
+.problemsCol1 {
+    width: calc(100% / 12);
+}
+
+.problemsCol5 {
+    width: calc(5 * 100% / 12);
+}
+
+.problemsCol3 {
+    width: calc(3 * 100% / 12);
+}
+
+.problemsCol1D5 {
+    width: calc(1.5 * 100% / 12);
+}
+
+.textCenter {
+    text-align: center;
+}

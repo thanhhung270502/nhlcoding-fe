@@ -1,39 +1,42 @@
 /* Tùy chỉnh phân trang */
 .pagination {
     list-style: none;
-    padding: 0;
+    padding: 6px 12px;
     margin: 0;
     align-items: center;
+    background-color: white;
 
     .page-item {
         a {
-            padding: 9px 12px;
-            background-color: var(--gray-light);
+            padding: 9px 13px;
             margin: 0 4px;
-            color: var(--gray-dark);
             cursor: pointer;
             border: none;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: bold;
         }
 
         &:hover {
-            color: var(--black);
+            color: var(--hnl-problem-pagination-bg);
         }
     }
 
     .next,
     .previous {
         padding: 6px 12px;
-        background-color: var(--gray-light);
+        background-color: transparent;
         margin: 0 4px;
         cursor: pointer;
         border: none;
 
         a {
-            color: var(--black);
+            color: black;
+            font-weight: bold;
         }
-
+        
         &:hover {
-            color: var(--black);
+            color: var(--hnl-problem-pagination-bg);
         }
     }
 
@@ -43,15 +46,10 @@
         }
     }
 
-    .page-item:active {
-        a {
-            color: var(--black);
-        }
-    }
-
     .active {
         a {
-            color: var(--black);
+            background-color: var(--hnl-problem-pagination-bg) !important;
+            color: white !important;
         }
     }
 }

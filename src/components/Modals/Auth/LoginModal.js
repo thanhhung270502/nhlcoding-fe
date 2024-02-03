@@ -73,6 +73,7 @@ const LoginModal = () => {
         if (res.code === 401) {
             setErrorLogin('Incorrect password or User is not existed');
         } else {
+            console.log(res.body);
             var session = {
                 accessToken: res.body.accessToken,
                 user: res.body.user,

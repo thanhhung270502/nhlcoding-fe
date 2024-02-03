@@ -1,0 +1,131 @@
+.problems {
+    min-height: calc(100vh - 116px);
+    // padding-bottom: 8rem;
+}
+
+.problems-categories {
+    width: 100%;
+    overflow: scroll hidden;
+}
+
+.problems-category {
+    background-color: var(--gray-light);
+    padding: 12px 24px;
+    margin: 0 8px;
+    min-width: fit-content;
+}
+
+.problems-dropdown {
+    position: relative;
+}
+
+.problems-dropdown-toggle {
+    background-color: var(--hnl-problems-dropdown-toggle-bg);
+    color: var(--hnl-problems-dropdown-toggle-color);
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: none;
+
+    &:disabled {
+        color: var(--hnl-problems-dropdown-toggle-disable-color);
+        opacity: 50%;
+    }
+}
+
+.problems-dropdown-menu {
+    position: absolute;
+    background-color: aliceblue;
+    width: 200px;
+    padding: 8px;
+    top: 110%;
+}
+
+.problems-dropdown-item {
+    padding: 6px 12px;
+
+    &:hover {
+        background-color: var(--gray-light);
+    }
+}
+
+.problem-dropdown-menu {
+    border: unset !important;
+    box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.1);
+    background-color: var(--hnl-dropdown-bg);
+    border: 1px solid var(--hnl-dropdown-border);
+
+    .dropdown-item {
+        color: var(--black);
+        padding: 8px 24px;
+
+        &:hover {
+            background-color: var(--hnl-select-bg);
+        }
+    }
+}
+
+.problems-right {}
+
+.problems-head {
+    font-weight: bold;
+    // background: var(--vp-home-hero-name-background);
+    background-color: var(--blue-dark-2);
+    color: var(--white);
+}
+
+.problems-row {
+    background-color: var(--gray-light);
+}
+
+.problems-status-accept {
+    color: var(--green-dark-2);
+}
+
+.problems-status-progress {
+    color: var(--orange);
+}
+
+.problems-status-high {
+    color: var(--red-dark);
+}
+
+.pagination {}
+
+// Filters
+.filter-item {
+    background-color: var(--gray-light);
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 5px;
+    margin-right: 6px;
+}
+
+.filter-item-delete {
+    background-color: var(--gray-dark);
+    color: var(--white);
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dropdown-item {
+    span {
+        color: var(--blue);
+    }
+}
+
+// .dropdown-item-active {
+//     background-color: var();
+//     color: var(--white);
+// }
+
+.problem-solution-search-submit {
+    border: none;
+    background-color: var(--blue-dark);
+    color: var(--white);
+    position: absolute;
+    right: 12px;
+    padding: 0 12px;
+}

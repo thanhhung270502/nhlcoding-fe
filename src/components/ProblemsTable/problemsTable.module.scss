@@ -1,0 +1,121 @@
+.problemsBody {
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: var(--hnl-problems-text-color);
+    font-size: 14px;
+    background-color: var(--hnl-problem-table-bg);
+    border-bottom: 1px solid var(--hnl-problems-search-border);
+    padding: 0.5rem 0;
+}
+
+.problemsCol1 {
+    width: calc(100% / 12);
+}
+
+.problemsCol5 {
+    width: calc(5 * 100% / 12);
+}
+
+.problemsCol3 {
+    width: calc(3 * 100% / 12);
+}
+
+.problemsCol1D5 {
+    width: calc(1.5 * 100% / 12);
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.problemsCategories {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.problemsCategory {
+    background-color: var(--hnl-problem-category-bg);
+    padding: 4px 12px;
+    border-radius: 5px;
+    margin: 0.25rem 0;
+    margin-right: 1rem;
+    font-size: 12px;
+}
+
+.problemsLevel {
+    padding: 4px 16px;
+    border-radius: 5px;
+    font-size: 12px;
+    color: white;
+    width: fit-content;
+}
+
+.problemsLevelEasy {
+    background-color: var(--hnl-problem-level-easy);
+}
+
+.problemsLevelMedium {
+    background-color: var(--hnl-problem-level-medium);
+}
+
+.problemsLevelHard {
+    background-color: var(--hnl-problem-level-hard);
+}
+
+.problemsStatus {
+
+}
+
+.problemsStatusTodo {
+}
+
+.problemsStatusSolved {
+    color: var(--hnl-problem-level-easy);
+}
+
+.problemsStatusAttempted {
+    color: var(--hnl-problem-level-medium);
+}
+
+.page {
+    background-color: white;
+    padding: 6px 12px;
+    font-size: 15px;
+}
+
+.problemsShowAll {
+    background-color: transparent;
+    padding: 4px 0px;
+    border-radius: 5px;
+    margin: 0.25rem 0;
+    margin-right: 1rem;
+    font-size: 12px;
+    border: 0;
+
+    &::after {
+        border: none !important;
+    }
+}
+
+.problemsDropdownItem {
+    background-color: var(--hnl-problem-category-bg);
+    margin: 5px 5px;
+    width: fit-content;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+.problemsDropdownMenuContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-width: 0;
+    width: 225px;
+    margin: 0 5px;
+}
+.problemsDropdownMenu {
+    left: 10px !important;
+    border: 1px solid var(--hnl-problems-search-border);
+}
