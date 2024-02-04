@@ -103,6 +103,17 @@
     --hnl-problem-level-medium: var(--orange-dark);
     --hnl-problem-level-hard: var(--red);
     --hnl-problem-pagination-bg: var(--blue-dark);
+    
+    --hnl-courses-bg: var(--while-light);
+    --hnl-courses-bg1: var(--white);
+    --hnl-courses-bg2: var(--blue-dark-4);
+    --hnl-courses-search-bg: var(--white);
+    --hnl-courses-search-color: var(--blue-dark-4);
+    --hnl-courses-semester-bg: var(--white);
+    --hnl-courses-semester-color: var(--blue-dark-4);
+    --hnl-courses-semester-course-border: var(--white-dark);
+    --hnl-courses-semester-course-name-hover: var(--blue-dark-4);
+    --hnl-courses-semester-course-name: var(--black);
 }
 
 [data-theme='dark'] {

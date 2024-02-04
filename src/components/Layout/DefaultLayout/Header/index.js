@@ -153,6 +153,11 @@ function Header() {
                                 Contribute
                             </Link>
                         </div>
+                        <div className="navbarItem">
+                            <Link className={clsx(styles.navbarLink)} to="/courses">
+                                Courses
+                            </Link>
+                        </div>
                     </div>
                     {currentUser && (
                         <div class={clsx(styles.dropdown)} ref={userMenuRef}>

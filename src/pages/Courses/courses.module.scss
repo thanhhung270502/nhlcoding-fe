@@ -1,0 +1,108 @@
+.coursesPage {
+    height: 100vh;
+    position: relative;
+    z-index: 0;
+    background-color: var(--hnl-courses-bg);
+}
+
+.coursesBackground {
+    position: absolute;
+    height: 450px;
+    width: 100%;
+    background-color: var(--hnl-courses-bg1);
+    background-image: linear-gradient(180deg, var(--hnl-courses-bg1) 0%, var(--hnl-courses-bg2) 74%);
+    z-index: -1;
+}
+
+.coursesBreadcrumb {
+    padding: 1.5rem 0;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.subTitle {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 1rem 0 2rem;
+}
+
+.sortBar {
+    display: flex;
+}
+
+.sortBarSearch {
+    position: relative;
+}
+
+.sortBarSearchIcon {
+    position: absolute;
+    color: var(--hnl-courses-search-color);
+    top: 11px;
+    left: 1.65rem;
+    font-size: 14px;
+}
+
+.sortBarSearchInput {
+    // background-color: var(--hnl-courses-search-bg);
+}
+
+.sortBarFormControl {
+    border: 1.5px solid var(--hnl-problems-search-border);
+    border-radius: 100px;
+    padding: 0.65rem 1.5rem 0.65rem 3.75rem;
+    height: 42px;
+    width: 350px;
+    color: var(--hnl-courses-search-color);
+    background-color: var(--hnl-courses-search-bg);
+    font-size: 15px;
+    
+    &::placeholder {
+        color: var(--hnl-courses-search-color);
+    }
+}
+
+.semester {
+    background-color: var(--hnl-courses-semester-bg);
+    border-radius: 10px;
+    margin-top: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.semesterHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    font-weight: bold;
+    color: var(--hnl-courses-semester-color);
+    cursor: pointer;
+}
+
+.semesterTitle {
+
+}
+
+.semesterDropdown {
+
+}
+
+.semesterBody {
+    padding: 0rem 1.5rem 0.5rem;
+}
+
+.semesterCourse {
+    border-bottom: 2px solid var(--hnl-courses-semester-course-border);
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.semesterCourseName {
+    font-weight: bold; 
+    color: var(--hnl-courses-semester-course-name);
+
+    &:hover {
+        color: var(--hnl-courses-semester-course-name-hover);
+    }
+}
