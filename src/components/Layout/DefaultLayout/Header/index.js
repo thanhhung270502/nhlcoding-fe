@@ -158,6 +158,11 @@ function Header() {
                                 Courses
                             </Link>
                         </div>
+                        <div className="navbarItem">
+                            <Link className={clsx(styles.navbarLink)} to="/courses/1">
+                                Course
+                            </Link>
+                        </div>
                     </div>
                     {currentUser && (
                         <div class={clsx(styles.dropdown)} ref={userMenuRef}>

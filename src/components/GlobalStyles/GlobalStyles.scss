@@ -19,7 +19,7 @@
     --black-blue-light-3: #282a36;
 
     --white: #ffffff;
-    --while-light: #F5F7FA;
+    --white-light: #F5F7FA;
     --white-dark: #E0E0E0;
     --white-dark-2: #B9B9B9;
 
@@ -30,11 +30,13 @@
     --blue-dark-3: #0b1517;
     --blue-dark-2: #032343;
     --blue-dark: #1a4979;
-    --blue-dark-4: #207bf3;
+    --blue-dark-4: #207bf3; 
+    // --blue-dark-4: #5078F2; 
+    
     --blue: #20c0f3;
     --blue-light: #9ae7ff;
     --blue-white: #d1f4ff;
-    --blue-white-light: #e7f9ff;
+    --blue-white-light: #EDF2FF;
 
     --purple: #966fd6;
 
@@ -91,29 +93,74 @@
     --hnl-signup-alter-text: var(--gray-dark);
     --hnl-footer-bg: var(--blue-dark);
 
-    --hnl-problems-bg: var(--while-light);
+    --hnl-problems-bg: var(--white-light);
+    
     --hnl-problems-search-border: var(--white-dark);
     --hnl-problems-search-color: var(--white-dark-2);
+
     --hnl-problems-text-color: var(--dark);
+
     --hnl-problem-table-bg: var(--white);
-    --hnl-problem-table-head-bg: var(--blue-dark);
+    --hnl-problem-table-head-bg: var(--blue-dark-4);
     --hnl-problem-table-head-color: var(--white);
+
     --hnl-problem-category-bg: var(--gray);
+
     --hnl-problem-level-easy: var(--green-dark-2);
     --hnl-problem-level-medium: var(--orange-dark);
     --hnl-problem-level-hard: var(--red);
-    --hnl-problem-pagination-bg: var(--blue-dark);
+
+    --hnl-problem-pagination-bg: var(--blue-dark-4);
     
-    --hnl-courses-bg: var(--while-light);
+    --hnl-courses-bg: var(--white-light);
     --hnl-courses-bg1: var(--white);
     --hnl-courses-bg2: var(--blue-dark-4);
     --hnl-courses-search-bg: var(--white);
     --hnl-courses-search-color: var(--blue-dark-4);
+
     --hnl-courses-semester-bg: var(--white);
     --hnl-courses-semester-color: var(--blue-dark-4);
     --hnl-courses-semester-course-border: var(--white-dark);
     --hnl-courses-semester-course-name-hover: var(--blue-dark-4);
     --hnl-courses-semester-course-name: var(--black);
+
+    --hnl-course-nav-item-bg: var(--white);
+    --hnl-course-nav-item-active-bg: var(--blue-dark-4);
+    --hnl-course-nav-item-color: var(--blue-dark-4);
+    --hnl-course-nav-item-active-color: var(--white);
+    --hnl-course-nav-item-border: var(--blue-dark-4);
+    
+    --hnl-course-topic-header-bg: var(--white-light);
+    --hnl-course-topic-header-color: var(--black);
+    --hnl-course-topic-header-icon-color: var(--blue-dark-4);
+    --hnl-course-topic-header-title-color: var(--black);
+    --hnl-course-topic-header-edit-color: var(--orange);
+
+    --hnl-course-topic-body-title-color: var(--blue-dark-4);
+    --hnl-course-topic-body-title-color-hover: var(--orange);
+    --hnl-course-topic-body-border: var(--white-light);
+    --hnl-course-topic-body-title-color-2: var(--orange);
+    --hnl-course-topic-body-border2: var(--orange);
+
+    --hnl-course-participants-head-bg: var(--blue-dark-4);
+    --hnl-course-participants-head-color: var(--white);
+
+    --hnl-course-participants-body-bg: var(--white);
+    --hnl-course-participants-body-odd-bg: var(--blue-white-light);
+    --hnl-course-participants-body-color: var(--black);
+    --hnl-course-participants-body-border: var(--blue-dark-4);
+
+    --hnl-course-participants-body-button-border: var(--red);
+    --hnl-course-participants-body-button-color: var(--red);
+    --hnl-course-participants-body-button-hover-bg: var(--red);
+    --hnl-course-participants-body-button-hover-color: var(--white);
+    
+    --hnl-course-participants-body-page-bg: var(--blue-dark-4);
+    --hnl-course-participants-body-page-color: var(--white);
+
+    --hnl-course-participants-body-dropdown-bg: var(--blue-white-light);
+    --hnl-course-participants-body-dropdown-border: var(--blue-dark-4);
+    --hnl-course-participants-body-dropdown-item-hover: var(--white);
 }
 
 [data-theme='dark'] {

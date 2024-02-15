@@ -1,0 +1,98 @@
+.coursePage {
+    // height: 100vh;
+    position: relative;
+    z-index: 0;
+    height: 100vh;
+    background-color: var(--hnl-courses-bg);
+}
+
+.courseBackground {
+    position: absolute;
+    height: 550px;
+    width: 100%;
+    background-color: var(--hnl-courses-bg1);
+    background-image: linear-gradient(180deg, var(--hnl-courses-bg1) 0%, var(--hnl-courses-bg2) 74%);
+    z-index: -1;
+}
+
+.courseBreadcrumb {
+    padding: 1.5rem 0;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: bold;
+    padding-bottom: 1rem;
+}
+
+.courseNavigation {
+    padding: 1rem 0;
+}
+
+.courseNavItem {
+    padding: 10px 32px;
+    border: 2px solid var(--hnl-course-nav-item-border);
+    border-radius: 100px;
+    margin-right: 1rem;
+    background-color: var(--hnl-course-nav-item-bg);
+    color: var(--hnl-course-nav-item-color);
+    font-weight: bold;
+
+    &:hover {
+        background-color: var(--hnl-course-nav-item-active-bg);
+        color: var(--hnl-course-nav-item-active-color);
+    }
+}
+
+.courseNavItemActive {
+    background-color: var(--hnl-course-nav-item-active-bg);
+    color: var(--hnl-course-nav-item-active-color);
+}
+
+.semester {
+    background-color: var(--hnl-courses-semester-bg);
+    border-radius: 10px;
+    margin-top: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.semesterHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    font-weight: bold;
+    color: var(--hnl-course-topic-header-color);
+    background-color: var(--hnl-course-topic-header-bg);
+    border-radius: 10px;
+    // border-top-left-radius: 10px;
+    // border-top-right-radius: 10px;
+    cursor: pointer;
+}
+
+.semesterTitle {
+    span {
+        padding-right: 1rem;
+        color: var(--hnl-course-topic-header-icon-color);
+    }
+}
+
+.semesterDropdown {}
+
+.semesterBody {
+    padding: 0rem 1.5rem 0.5rem;
+}
+
+.semesterCourse {
+    border-bottom: 2px solid var(--hnl-courses-semester-course-border);
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.semesterCourseName {
+    font-weight: bold;
+    color: var(--hnl-courses-semester-course-name);
+
+    &:hover {
+        color: var(--hnl-courses-semester-course-name-hover);
+    }
+}

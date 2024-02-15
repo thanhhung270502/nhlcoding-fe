@@ -1,0 +1,175 @@
+.course {
+    background-color: var(--hnl-courses-semester-bg);
+    border-radius: 10px;
+    margin-top: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.courseHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    font-weight: bold;
+    color: var(--hnl-course-topic-header-color);
+    background-color: var(--hnl-course-topic-header-bg);
+    border-radius: 10px;
+    // border-top-left-radius: 10px;
+    // border-top-right-radius: 10px;
+    cursor: pointer;
+}
+
+.courseTitle {
+    color: var(--hnl-course-topic-header-icon-color);
+    
+    a {
+        color: var(--hnl-course-topic-header-edit-color);
+    }
+
+    span {
+        color: var(--hnl-course-topic-header-title-color);
+        padding: 0 1rem;
+    }
+}
+
+.courseDropdown {}
+
+.courseBody {
+    padding: 0rem 1.5rem 0.5rem;
+}
+
+.courseCourse {
+    border-bottom: 2px solid var(--hnl-courses-semester-course-border);
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.courseCourseName {
+    font-weight: bold;
+    color: var(--hnl-courses-semester-course-name);
+
+    &:hover {
+        color: var(--hnl-courses-semester-course-name-hover);
+    }
+}
+
+.courseExercise {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--hnl-course-topic-body-border);
+}
+
+.courseExerciseIcon {
+    font-size: 48px;
+    padding-right: 1.25rem;
+    color: var(--hnl-course-topic-body-title-color);
+}
+
+.courseExerciseContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.courseExerciseSubTitle {
+
+}
+
+.courseExerciseTitle {
+    color: var(--hnl-course-topic-body-title-color);
+    font-weight: bold;
+
+    &:hover {
+        color: var(--hnl-course-topic-body-title-color-hover);
+    }
+}
+
+.courseAddExercise {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    border: 1px solid var(--hnl-course-topic-body-border2);
+    border-radius: 10px;
+}
+
+.courseAddExerciseIcon {
+    font-size: 42px;
+    color: var(--hnl-course-topic-body-title-color-2);
+    padding-right: 1.25rem;
+}   
+
+.courseAddExerciseTitle {
+    color: var(--hnl-course-topic-body-title-color-2);
+    font-weight: bold;
+    
+    &:hover {
+        color: var(--hnl-course-topic-body-title-color-2);
+        text-decoration: underline;
+    }
+}
+
+// Participants
+.participants {
+    padding-top: 2rem;
+}
+
+.sortBarSearch {
+    position: relative;
+}
+
+.sortBarSearchIcon {
+    position: absolute;
+    color: var(--hnl-courses-search-color);
+    top: 11px;
+    left: 1.65rem;
+    font-size: 14px;
+}
+
+.sortBarSearchInput {
+    // background-color: var(--hnl-courses-search-bg);
+}
+
+.sortBarFormControl {
+    border: 1.5px solid var(--hnl-problems-search-border);
+    border-radius: 100px;
+    padding: 0.65rem 1.5rem 0.65rem 3.75rem;
+    height: 42px;
+    width: 350px;
+    color: var(--hnl-courses-search-color);
+    background-color: var(--hnl-courses-search-bg);
+    font-size: 15px;
+
+    &::placeholder {
+        color: var(--hnl-courses-search-color);
+    }
+}
+
+.participantsTable {
+    margin-top: 2rem;
+}
+
+.participantsHead {
+    background-color: var(--hnl-course-participants-head-bg);
+    color: var(--hnl-course-participants-head-color);
+    font-weight: bold;
+    display: flex;
+    padding: 12px 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.participantsCol1 {
+    width: calc(100% / 12);
+}
+
+.participantsCol3 {
+    width: calc(3 * 100% / 12);
+}
+
+.participantsCol5 {
+    width: calc(5 * 100% / 12);
+}
+
+.textCenter {
+    text-align: center;
+}

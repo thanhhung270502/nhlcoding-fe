@@ -1,0 +1,80 @@
+.participantsBody {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom: 4px solid var(--hnl-course-participants-body-border);
+    background-color: var(--hnl-course-participants-body-bg);
+}
+
+.participantsRow {
+    background-color: var(--hnl-course-participants-body-bg);
+    color: var(--hnl-course-participants-body-color);
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.participantsOdd {
+    background-color: var(--hnl-course-participants-body-odd-bg);
+}
+
+.participantsCol1 {
+    width: calc(100% / 12);
+}
+
+.participantsCol3 {
+    width: calc(3 * 100% / 12);
+}
+
+.participantsCol5 {
+    width: calc(5 * 100% / 12);
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.button {
+    background-color: transparent;
+    color: var(--hnl-course-participants-body-button-color);
+    border: 2px solid var(--hnl-course-participants-body-button-border);
+    border-radius: 10px;
+    padding: 6px 12px;
+
+    &:hover {
+        background-color: var(--hnl-course-participants-body-button-hover-bg);
+        color: var(--hnl-course-participants-body-button-hover-color);
+    }
+}
+
+.buttonRemove {
+
+}
+
+.footer {
+    border-top: 3px solid var(--hnl-course-participants-body-odd-bg);
+    padding: 16px 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page {
+    background-color: var(--hnl-course-participants-body-page-bg);
+    color: var(--hnl-course-participants-body-page-color);
+    width: fit-content;
+    padding: 6px 24px;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.participantDropdown {
+    border: 2px solid var(--hnl-course-participants-body-dropdown-border);
+    background-color: var(--hnl-course-participants-body-dropdown-bg);
+}
+
+.participantDropdownItem {
+    &:hover {
+        background-color: var(--hnl-course-participants-body-dropdown-item-hover);
+    }
+}
