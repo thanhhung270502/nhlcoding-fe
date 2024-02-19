@@ -7,8 +7,7 @@ import { SignupModalTrigger } from './SignupModal';
 import { ResetPasswordModalTrigger } from './ResetPasswordModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { ImageChangeOnHover } from '~/components/ImageChangeOnHover';
-import { getUserByID, getUserGoogle, login, logout, logoutGoogle, signup } from '~/api/api';
+import { login } from '~/api/api';
 import clsx from 'clsx';
 import styles from '../../Contribute/contribute.module.scss';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
@@ -73,7 +72,6 @@ const LoginModal = () => {
         if (res.code === 401) {
             setErrorLogin('Incorrect password or User is not existed');
         } else {
-            console.log(res.body);
             var session = {
                 accessToken: res.body.accessToken,
                 user: res.body.user,

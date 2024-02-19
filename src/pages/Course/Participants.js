@@ -44,7 +44,7 @@ const MainChild = () => {
             </div>
             <div className={clsx(styles.participantsTable)}>
                 <div className={clsx(styles.participantsHead)}>
-                    <div className={clsx(styles.participantsCol1, styles.textCenter)}>ID</div>
+                    <div className={clsx(styles.participantsCol1, 'textCenter')}>ID</div>
                     <div className={clsx(styles.participantsCol5)}>Full Name</div>
                     <div className={clsx(styles.participantsCol1)}>Roles</div>
                     <div className={clsx(styles.participantsCol1)}>Group</div>

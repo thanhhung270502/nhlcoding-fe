@@ -161,6 +161,12 @@
     --hnl-course-participants-body-dropdown-bg: var(--blue-white-light);
     --hnl-course-participants-body-dropdown-border: var(--blue-dark-4);
     --hnl-course-participants-body-dropdown-item-hover: var(--white);
+
+    --hnl-course-grades-sortBar-button-bg: var(--white);
+    --hnl-course-grades-sortBar-button-border: var(--blue-dark-4);
+    --hnl-course-grades-sortBar-button-color: var(--blue-dark-4);
+
+    --hnl-course-grades-body-title-color: var(--blue-dark-4);
 }
 
 [data-theme='dark'] {
@@ -375,4 +381,20 @@ html {
     opacity: 0;
     filter: blur(5px);
     transform: translateX(+100%);
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.textEnd {
+    text-align: end;
+}
+
+.textStart {
+    text-align: start;
+}
+
+.textBold {
+    font-weight: bold;
 }
