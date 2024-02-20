@@ -6,12 +6,15 @@ import styles from './courses.module.scss';
 import BreadCrumb from '~/components/Breadcrumb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getAllCoursesByMe } from '~/api/courses';
 
 function Courses() {
     const [textOfSearch, setTextOfSearch] = useState('');
-    const [opens, setOpens] = useState([false, false, false]);
+    const [opens, setOpens] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [keysOfCourses, setKeysOfCourses] = useState([]);
 
     const handleChangeSearchInput = (event) => {
         setTextOfSearch(event.target.value);
@@ -24,6 +27,17 @@ function Courses() {
         updateOpens[index] = !updateOpens[index];
         setOpens(updateOpens);
     };
+
+    useEffect(() => {
+        (async () => {
+            const getAllcourses = await getAllCoursesByMe();
+            setCourses(getAllcourses.body.courses);
+            setKeysOfCourses(Object.keys(getAllcourses.body.courses));
+            let length = Object.keys(getAllcourses.body.courses).length;
+            console.log(length);
+            setOpens(new Array(length).fill(false));
+        })();
+    }, []);
 
     return (
         <div className={clsx(styles.coursesPage)}>
@@ -51,53 +65,32 @@ function Courses() {
                         </div>
                     </div>
                 </div>
-
-                <div className={clsx(styles.semester)}>
-                    <div className={clsx(styles.semesterHeader)} onClick={() => handleOpenSemester(0)}>
-                        <div className={clsx(styles.semesterTitle)}>SEMESTER 1 YEAR 2023 - 2024</div>
-                        <div className={clsx(styles.semesterDropdown)}>
-                            {opens[0] && <FontAwesomeIcon icon={faAngleUp} />}
-                            {!opens[0] && <FontAwesomeIcon icon={faAngleDown} />}
-                        </div>
-                    </div>
-                    {opens[0] && (
-                        <div className={clsx(styles.semesterBody)}>
-                            <div className={clsx(styles.semesterCourse)}>
-                                <Link className={clsx(styles.semesterCourseName)} to="../">
-                                    CAPSTONE PROJECT _ TRAN NGOC BAO DUY
-                                </Link>
+                {keysOfCourses.map((key, index) => {
+                    return (
+                        <div className={clsx(styles.semester)}>
+                            <div className={clsx(styles.semesterHeader)} onClick={() => handleOpenSemester(index)}>
+                                <div className={clsx(styles.semesterTitle)}>SEMESTER {key} YEAR 2023 - 2024</div>
+                                <div className={clsx(styles.semesterDropdown)}>
+                                    {opens[index] && <FontAwesomeIcon icon={faAngleUp} />}
+                                    {!opens[index] && <FontAwesomeIcon icon={faAngleDown} />}
+                                </div>
                             </div>
-                            <div className={clsx(styles.semesterCourse)}>
-                                <Link className={clsx(styles.semesterCourseName)} to="../">
-                                    CAPSTONE PROJECT _ TRAN NGOC BAO DUY
-                                </Link>
-                            </div>
+                            {opens[index] && (
+                                <div className={clsx(styles.semesterBody)}>
+                                    {courses[key].map((course, idx) => {
+                                        return (
+                                            <div className={clsx(styles.semesterCourse)}>
+                                                <Link className={clsx(styles.semesterCourseName)} to="../">
+                                                    {course.subject_name} _ {course.teacher_name}
+                                                </Link>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
-                <div className={clsx(styles.semester)}>
-                    <div className={clsx(styles.semesterHeader)} onClick={() => handleOpenSemester(1)}>
-                        <div className={clsx(styles.semesterTitle)}>SEMESTER 1 YEAR 2023 - 2024</div>
-                        <div className={clsx(styles.semesterDropdown)}>
-                            {opens[1] && <FontAwesomeIcon icon={faAngleUp} />}
-                            {!opens[1] && <FontAwesomeIcon icon={faAngleDown} />}
-                        </div>
-                    </div>
-                    {opens[1] && (
-                        <div className={clsx(styles.semesterBody)}>
-                            <div className={clsx(styles.semesterCourse)}>
-                                <Link className={clsx(styles.semesterCourseName)} to="../">
-                                    CAPSTONE PROJECT _ TRAN NGOC BAO DUY
-                                </Link>
-                            </div>
-                            <div className={clsx(styles.semesterCourse)}>
-                                <Link className={clsx(styles.semesterCourseName)} to="../">
-                                    CAPSTONE PROJECT _ TRAN NGOC BAO DUY
-                                </Link>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                    );
+                })}
             </div>
         </div>
     );

@@ -1,6 +1,5 @@
 function getCurrentTimeFormatted() {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     const date = new Date();
     const hour = date.getHours().toString().padStart(2, '0');
@@ -13,4 +12,11 @@ function getCurrentTimeFormatted() {
     return formattedTime;
 }
 
-export { getCurrentTimeFormatted };
+const getAccessToken = () => {
+    let session = JSON.parse(localStorage.getItem('session'));
+    return {
+        'access-token': session['accessToken'],
+    };
+};
+
+export { getCurrentTimeFormatted, getAccessToken };

@@ -101,6 +101,7 @@
 .semesterCourseName {
     font-weight: bold; 
     color: var(--hnl-courses-semester-course-name);
+    text-transform: uppercase;
 
     &:hover {
         color: var(--hnl-courses-semester-course-name-hover);
