@@ -1,7 +1,8 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 const CourseRedirect = () => {
-    return <Navigate to="/courses/2/course" replace />;
+    const { id } = useParams();
+    return <Navigate to={`/courses/${id}/course`} replace />;
 };
 
 export default CourseRedirect;

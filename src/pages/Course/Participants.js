@@ -5,12 +5,15 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import ParticipantsTable from '~/components/ParticipantsTable';
 import data from './participants.json';
+import { getParticipantsInClass } from '~/api/courses';
+import { useParams } from 'react-router-dom';
 
 const { default: CourseComponent } = require('~/components/Course');
 
 const MainChild = () => {
     const [textOfSearch, setTextOfSearch] = useState('');
     const [participants, setParticipants] = useState([]);
+    const { id } = useParams();
 
     const handleChangeSearchInput = (event) => {
         setTextOfSearch(event.target.value);
@@ -19,8 +22,15 @@ const MainChild = () => {
     const handleSubmitSearch = () => {};
 
     useEffect(() => {
-        setParticipants(data);
-    }, []);
+        (async () => {
+            const getParticipants = await getParticipantsInClass(id);
+            if (getParticipants.code === 200) {
+                console.log(getParticipants.body.participants);
+                setParticipants(getParticipants.body.participants);
+            }
+        })();
+        // setParticipants(data);
+    }, [id]);
 
     return (
         <div className={clsx(styles.participants)}>

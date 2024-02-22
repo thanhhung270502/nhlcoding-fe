@@ -61,11 +61,13 @@ const ParticipantsTable = ({ participants, page }) => {
                 if (index % 2 === 0) {
                     return (
                         <div className={clsx(styles.participantsRow, styles.participantsEven)}>
-                            <div className={clsx(styles.participantsCol1, styles.textCenter)}>{participant.ID}</div>
-                            <div className={clsx(styles.participantsCol5)}>{participant.fullName}</div>
+                            <div className={clsx(styles.participantsCol1, styles.textCenter)}>
+                                {participant.student_code}
+                            </div>
+                            <div className={clsx(styles.participantsCol5)}>{participant.name}</div>
                             <div className={clsx(styles.participantsCol1)}>{participant.role}</div>
-                            <div className={clsx(styles.participantsCol1)}>{participant.group}</div>
-                            <div className={clsx(styles.participantsCol3)}>{lastAccess(participant.timeToAccess)}</div>
+                            <div className={clsx(styles.participantsCol1)}>No group</div>
+                            <div className={clsx(styles.participantsCol3)}>{lastAccess('2024-2-20')}</div>
                             <div className={clsx(styles.participantsCol1)}>
                                 <button className={clsx(styles.button, styles.buttonRemove)}>
                                     <FontAwesomeIcon icon={faTrash} />
@@ -76,11 +78,13 @@ const ParticipantsTable = ({ participants, page }) => {
                 } else {
                     return (
                         <div className={clsx(styles.participantsRow, styles.participantsOdd)}>
-                            <div className={clsx(styles.participantsCol1, styles.textCenter)}>{participant.ID}</div>
-                            <div className={clsx(styles.participantsCol5)}>{participant.fullName}</div>
+                            <div className={clsx(styles.participantsCol1, styles.textCenter)}>
+                                {participant.student_code}
+                            </div>
+                            <div className={clsx(styles.participantsCol5)}>{participant.name}</div>
                             <div className={clsx(styles.participantsCol1)}>{participant.role}</div>
-                            <div className={clsx(styles.participantsCol1)}>{participant.group}</div>
-                            <div className={clsx(styles.participantsCol3)}>{lastAccess(participant.timeToAccess)}</div>
+                            <div className={clsx(styles.participantsCol1)}>No group</div>
+                            <div className={clsx(styles.participantsCol3)}>{lastAccess('2024-2-20')}</div>
                             <div className={clsx(styles.participantsCol1)}>
                                 <button className={clsx(styles.button, styles.buttonRemove)}>
                                     <FontAwesomeIcon icon={faTrash} />

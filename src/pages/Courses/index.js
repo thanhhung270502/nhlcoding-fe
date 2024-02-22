@@ -80,7 +80,10 @@ function Courses() {
                                     {courses[key].map((course, idx) => {
                                         return (
                                             <div className={clsx(styles.semesterCourse)}>
-                                                <Link className={clsx(styles.semesterCourseName)} to="../">
+                                                <Link
+                                                    className={clsx(styles.semesterCourseName)}
+                                                    to={`./${course.class_id}`}
+                                                >
                                                     {course.subject_name} _ {course.teacher_name}
                                                 </Link>
                                             </div>

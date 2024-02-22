@@ -13,10 +13,25 @@ function getCurrentTimeFormatted() {
 }
 
 const getAccessToken = () => {
-    let session = JSON.parse(localStorage.getItem('session'));
-    return {
-        'access-token': session['accessToken'],
-    };
+    let session = localStorage.getItem('session');
+    if (session) {
+        session = JSON.parse(session);
+        return {
+            'access-token': session['accessToken'],
+        };
+    } else
+        return {
+            'access-token': null,
+        };
 };
 
-export { getCurrentTimeFormatted, getAccessToken };
+const isTeacher = () => {
+    let session = localStorage.getItem('session');
+    if (session) {
+        session = JSON.parse(session);
+        if (session['user']['role'] === 'teacher') return true;
+    }
+    return false;
+};
+
+export { getCurrentTimeFormatted, getAccessToken, isTeacher };

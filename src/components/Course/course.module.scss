@@ -1,9 +1,9 @@
 .coursePage {
-    // height: 100vh;
+    min-height: 100vh;
     position: relative;
     z-index: 0;
-    height: 100vh;
     background-color: var(--hnl-courses-bg);
+    padding-bottom: 3rem;
 }
 
 .courseBackground {
