@@ -1,116 +1,212 @@
 .course {
-    background-color: var(--hnl-courses-semester-bg);
-    border-radius: 10px;
-    margin-top: 2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
+    .courseAddTopic {
+        background-color: var(--hnl-course-add-topic-bg);
+        color: var(--hnl-course-add-topic-color);
+        border-radius: 10px;
+        padding: 0.25rem 2rem;
+        display: flex;
+        align-items: center;
+        margin-top: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 
-.courseHeader {
-    display: flex;
-    justify-content: space-between;
-    padding: 1.5rem;
-    font-weight: bold;
-    color: var(--hnl-course-topic-header-color);
-    background-color: var(--hnl-course-topic-header-bg);
-    border-radius: 10px;
-    // border-top-left-radius: 10px;
-    // border-top-right-radius: 10px;
-    cursor: pointer;
-}
+        &:hover {
+            color: var(--hnl-course-add-topic-color-hover);
+        }
+    }
 
-.courseTitle {
-    color: var(--hnl-course-topic-header-icon-color);
+    .courseAddTopicIcon {
+        font-size: 42px;
+        padding-right: 1.25rem;
+    }
+
+    .courseAddTopicTitle {
+        font-weight: bold;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .sortBar{
+        display: flex;
+        align-items: center;
+        margin-top: 2rem;
+    }
+
+    .sortBarOptions{
+        display: flex;
+        align-items: center;
+        background-color: var(--hnl-course-sortBar-options-bg);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+    }
+
+    .sortBarOptionsItem{
+        background-color: transparent;
+        color: var(--hnl-course-sortBar-options-item-color);
+        padding: 0.25rem 1rem;
+        border-radius: 50px;
+        margin: 0 0.25rem;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--hnl-course-sortBar-options-item-bg);
+            color: var(--hnl-course-sortBar-options-item-color-active);
+        }
+    }
+
+    .sortBarOptionsItemActive {
+        background-color: var(--hnl-course-sortBar-options-item-bg);
+        color: var(--hnl-course-sortBar-options-item-color-active);
+    } 
+
+    .sortBarOptionsItemIcon {
+        padding-right: 1rem;
+    }
+
+    // .courseContainer {}
+
+    .courseElement {
+        background-color: var(--hnl-courses-semester-bg);
+        border-radius: 10px;
+        margin-top: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
     
-    a {
-        color: var(--hnl-course-topic-header-edit-color);
+    .courseHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem;
+        font-weight: bold;
+        color: var(--hnl-course-topic-header-color);
+        background-color: var(--hnl-course-topic-header-bg);
+        border-radius: 10px;
+        // border-top-left-radius: 10px;
+        // border-top-right-radius: 10px;
+        cursor: pointer;
     }
-
-    span {
-        color: var(--hnl-course-topic-header-title-color);
-        padding: 0 1rem;
-    }
-
-    .courseClass {
-        padding: 0;
-    }
-}
-
-.courseDropdown {}
-
-.courseBody {
-    padding: 0rem 1.5rem 0.5rem;
-}
-
-.courseCourse {
-    border-bottom: 2px solid var(--hnl-courses-semester-course-border);
-    padding: 1rem 0;
-    margin-bottom: 1rem;
-}
-
-.courseCourseName {
-    font-weight: bold;
-    color: var(--hnl-courses-semester-course-name);
-
-    &:hover {
-        color: var(--hnl-courses-semester-course-name-hover);
-    }
-}
-
-.courseExercise {
-    display: flex;
-    align-items: center;
-    border-bottom: 2px solid var(--hnl-course-topic-body-border);
-}
-
-.courseExerciseIcon {
-    font-size: 48px;
-    padding-right: 1.25rem;
-    color: var(--hnl-course-topic-body-title-color);
-}
-
-.courseExerciseContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.courseExerciseSubTitle {
-
-}
-
-.courseExerciseTitle {
-    color: var(--hnl-course-topic-body-title-color);
-    font-weight: bold;
-
-    &:hover {
-        color: var(--hnl-course-topic-body-title-color-hover);
-    }
-}
-
-.courseAddExercise {
-    margin-top: 0.5rem;
-    display: flex;
-    align-items: center;
-    padding: 0 18px;
-    border: 1px solid var(--hnl-course-topic-body-border2);
-    border-radius: 10px;
-}
-
-.courseAddExerciseIcon {
-    font-size: 42px;
-    color: var(--hnl-course-topic-body-title-color-2);
-    padding-right: 1.25rem;
-}   
-
-.courseAddExerciseTitle {
-    color: var(--hnl-course-topic-body-title-color-2);
-    font-weight: bold;
     
-    &:hover {
+    .courseTitle {
+        display: flex;
+        align-items: center;
+        color: var(--hnl-course-topic-header-icon-color);
+        flex-grow: 1;
+        
+        .courseIconEdit {
+            color: var(--hnl-course-topic-header-edit-color);
+        }
+    
+        span {
+            color: var(--hnl-course-topic-header-title-color);
+            padding: 0 1rem;
+        }
+    
+        .courseClass {
+            padding: 0;
+        }
+    }
+    
+    .courseDropdown {}
+    
+    .courseBody {
+        padding: 0rem 1.5rem 0.5rem;
+    }
+    
+    .courseCourse {
+        border-bottom: 2px solid var(--hnl-courses-semester-course-border);
+        padding: 1rem 0;
+        margin-bottom: 1rem;
+    }
+    
+    .courseCourseName {
+        font-weight: bold;
+        color: var(--hnl-courses-semester-course-name);
+    
+        &:hover {
+            color: var(--hnl-courses-semester-course-name-hover);
+        }
+    }
+    
+    .courseExercise {
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid var(--hnl-course-topic-body-border);
+    }
+    
+    .courseExerciseIcon {
+        font-size: 48px;
+        padding-right: 1.25rem;
+        color: var(--hnl-course-topic-body-title-color);
+    }
+    
+    .courseExerciseContent {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .courseExerciseSubTitle {
+    
+    }
+    
+    .courseExerciseTitle {
+        color: var(--hnl-course-topic-body-title-color);
+        font-weight: bold;
+    
+        &:hover {
+            color: var(--hnl-course-topic-body-title-color-hover);
+        }
+    }
+    
+    .courseAddExercise {
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        padding: 0 18px;
+        border: 1px solid var(--hnl-course-topic-body-border2);
+        border-radius: 10px;
+    }
+    
+    .courseAddExerciseIcon {
+        font-size: 42px;
         color: var(--hnl-course-topic-body-title-color-2);
-        text-decoration: underline;
+        padding-right: 1.25rem;
+    }   
+    
+    .courseAddExerciseTitle {
+        color: var(--hnl-course-topic-body-title-color-2);
+        font-weight: bold;
+        
+        &:hover {
+            color: var(--hnl-course-topic-body-title-color-2);
+            text-decoration: underline;
+        }
+    }
+
+    .inputEditTopicNameGroup {
+        margin-left: 1rem;
+        margin-right: 1rem;
+
+        .formControl {
+            // border: none;
+            background-color: var(--hnl-course-topic-header-bg);
+
+            &:focus {
+                box-shadow: none;
+                border-color: var(--bs-border-color);
+            }
+            
+        }
+        .buttonSecondary {
+            border-color: var(--bs-border-color) !important;
+        }
     }
 }
+
 
 // Participants
 .participants {

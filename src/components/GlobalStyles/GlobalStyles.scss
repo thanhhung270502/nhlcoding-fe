@@ -119,16 +119,22 @@
     --hnl-courses-search-color: var(--blue-dark-4);
 
     --hnl-courses-semester-bg: var(--white);
-    --hnl-courses-semester-color: var(--blue-dark-4);
+    --hnl-courses-semester-color: var(--orange);
+    --hnl-courses-semester-header-bg: var(--white-light);
     --hnl-courses-semester-course-border: var(--white-dark);
     --hnl-courses-semester-course-name-hover: var(--blue-dark-4);
-    --hnl-courses-semester-course-name: var(--black);
+    --hnl-courses-semester-course-name: var(--blue-dark-4);
+    --hnl-courses-semester-course-class-name: var(--black);
 
     --hnl-course-nav-item-bg: var(--white);
     --hnl-course-nav-item-active-bg: var(--blue-dark-4);
     --hnl-course-nav-item-color: var(--blue-dark-4);
     --hnl-course-nav-item-active-color: var(--white);
     --hnl-course-nav-item-border: var(--blue-dark-4);
+
+    --hnl-course-add-topic-bg: var(--white);
+    --hnl-course-add-topic-color: var(--gray-dark);
+    --hnl-course-add-topic-color-hover: var(--black);
     
     --hnl-course-topic-header-bg: var(--white-light);
     --hnl-course-topic-header-color: var(--black);
@@ -167,6 +173,11 @@
     --hnl-course-grades-sortBar-button-color: var(--blue-dark-4);
 
     --hnl-course-grades-body-title-color: var(--blue-dark-4);
+
+    --hnl-course-sortBar-options-bg: var(--blue-white-light);
+    --hnl-course-sortBar-options-item-bg: var(--white);
+    --hnl-course-sortBar-options-item-color: var(--black);
+    --hnl-course-sortBar-options-item-color-active: var(--blue-dark-4);
 }
 
 [data-theme='dark'] {

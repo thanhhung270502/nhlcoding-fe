@@ -1,3 +1,5 @@
+import { getRole } from '~/api/auth';
+
 function getCurrentTimeFormatted() {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -25,13 +27,19 @@ const getAccessToken = () => {
         };
 };
 
-const isTeacher = () => {
-    let session = localStorage.getItem('session');
-    if (session) {
-        session = JSON.parse(session);
-        if (session['user']['role'] === 'teacher') return true;
-    }
-    return false;
+// const isTeacher = () => {
+//     let session = localStorage.getItem('session');
+//     if (session) {
+//         session = JSON.parse(session);
+//         if (session['user']['role'] === 'teacher') return true;
+//     }
+//     return false;
+// };
+
+const checkRole = async () => {
+    const response = await getRole();
+    return response.body.role;
+    // if (response.body.role === 'teacher') return true;
 };
 
-export { getCurrentTimeFormatted, getAccessToken, isTeacher };
+export { getCurrentTimeFormatted, getAccessToken, checkRole };

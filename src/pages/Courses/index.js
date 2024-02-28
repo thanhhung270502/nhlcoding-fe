@@ -9,12 +9,15 @@ import { faAngleDown, faAngleUp, faMagnifyingGlass } from '@fortawesome/free-sol
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllCoursesByMe } from '~/api/courses';
+import { getRole } from '~/api/auth';
 
 function Courses() {
+    const [role, setRole] = useState('student');
     const [textOfSearch, setTextOfSearch] = useState('');
-    const [opens, setOpens] = useState([]);
-    const [courses, setCourses] = useState([]);
-    const [keysOfCourses, setKeysOfCourses] = useState([]);
+    const [semesters, setSemesters] = useState([]);
+    const [openSemesters, setOpenSemesters] = useState([]);
+
+    const [openClasses, setOpenClasses] = useState([]);
 
     const handleChangeSearchInput = (event) => {
         setTextOfSearch(event.target.value);
@@ -23,19 +26,31 @@ function Courses() {
     const handleSubmitSearch = () => {};
 
     const handleOpenSemester = (index) => {
-        const updateOpens = [...opens];
+        const updateOpens = [...openSemesters];
         updateOpens[index] = !updateOpens[index];
-        setOpens(updateOpens);
+        setOpenSemesters(updateOpens);
+    };
+
+    const handleOpenClasses = (index) => {
+        const updateOpens = [...openClasses];
+        updateOpens[index] = !updateOpens[index];
+        setOpenClasses(updateOpens);
     };
 
     useEffect(() => {
         (async () => {
+            const fetchRole = await getRole();
+            setRole(fetchRole.body.role);
+        })();
+    }, []);
+
+    useEffect(() => {
+        (async () => {
             const getAllcourses = await getAllCoursesByMe();
-            setCourses(getAllcourses.body.courses);
-            setKeysOfCourses(Object.keys(getAllcourses.body.courses));
-            let length = Object.keys(getAllcourses.body.courses).length;
-            console.log(length);
-            setOpens(new Array(length).fill(false));
+            setSemesters(getAllcourses.body.courses);
+
+            setOpenSemesters(new Array(100).fill(true));
+            setOpenClasses(new Array(100).fill(true));
         })();
     }, []);
 
@@ -48,44 +63,99 @@ function Courses() {
                 </div>
                 <div className={clsx(styles.title)}>MY COURSES</div>
                 <div className={clsx(styles.subTitle)}>Courses overview</div>
-                <div className={clsx(styles.sortBar)}>
-                    <div className={clsx(styles.sortBarSearch)}>
-                        <div className={clsx(styles.sortBarSearchIcon)}>
-                            <FontAwesomeIcon icon={faMagnifyingGlass} />
-                        </div>
-                        <div className={clsx(styles.sortBarSearchInput)}>
-                            <input
-                                type="text"
-                                value={textOfSearch}
-                                placeholder="Search by course name..."
-                                className={clsx('form-control', styles.sortBarFormControl)}
-                                onChange={handleChangeSearchInput}
-                                onKeyUp={handleSubmitSearch}
-                            />
-                        </div>
-                    </div>
-                </div>
-                {keysOfCourses.map((key, index) => {
-                    return (
-                        <div className={clsx(styles.semester)}>
-                            <div className={clsx(styles.semesterHeader)} onClick={() => handleOpenSemester(index)}>
-                                <div className={clsx(styles.semesterTitle)}>SEMESTER {key} YEAR 2023 - 2024</div>
-                                <div className={clsx(styles.semesterDropdown)}>
-                                    {opens[index] && <FontAwesomeIcon icon={faAngleUp} />}
-                                    {!opens[index] && <FontAwesomeIcon icon={faAngleDown} />}
+                <div className={clsx('d-flex', 'align-items-end', 'justify-content-between')}>
+                    <div>
+                        <div className={clsx(styles.sortBar)}>
+                            <div className={clsx(styles.sortBarSearch)}>
+                                <div className={clsx(styles.sortBarSearchIcon)}>
+                                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                </div>
+                                <div className={clsx(styles.sortBarSearchInput)}>
+                                    <input
+                                        type="text"
+                                        value={textOfSearch}
+                                        placeholder="Search by course name..."
+                                        className={clsx('form-control', styles.sortBarFormControl)}
+                                        onChange={handleChangeSearchInput}
+                                        onKeyUp={handleSubmitSearch}
+                                    />
                                 </div>
                             </div>
-                            {opens[index] && (
+                        </div>
+                    </div>
+                    <div></div>
+                </div>
+                {semesters.map((semester, indexSemester) => {
+                    return (
+                        <div className={clsx(styles.semester)}>
+                            <div
+                                className={clsx(styles.semesterHeader)}
+                                onClick={() => handleOpenSemester(indexSemester)}
+                            >
+                                <div className={clsx(styles.semesterTitle)}>
+                                    SEMESTER {semester['semester_name']} YEAR 2023 - 2024
+                                </div>
+                                <div className={clsx(styles.semesterDropdown)}>
+                                    {openSemesters[indexSemester] && <FontAwesomeIcon icon={faAngleUp} />}
+                                    {!openSemesters[indexSemester] && <FontAwesomeIcon icon={faAngleDown} />}
+                                </div>
+                            </div>
+                            {role === 'student' && openSemesters[indexSemester] && (
                                 <div className={clsx(styles.semesterBody)}>
-                                    {courses[key].map((course, idx) => {
+                                    {semester['subjects'].map((subject, indexSubject) => {
                                         return (
                                             <div className={clsx(styles.semesterCourse)}>
                                                 <Link
                                                     className={clsx(styles.semesterCourseName)}
-                                                    to={`./${course.class_id}`}
+                                                    to={`./${subject.classes[0].class_id}`}
                                                 >
-                                                    {course.subject_name} _ {course.teacher_name}
+                                                    {subject.subject_name} _ {subject.classes[0].class_name} _{' '}
+                                                    {subject.teacher_name}
                                                 </Link>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                            {role === 'teacher' && openSemesters[indexSemester] && (
+                                <div className={clsx(styles.semesterBody)}>
+                                    {semester['subjects'].map((subject, indexSubject) => {
+                                        return (
+                                            <div className={clsx(styles.semesterCourse)}>
+                                                <div
+                                                    className={clsx(styles.semesterCourseContainer)}
+                                                    onClick={() => handleOpenClasses(indexSubject)}
+                                                >
+                                                    <Link
+                                                        className={clsx(styles.semesterCourseName)}
+                                                        to={`./${subject.classes[0].class_id}`}
+                                                    >
+                                                        {subject.subject_name} _ {subject.teacher_name}
+                                                    </Link>
+
+                                                    <div className={clsx(styles.semesterDropdown)}>
+                                                        {openClasses[indexSubject] && (
+                                                            <FontAwesomeIcon icon={faAngleUp} />
+                                                        )}
+                                                        {!openClasses[indexSubject] && (
+                                                            <FontAwesomeIcon icon={faAngleDown} />
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                {openClasses[indexSubject] && (
+                                                    <div className={clsx(styles.semesterClasses)}>
+                                                        {subject.classes.map((class_, indexClass) => {
+                                                            return (
+                                                                <Link
+                                                                    className={clsx(styles.semesterClass)}
+                                                                    to={`./${class_.class_id}`}
+                                                                >
+                                                                    [{class_.class_name}]
+                                                                </Link>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
                                             </div>
                                         );
                                     })}

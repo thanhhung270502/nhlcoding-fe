@@ -78,6 +78,10 @@
     padding: 1.5rem;
     font-weight: bold;
     color: var(--hnl-courses-semester-color);
+    background-color: var(--hnl-courses-semester-header-bg);
+    border-radius: 10px;
+    // border-top-left-radius: 10px;
+    // border-top-right-radius: 10px;
     cursor: pointer;
 }
 
@@ -99,10 +103,33 @@
     margin-bottom: 1rem;
 }
 
+.semesterCourseContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    color: var(--hnl-courses-semester-course-name);
+}
+
 .semesterCourseName {
     font-weight: bold; 
-    color: var(--hnl-courses-semester-course-name);
     text-transform: uppercase;
+
+    &:hover {
+        color: var(--hnl-courses-semester-course-name-hover);
+    }
+}
+
+.semesterClasses {
+    display: flex;
+    align-items: center;
+    padding-top: 0.5rem;
+}
+
+.semesterClass {
+    padding-right: 1rem;
+    cursor: pointer;
+    color: var(--hnl-courses-semester-course-class-name);
 
     &:hover {
         color: var(--hnl-courses-semester-course-name-hover);
