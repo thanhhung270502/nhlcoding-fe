@@ -13,6 +13,7 @@ import { OnlyHeader } from '~/components/Layout';
 import { Home, NotFound, Problem, Problems, Test } from '~/pages';
 import ContributeRedirect from '~/pages/Contribute';
 import CourseRedirect from '~/pages/Course';
+import AddExercise from '~/pages/Course/AddExercise';
 import Course from '~/pages/Course/Course';
 import Grades from '~/pages/Course/Grades';
 import Participants from '~/pages/Course/Participants';
@@ -52,6 +53,11 @@ const publicRoutes = [
     {
         path: '/courses/:id',
         component: CourseRedirect,
+    },
+    // http://localhost:4000/courses/:id/course
+    {
+        path: '/courses/:id/course/add-new-exercise',
+        component: AddExercise,
     },
     // http://localhost:4000/courses/:id/course
     {

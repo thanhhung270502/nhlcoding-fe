@@ -178,6 +178,37 @@
     --hnl-course-sortBar-options-item-bg: var(--white);
     --hnl-course-sortBar-options-item-color: var(--black);
     --hnl-course-sortBar-options-item-color-active: var(--blue-dark-4);
+
+    // Add Exercise
+    --hnl-course-addExercise-bg: var(--white);
+    --hnl-course-addExercise-color: var(--black);
+
+    --hnl-course-addExercise-header-color: var(--orange);
+    --hnl-course-addExercise-header-bg: var(--white-light);
+
+    --hnl-course-addExercise-formTitle-color: var(--blue-dark-4);
+
+    --hnl-course-addExercise-dropdown-header-border: var(--white-dark);
+    --hnl-course-addExercise-dropdown-header-color: var(--black);
+    --hnl-course-addExercise-dropdown-header-bg: var(--white);
+
+    --hnl-course-addExercise-dropdown-body-border: var(--white-dark);
+    --hnl-course-addExercise-dropdown-body-color: var(--black);
+    --hnl-course-addExercise-dropdown-body-icon: var(--blue-dark-4);
+    --hnl-course-addExercise-dropdown-body-bg: var(--white);
+    --hnl-course-addExercise-dropdown-body-bg-hover: var(--gray-light);
+
+    --hnl-course-addExercise-testcase-header-bg: var(--white);
+    // --hnl-course-addExercise-testcase-header-color: var(--green-dark-2);
+    --hnl-course-addExercise-testcase-header-color: var(--black);
+
+    --hnl-course-addExercise-testcase-button-add-bg: var(--blue-dark-4);
+    --hnl-course-addExercise-testcase-button-add-color: var(--white);
+    --hnl-course-addExercise-testcase-button-cancel-bg: var(--gray-dark-2);
+
+    --hnl-course-addExercise-testcase-table-header-bg: var(--blue-dark-4);
+    --hnl-course-addExercise-testcase-table-header-color: var(--white);
+    --hnl-course-addExercise-testcase-table-row-border: var(--gray);
 }
 
 [data-theme='dark'] {
@@ -244,6 +275,7 @@ html {
 
 .content {
     background-color: var(--primary-background);
+    padding-top: 60px;
 }
 
 .gutter {

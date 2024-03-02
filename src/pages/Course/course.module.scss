@@ -207,7 +207,6 @@
     }
 }
 
-
 // Participants
 .participants {
     padding-top: 2rem;
@@ -333,5 +332,229 @@
     .textPrimary {
         color: var(--hnl-course-grades-body-title-color);
         font-weight: bold;
+    }
+}
+
+// Add Exercise
+.addExercise {
+    margin-top: 2rem;
+    background-color: var(--hnl-course-addExercise-bg);
+    color: var(--hnl-course-addExercise-color);
+    border-radius: 10px;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        font-weight: bold;
+        color: var(--hnl-course-addExercise-header-color);
+        background-color: var(--hnl-course-addExercise-header-bg);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .headerTitle {
+        display: flex;
+        align-items: center;
+        span {
+            padding-right: 1rem;
+            font-size: 30px;
+        }
+    }
+
+    .headerIcon {
+
+    }
+
+    .body {
+        padding: 0rem 1.5rem 1rem;
+    }
+
+    .formField {
+        border-bottom: 2px solid var(--hnl-courses-semester-course-border);
+        padding: 1rem 0;
+        margin-bottom: 1rem;
+    }
+
+    .formTitle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 0.5rem;
+        cursor: pointer;
+        color: var(--hnl-course-addExercise-formTitle-color);
+        font-weight: bold;
+    }
+
+    .formInput {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        padding-top: 1rem;
+    }
+
+    .label {
+        width: 25%;
+    }
+
+    .input {
+        width: 75%;
+        position: relative;
+    }
+
+    // Dropdown
+    .dropdown {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 20px;
+        border: 1.5px solid var(--hnl-course-addExercise-dropdown-header-border);
+        color: var(--hnl-course-addExercise-dropdown-header-color);
+        background-color: var(--hnl-course-addExercise-dropdown-header-bg);
+        cursor: pointer;
+    }
+
+    .dropdownName {
+
+    }
+
+    .dropdownIcon {
+
+    }
+
+    .dropdownBody {
+        padding: 4px 0;
+        // border: 1.5px solid var(--hnl-course-addExercise-dropdown-header-border);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        position: absolute;
+        width: 100%;
+        background-color: var(--hnl-course-addExercise-dropdown-body-bg);
+        z-index: 100;
+    }
+    
+    .dropdownItem {
+        padding: 8px 20px;
+        display: flex; 
+        align-items: center;
+        // justify-content: space-between;
+        
+        &:hover {
+            background-color: var(--hnl-course-addExercise-dropdown-body-bg-hover);
+
+        }
+    }
+
+    .dropdownItemTitle {
+
+    }
+
+    .dropdownItemIcon {
+        padding-left: 2rem;
+        color: var(--hnl-course-addExercise-dropdown-body-icon);
+    }
+
+    .textarea {
+        overflow: auto;
+        overflow-wrap: break-word;
+        height: 200px !important;
+        width: 100%;
+        border: 2px solid var(--hnl-input-border);
+        padding: 10px 15px;
+        transition: 0.2s all;
+        resize: none;
+        background-color: var(--hnl-input-bg);
+        color: var(--black);
+    }
+
+    .inputCode {
+        border: 1.5px solid var(--hnl-course-addExercise-dropdown-header-border);
+    }
+
+    .testCaseField {
+        padding-top: 1rem;
+    }
+
+    .testCaseHeader {
+        display: flex;
+        align-items: center;
+        // justify-content: space-between;
+        color: var(--hnl-course-addExercise-testcase-header-color);
+        background-color: var(--hnl-course-addExercise-testcase-header-bg);
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .testCaseIcon {
+        width: 2rem;
+    }
+
+    .testCaseTitle {
+
+    }
+
+    .testCaseFillField {
+
+    }
+
+    .testCaseFillItem {
+        display: flex;
+        align-items: start;
+        padding-top: 1rem;
+    }
+    
+    .testCaseReviewField {
+        padding-top: 1.5rem;
+    }
+
+    .textCenter {
+        // text-align: center;
+    }
+    
+    .button {
+        padding: 8px 20px;
+        margin: 0 4px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: bold;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    .buttonAdd {
+        color: var(--hnl-course-addExercise-testcase-button-add-color);
+        background-color: var(--hnl-course-addExercise-testcase-button-add-bg);
+    }
+    .buttonCancel {
+        background-color:var(--hnl-course-addExercise-testcase-button-cancel-bg);
+        color: var(--hnl-course-addExercise-testcase-button-add-color);
+    }
+
+    .buttonAddTestcase {
+        margin: 0;
+        border-radius: 10px;
+        margin-top: 0.5rem;
+        padding: 6px 28px;
+    }
+
+    .testCaseTableHeader {
+        // padding: 8px 16px;
+        background-color: var(--hnl-course-addExercise-testcase-table-header-bg);
+        color: var(--hnl-course-addExercise-testcase-table-header-color);
+        font-weight: bold;
+    }
+
+    .testCaseTableBody {
+        
+    }
+
+    .testCaseTableRow {
+    }
+    
+    .borderCol {
+        border: 1px solid var(--hnl-course-addExercise-testcase-table-row-border);
+        padding: 8px 16px;
     }
 }

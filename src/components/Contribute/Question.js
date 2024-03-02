@@ -449,7 +449,7 @@ const MainChild = ({ descriptionData, setDescriptionData }) => {
                 onChange={handleChangeDescription}
                 onClick={handleChangeDescription}
                 name="description"
-                placeholder="Type your decription about the question here."
+                placeholder="Type your description about the question here."
             ></textarea>
             <div
                 className={clsx(
