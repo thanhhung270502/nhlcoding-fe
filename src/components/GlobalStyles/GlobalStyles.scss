@@ -209,6 +209,8 @@
     --hnl-course-addExercise-testcase-table-header-bg: var(--blue-dark-4);
     --hnl-course-addExercise-testcase-table-header-color: var(--white);
     --hnl-course-addExercise-testcase-table-row-border: var(--gray);
+
+    --hnl-course-addExercise-error-color: var(--red);
 }
 
 [data-theme='dark'] {
@@ -440,4 +442,41 @@ html {
 
 .textBold {
     font-weight: bold;
+}
+
+// Datetime Picker
+.react-datetime-picker,
+.react-time-picker {
+    width: 100%;
+    font-family: 'Nunito', sans-serif;
+}
+
+.react-datetime-picker__wrapper,
+.react-time-picker__wrapper {
+    padding: 8px 20px;
+    // border: none !important;
+    background-color: transparent;
+    border: 1px solid var(--white-dark) !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+    abbr {
+        text-decoration: none !important;
+    }
+}
+
+.react-calendar__navigation {
+    padding-top: 1.5rem;
+    height: 100%;
+}
+
+.react-calendar {
+    border: 1px solid var(--white-dark) !important;
+}
+
+.react-datetime-picker__inputGroup__input,
+.react-time-picker__inputGroup__input {
+    &:focus-visible {
+        outline: none !important;
+    }
 }

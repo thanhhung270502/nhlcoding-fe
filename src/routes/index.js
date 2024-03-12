@@ -56,7 +56,7 @@ const publicRoutes = [
     },
     // http://localhost:4000/courses/:id/course
     {
-        path: '/courses/:id/course/add-new-exercise',
+        path: '/courses/:id/course/:class_topics_id/add-new-exercise',
         component: AddExercise,
     },
     // http://localhost:4000/courses/:id/course

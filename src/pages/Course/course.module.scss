@@ -180,6 +180,7 @@
     .courseAddExerciseTitle {
         color: var(--hnl-course-topic-body-title-color-2);
         font-weight: bold;
+        cursor: pointer;
         
         &:hover {
             color: var(--hnl-course-topic-body-title-color-2);
@@ -396,6 +397,13 @@
 
     .label {
         width: 25%;
+        display: flex;
+        justify-content: space-between;
+        padding-right: 1rem;
+
+        span{
+            color: var(--hnl-course-addExercise-error-color);
+        }
     }
 
     .input {
@@ -483,6 +491,7 @@
         background-color: var(--hnl-course-addExercise-testcase-header-bg);
         font-weight: bold;
         cursor: pointer;
+        padding-bottom: 0.5rem;
     }
 
     .testCaseIcon {
@@ -504,7 +513,7 @@
     }
     
     .testCaseReviewField {
-        padding-top: 1.5rem;
+        padding-top: 1rem;
     }
 
     .textCenter {
@@ -547,7 +556,9 @@
     }
 
     .testCaseTableBody {
-        
+        max-height: 300px;
+        overflow-y: auto;
+        scrollbar-width: none;
     }
 
     .testCaseTableRow {
@@ -556,5 +567,8 @@
     .borderCol {
         border: 1px solid var(--hnl-course-addExercise-testcase-table-row-border);
         padding: 8px 16px;
+        // overflow: auto;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 }

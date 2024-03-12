@@ -57,3 +57,15 @@ export const createTopicForClass = async (info, class_id) => {
             return err;
         });
 };
+
+// [POST]
+export const createExercise = async (info) => {
+    return await axios
+        .post(`${process.env.REACT_APP_LOCAL_API_URL}/classes/createExercise`, info, {
+            headers: getAccessToken(),
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+            return err;
+        });
+};

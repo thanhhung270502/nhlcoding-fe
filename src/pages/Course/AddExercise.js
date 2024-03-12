@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import styles from './course.module.scss';
 import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faAngleRight, faAngleUp, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleRight, faAngleUp, faCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { faSlack } from '@fortawesome/free-brands-svg-icons';
 import { getAllLanguages } from '~/api/languages';
 import { getAllLevels } from '~/api/levels';
@@ -12,9 +12,20 @@ import { langs } from '@uiw/codemirror-extensions-langs';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { xcodeLight } from '@uiw/codemirror-theme-xcode';
 
+import DateTimePicker from 'react-datetime-picker';
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
+import TimePicker from 'react-time-picker';
+import 'react-time-picker/dist/TimePicker.css';
+import { useParams } from 'react-router-dom';
+import { createExercise } from '~/api/courses';
+
 const { default: CourseComponent } = require('~/components/Course');
 
 const MainChild = () => {
+    const { id, class_topics_id } = useParams();
+
     const [openFieldForm, setOpenFieldForm] = useState(true);
     const [openFieldForms, setOpenFieldForms] = useState([]);
 
@@ -38,12 +49,12 @@ const MainChild = () => {
     const [inputTestcase, setInputTestcase] = useState('');
     const [outputTestcase, setOutputTestcase] = useState('');
 
-    const [testcases, setTestcases] = useState([
-        {
-            input: '12 34',
-            output: '56',
-        },
-    ]);
+    const [testcases, setTestcases] = useState([]);
+
+    const [startTime, setStartTime] = useState();
+    const [endTime, setEndTime] = useState();
+    const [timeLimit, setTimeLimit] = useState();
+    const [retries, setRetries] = useState();
 
     const [errorTitle, setErrorTitle] = useState('');
     const [errorDescription, setErrorDescription] = useState('');
@@ -95,6 +106,11 @@ const MainChild = () => {
     // Level
     const handleSelectLevel = (level) => {
         setLevel_(level);
+    };
+
+    // Timer
+    const handleChangeRetries = (_retries) => {
+        setRetries(_retries);
     };
 
     // Code
@@ -172,6 +188,41 @@ const MainChild = () => {
         setOutputTestcase('');
     };
 
+    const handleSubmitExercise = async () => {
+        let problem_languages = [];
+
+        for (let i = 0; i < languages_.length; i++) {
+            problem_languages.push({
+                language_id: languages_[i].id,
+                initialCode: initialCodes[languages_[i].id],
+                solutionCode: solutionCodes[languages_[i].id],
+                fullCode: fullCodes[languages_[i].id],
+            });
+        }
+
+        let timeLimitSplit = timeLimit.split(':');
+        let time_limit;
+        time_limit = JSON.stringify(parseInt(timeLimitSplit[0]) * 60 + parseInt(timeLimitSplit[1]));
+
+        const data = {
+            title,
+            level_id: level_.id,
+            description,
+            problem_languages,
+            testcases,
+            class_topics_id,
+            time_limit,
+            start_time: startTime,
+            end_time: endTime,
+            retries,
+        };
+        const response = await createExercise(data);
+        if (response.code === 201) {
+            window.location.href = `/courses/${id}/course`;
+        }
+        console.log(response);
+    };
+
     useEffect(() => {
         setOpenFieldForms(new Array(100).fill(true));
         setInitialCodes(new Array(100).fill(''));
@@ -224,7 +275,12 @@ const MainChild = () => {
                         {openFieldForms[0] && (
                             <div>
                                 <div className={clsx(styles.formInput)}>
-                                    <div className={clsx(styles.label)}>Title *</div>
+                                    <div className={clsx(styles.label)}>
+                                        Title
+                                        <span>
+                                            <FontAwesomeIcon icon={faCircleExclamation} />
+                                        </span>
+                                    </div>
                                     <div className={clsx(styles.input)}>
                                         <input
                                             type="text"
@@ -236,7 +292,12 @@ const MainChild = () => {
                                     </div>
                                 </div>
                                 <div className={clsx(styles.formInput)}>
-                                    <div className={clsx(styles.label)}>Languages *</div>
+                                    <div className={clsx(styles.label)}>
+                                        Languages
+                                        <span>
+                                            <FontAwesomeIcon icon={faCircleExclamation} />
+                                        </span>
+                                    </div>
                                     <div className={clsx(styles.input)}>
                                         <div
                                             className={clsx(styles.dropdown)}
@@ -276,7 +337,12 @@ const MainChild = () => {
                                     </div>
                                 </div>
                                 <div className={clsx(styles.formInput)}>
-                                    <div className={clsx(styles.label)}>Level *</div>
+                                    <div className={clsx(styles.label)}>
+                                        Level
+                                        <span>
+                                            <FontAwesomeIcon icon={faCircleExclamation} />
+                                        </span>
+                                    </div>
                                     <div className={clsx(styles.input)}>
                                         <div className={clsx(styles.dropdown)} onClick={() => setOpenLevel(!openLevel)}>
                                             <div className={clsx(styles.dropdownName)}>
@@ -311,7 +377,12 @@ const MainChild = () => {
                                     </div>
                                 </div>
                                 <div className={clsx(styles.formInput)}>
-                                    <div className={clsx(styles.label)}>Description *</div>
+                                    <div className={clsx(styles.label)}>
+                                        Description
+                                        <span>
+                                            <FontAwesomeIcon icon={faCircleExclamation} />
+                                        </span>
+                                    </div>
                                     <div className={clsx(styles.input)}>
                                         <textarea
                                             type="text"
@@ -342,102 +413,52 @@ const MainChild = () => {
                         {openFieldForms[6] && (
                             <div>
                                 <div className={clsx(styles.formInput)}>
-                                    <div className={clsx(styles.label)}>Start time *</div>
+                                    <div className={clsx(styles.label)}>
+                                        Start Time{' '}
+                                        <span>
+                                            <FontAwesomeIcon icon={faCircleExclamation} />
+                                        </span>
+                                    </div>
+                                    <div className={clsx(styles.input)}>
+                                        <DateTimePicker onChange={setStartTime} value={startTime} />
+                                    </div>
+                                </div>
+                                <div className={clsx(styles.formInput)}>
+                                    <div className={clsx(styles.label)}>
+                                        End Time
+                                        <span>
+                                            <FontAwesomeIcon icon={faCircleExclamation} />
+                                        </span>
+                                    </div>
+                                    <div className={clsx(styles.input)}>
+                                        <DateTimePicker onChange={setEndTime} value={endTime} />
+                                    </div>
+                                </div>
+                                <div className={clsx(styles.formInput)}>
+                                    <div className={clsx(styles.label)}>
+                                        Time Limit
+                                        <span>
+                                            <FontAwesomeIcon icon={faCircleExclamation} />
+                                        </span>
+                                    </div>
+                                    <div className={clsx(styles.input)}>
+                                        <TimePicker onChange={setTimeLimit} value={timeLimit} />
+                                    </div>
+                                </div>
+                                <div className={clsx(styles.formInput)}>
+                                    <div className={clsx(styles.label)}>
+                                        Retries
+                                        <span>
+                                            <FontAwesomeIcon icon={faCircleExclamation} />
+                                        </span>
+                                    </div>
                                     <div className={clsx(styles.input)}>
                                         <input
-                                            type="text"
+                                            type="number"
                                             className="form-control"
                                             id="exampleFormControlInput1"
-                                            value={title}
-                                            onChange={(event) => handleChangeTitle(event.target.value)}
-                                        />
-                                    </div>
-                                </div>
-                                <div className={clsx(styles.formInput)}>
-                                    <div className={clsx(styles.label)}>Languages *</div>
-                                    <div className={clsx(styles.input)}>
-                                        <div
-                                            className={clsx(styles.dropdown)}
-                                            onClick={() => setOpenLanguages(!openLanguages)}
-                                        >
-                                            <div className={clsx(styles.dropdownName)}>
-                                                {languages_.length > 0
-                                                    ? convertLanguages(languages_)
-                                                    : 'Select one or more languages...'}
-                                            </div>
-                                            <div className={clsx(styles.dropdownIcon)}>
-                                                {openLanguages && <FontAwesomeIcon icon={faAngleUp} />}
-                                                {!openLanguages && <FontAwesomeIcon icon={faAngleDown} />}
-                                            </div>
-                                        </div>
-                                        {openLanguages && (
-                                            <div className={clsx(styles.dropdownBody)}>
-                                                {languages.map((language, indexLanguage) => {
-                                                    return (
-                                                        <div
-                                                            className={clsx(styles.dropdownItem)}
-                                                            onClick={() => handleSelectLanguages(language)}
-                                                        >
-                                                            <div className={clsx(styles.dropdownItemTitle)}>
-                                                                {language.name}
-                                                            </div>
-                                                            {checkLanguage(languages_, language) && (
-                                                                <div className={clsx(styles.dropdownItemIcon)}>
-                                                                    <FontAwesomeIcon icon={faCheck} />
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className={clsx(styles.formInput)}>
-                                    <div className={clsx(styles.label)}>Level *</div>
-                                    <div className={clsx(styles.input)}>
-                                        <div className={clsx(styles.dropdown)} onClick={() => setOpenLevel(!openLevel)}>
-                                            <div className={clsx(styles.dropdownName)}>
-                                                {level_ ? level_.name : 'Select level...'}
-                                            </div>
-                                            <div className={clsx(styles.dropdownIcon)}>
-                                                {openLevel && <FontAwesomeIcon icon={faAngleUp} />}
-                                                {!openLevel && <FontAwesomeIcon icon={faAngleDown} />}
-                                            </div>
-                                        </div>
-                                        {openLevel && (
-                                            <div className={clsx(styles.dropdownBody)}>
-                                                {levels.map((level, indexLanguage) => {
-                                                    return (
-                                                        <div
-                                                            className={clsx(styles.dropdownItem)}
-                                                            onClick={() => handleSelectLevel(level)}
-                                                        >
-                                                            <div className={clsx(styles.dropdownItemTitle)}>
-                                                                {level.name}
-                                                            </div>
-                                                            {level_ && level.id === level_.id && (
-                                                                <div className={clsx(styles.dropdownItemIcon)}>
-                                                                    <FontAwesomeIcon icon={faCheck} />
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className={clsx(styles.formInput)}>
-                                    <div className={clsx(styles.label)}>Description *</div>
-                                    <div className={clsx(styles.input)}>
-                                        <textarea
-                                            type="text"
-                                            className={clsx('form-control', styles.textarea)}
-                                            id="exampleFormControlInput1"
-                                            placeholder="Type your description about the question here."
-                                            value={description}
-                                            onChange={(event) => handleChangeDescription(event.target.value)}
+                                            value={retries}
+                                            onChange={(event) => handleChangeRetries(event.target.value)}
                                         />
                                     </div>
                                 </div>
@@ -621,13 +642,7 @@ const MainChild = () => {
                                             <div className={clsx(styles.testCaseTableBody)}>
                                                 {testcases.map((testcase, idxTestcase) => {
                                                     return (
-                                                        <div
-                                                            className={clsx(
-                                                                'd-flex',
-                                                                'align-items-center',
-                                                                styles.testCaseTableRow,
-                                                            )}
-                                                        >
+                                                        <div className={clsx('d-flex', styles.testCaseTableRow)}>
                                                             <div
                                                                 className={clsx(
                                                                     styles.textCenter,
@@ -664,7 +679,9 @@ const MainChild = () => {
                                 styles.testCaseFillItem,
                             )}
                         >
-                            <div className={clsx(styles.button, styles.buttonAdd)}>Save and back to my class</div>
+                            <div className={clsx(styles.button, styles.buttonAdd)} onClick={handleSubmitExercise}>
+                                Save and back to my class
+                            </div>
                             <div className={clsx(styles.button, styles.buttonCancel)}>Cancel</div>
                         </div>
                     </div>

@@ -85,6 +85,10 @@ const MainChild = () => {
         setOpenEditTopicName(updateOpens);
     };
 
+    const handleNavigateCreateNewExercise = (class_topics_id) => {
+        console.log(class_topics_id);
+    };
+
     useEffect(() => {
         (async () => {
             const fetchRole = await getRole();
@@ -279,7 +283,10 @@ const MainChild = () => {
                                             <div className={clsx(styles.courseAddExerciseIcon)}>
                                                 <FontAwesomeIcon icon={faSquarePlus} />
                                             </div>
-                                            <Link className={clsx(styles.courseAddExerciseTitle)}>
+                                            <Link
+                                                className={clsx(styles.courseAddExerciseTitle)}
+                                                to={`/courses/${classes[classActive].class_id}/course/${topicProblems[key].class_topics_id}/add-new-exercise`}
+                                            >
                                                 Add an new exercise...
                                             </Link>
                                         </div>
