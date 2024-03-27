@@ -6,11 +6,12 @@ function getCurrentTimeFormatted() {
     const date = new Date();
     const hour = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
     const month = months[date.getMonth()];
     const day = date.getDate();
     const year = date.getFullYear();
 
-    const formattedTime = `${hour}:${minutes} ${month} ${day}, ${year}`;
+    const formattedTime = `${hour}:${minutes}:${seconds} ${month} ${day}, ${year}`;
     return formattedTime;
 }
 

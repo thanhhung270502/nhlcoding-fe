@@ -1,4 +1,4 @@
-import { faCaretDown, faRightFromBracket, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faMoon, faRightFromBracket, faSun, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -22,6 +22,7 @@ function Header() {
     const [isChecked, setIsChecked] = useState(false);
     const [open, setOpen] = useState(false);
     let userMenuRef = useRef();
+    const [isLight, setIsLight] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -132,11 +133,15 @@ function Header() {
         <div>
             <div className={clsx(styles.navbar)}>
                 <div className={clsx(styles.container)}>
-                    <Link className={clsx(styles.navbarBrand, styles.navbarLink)} to="/">
-                        <img className={clsx('img-fluid', styles.logoImage)} src="/images/logo.png" alt="logo" />
-                        <span className={clsx(styles.logoName)}>HNLCoding</span>
-                    </Link>
-                    <div className={clsx(styles.navbarSeparator)}>|</div>
+                    <div className={clsx(styles.logoField)}>
+                        <Link className={clsx(styles.navbarBrand, styles.navbarLink)} to="/">
+                            {/*
+                            <img className={clsx('img-fluid', styles.logoImage)} src="/images/logo.png" alt="logo" />
+                            */}
+                            <span className={clsx(styles.logoName)}>HNLCoding</span>
+                        </Link>
+                        <div className={clsx(styles.navbarSeparator)}>|</div>
+                    </div>
                     <div className={clsx(styles.navbarNav)}>
                         <div className="navbarItem">
                             <Link className={clsx(styles.navbarLink)} to="/">
@@ -166,25 +171,45 @@ function Header() {
                     </div>
                     {currentUser && (
                         <div class={clsx(styles.dropdown)} ref={userMenuRef}>
-                            <div className="dropdownToggle" onClick={() => setOpen(!open)}>
-                                {currentUser.avatar && (
-                                    <img src={currentUser.avatar} alt="avt" className={clsx(styles.logoImage)}></img>
-                                )}
-                                {!currentUser.avatar && (
-                                    <img
-                                        src="https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg"
-                                        alt="avt"
-                                        className={clsx(styles.logoImage)}
-                                    ></img>
-                                )}
-                                <div className={clsx(styles.name)}>{currentUser.name}</div>
-                                <FontAwesomeIcon icon={faCaretDown} />
+                            <div
+                                className={clsx(styles.dropdownToggle, styles.dropdownUser)}
+                                onClick={() => setOpen(!open)}
+                            >
+                                <FontAwesomeIcon icon={faUser} />
                             </div>
                             <div className={`${open ? '' : 'dropdownHide'} dropdownMenu`}>
+                                <div className={clsx(styles.dropdownItemUser)}>
+                                    <div className={clsx(styles.dropdownItemAvatar)}>
+                                        {currentUser.avatar && (
+                                            <img
+                                                src={currentUser.avatar}
+                                                alt="avt"
+                                                className={clsx(styles.logoImage)}
+                                            ></img>
+                                        )}
+                                        {!currentUser.avatar && (
+                                            <img
+                                                src="https://kenh14cdn.com/203336854389633024/2023/8/9/photo-6-1691581011481133485486.jpg"
+                                                alt="avt"
+                                                className={clsx(styles.logoImage)}
+                                            ></img>
+                                        )}
+                                    </div>
+                                    <div className={clsx(styles.dropdownItemUserInfo)}>
+                                        <div className={clsx(styles.name)}>{currentUser.name}</div>
+                                        <div className={clsx(styles.email)}>{currentUser.email}</div>
+                                    </div>
+                                </div>
+                                <div className={clsx(styles.dropdownDivider)}></div>
                                 <div className={clsx(styles.dropdownItem)}>
-                                    <Link className={clsx(styles.dropdownLink)} to="">
-                                        Profile
-                                    </Link>
+                                    <div className={clsx('d-flex', 'align-items-center')}>
+                                        <div className={clsx(styles.dropdownItemIcon)}>
+                                            <FontAwesomeIcon icon={faUser} />
+                                        </div>
+                                        <Link className={clsx(styles.dropdownLink)} to="">
+                                            Profile
+                                        </Link>
+                                    </div>
                                 </div>
                                 <div
                                     className={clsx(
@@ -194,15 +219,26 @@ function Header() {
                                         'justify-content-between',
                                     )}
                                 >
-                                    <div>Dark mode</div>
+                                    <div className={clsx('d-flex', 'align-items-center')}>
+                                        <div className={clsx(styles.dropdownItemIcon)}>
+                                            {!isChecked && <FontAwesomeIcon icon={faSun} />}
+                                            {isChecked && <FontAwesomeIcon icon={faMoon} />}
+                                        </div>
+                                        Dark mode
+                                    </div>
                                     <label class={clsx(styles.switch)}>
                                         <input type="checkbox" onChange={handleChangeDarkMode} checked={isChecked} />
                                         <span class={clsx(styles.slider, styles.round)}></span>
                                     </label>
                                 </div>
                                 <div className={clsx(styles.dropdownDivider)}></div>
-                                <div className={clsx(styles.dropdownItem)} onClick={handleLogout}>
-                                    Logout
+                                <div className={clsx(styles.dropdownItem, styles.dropdownItem2)} onClick={handleLogout}>
+                                    <div className={clsx('d-flex', 'align-items-center')}>
+                                        <div className={clsx(styles.dropdownItemIcon)}>
+                                            <FontAwesomeIcon icon={faRightFromBracket} />
+                                        </div>
+                                        Logout
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -99,6 +99,7 @@ const MainChild = () => {
     useEffect(() => {
         (async () => {
             const getAllTopics = await getAllTopicProblemsByClass(id);
+            console.log(getAllTopics.body);
             setClasses(getAllTopics.body.topic_problems);
             let lengthOfClasses = Object.keys(getAllTopics.body.topic_problems);
             setKeysOfClasses(lengthOfClasses);
@@ -271,7 +272,10 @@ const MainChild = () => {
                                                 </div>
                                                 <div className={clsx(styles.courseExerciseContent)}>
                                                     <div className={clsx(styles.courseExerciseSubTitle)}>Exercise</div>
-                                                    <Link className={clsx(styles.courseExerciseTitle)}>
+                                                    <Link
+                                                        className={clsx(styles.courseExerciseTitle)}
+                                                        to={`/courses/${id}/topic_problems/${problem.topic_problems_id}/problems/${problem.problem_id}/view`}
+                                                    >
                                                         {problem['title']}
                                                     </Link>
                                                 </div>

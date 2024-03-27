@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 
-const BreadCrumb = ({ items }) => {
+const BreadCrumb = ({ items, links }) => {
     return (
         <div className={clsx(styles.breadcrumb)}>
             {items.map((item, index) => {
@@ -12,7 +12,7 @@ const BreadCrumb = ({ items }) => {
                 else {
                     return (
                         <div className={clsx(styles.breadcrumb)}>
-                            <Link className={clsx(styles.breadcrumbItem)} to="../">
+                            <Link className={clsx(styles.breadcrumbItem)} to={links[index]}>
                                 {item}
                             </Link>
                             <div className={clsx(styles.breadcrumbDivider)}>

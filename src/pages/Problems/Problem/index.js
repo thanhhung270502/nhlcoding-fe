@@ -118,9 +118,8 @@ function Problem() {
     useEffect(() => {
         // IMPORTANT: set active_language and code if only when languages is done fetching
         if (languages.length === 0) return;
-        const { language_id, name, initial_code } = languages.length > 0 && languages.filter(
-            (item) => item.problem_id === parseInt(id)
-        )[0];
+        const { language_id, name, initial_code } =
+            languages.length > 0 && languages.filter((item) => item.problem_id === parseInt(id))[0];
         const lang_obj = { id: language_id, name: name, initialcode: convertCode(initial_code) };
 
         localStorage.setItem('active_language', JSON.stringify(lang_obj));
@@ -209,7 +208,7 @@ function Problem() {
 
         const res = await problemRunCode(id, code, activeLanguage.name);
 
-        if (res.message === 'Successfully') {
+        if (res.code === 200) {
             setIsLoading(false);
             setStatus(res.body.status);
             setCompileInfo(res.body.compile_info);
@@ -243,7 +242,7 @@ function Problem() {
 
         const res = await problemRunCode(id, code, activeLanguage.name);
 
-        if (res.message === 'Successfully') {
+        if (res.code === 200) {
             setRenderSubmissions(false);
             setIsLoading(false);
             setStatus(res.body.status);
@@ -292,8 +291,9 @@ function Problem() {
                                     <div className="problem-sidebar">
                                         <div className="problem-sidebar-items">
                                             <div
-                                                className={`problem-item ${tab === 'description' ? 'problem-item-active' : ''
-                                                    }`}
+                                                className={`problem-item ${
+                                                    tab === 'description' ? 'problem-item-active' : ''
+                                                }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=description`);
                                                 }}
@@ -301,8 +301,9 @@ function Problem() {
                                                 Description
                                             </div>
                                             <div
-                                                className={`problem-item ${tab === 'submissions' ? 'problem-item-active' : ''
-                                                    }`}
+                                                className={`problem-item ${
+                                                    tab === 'submissions' ? 'problem-item-active' : ''
+                                                }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=submissions`);
                                                 }}
@@ -310,8 +311,9 @@ function Problem() {
                                                 Submissions
                                             </div>
                                             <div
-                                                className={`problem-item ${tab === 'instruction' ? 'problem-item-active' : ''
-                                                    }`}
+                                                className={`problem-item ${
+                                                    tab === 'instruction' ? 'problem-item-active' : ''
+                                                }`}
                                                 onClick={() => {
                                                     navigate(`/problems/${id}?tab=instruction`);
                                                 }}
@@ -393,22 +395,37 @@ function Problem() {
                                                         )}
                                                     </div>
                                                 </div>
-                                                <div className="gutter-row gutter-row-1" {...getGutterProps('row', 1)} />
+                                                <div
+                                                    className="gutter-row gutter-row-1"
+                                                    {...getGutterProps('row', 1)}
+                                                />
                                                 {/* ------------ Console ------------ */}
                                                 <div className={clsx('d-flex', 'flex-column', styles.problemConsole)}>
                                                     <div className="d-flex align-items-center problemConsoleNav hide">
                                                         <div
-                                                            className={`problemConsoleNavItem ${currentConsoleNav === 0 ? 'problemConsoleNavItemActive' : ''}`}
+                                                            className={`problemConsoleNavItem ${
+                                                                currentConsoleNav === 0
+                                                                    ? 'problemConsoleNavItemActive'
+                                                                    : ''
+                                                            }`}
                                                             onClick={() => {
                                                                 setCurrentConsoleNav(0);
                                                             }}
-                                                        >Testcase</div>
+                                                        >
+                                                            Testcase
+                                                        </div>
                                                         <div
-                                                            className={`problemConsoleNavItem ${currentConsoleNav === 1 ? 'problemConsoleNavItemActive' : ''} ms-4`}
+                                                            className={`problemConsoleNavItem ${
+                                                                currentConsoleNav === 1
+                                                                    ? 'problemConsoleNavItemActive'
+                                                                    : ''
+                                                            } ms-4`}
                                                             onClick={() => {
                                                                 setCurrentConsoleNav(1);
                                                             }}
-                                                        >Result</div>
+                                                        >
+                                                            Result
+                                                        </div>
                                                     </div>
                                                     <div className={clsx('problemConsoleBody', 'hide')}>
                                                         {currentConsoleNav === 0 && (
@@ -423,7 +440,11 @@ function Problem() {
                                                                     {testcases.map((testcase, index) => (
                                                                         <div
                                                                             className={`problemConsoleCaseNum me-2
-                                                                            ${currentCaseTest === index ? 'problemConsoleCaseNumActive' : ''}`}
+                                                                            ${
+                                                                                currentCaseTest === index
+                                                                                    ? 'problemConsoleCaseNumActive'
+                                                                                    : ''
+                                                                            }`}
                                                                             onClick={() => {
                                                                                 setCurrentCaseTest(index);
                                                                             }}
@@ -433,7 +454,10 @@ function Problem() {
                                                                     ))}
                                                                 </div>
                                                                 <div
-                                                                    className={clsx(styles.problemConsoleCaseBody, 'pt-3')}
+                                                                    className={clsx(
+                                                                        styles.problemConsoleCaseBody,
+                                                                        'pt-3',
+                                                                    )}
                                                                 >
                                                                     <div className={clsx(styles.smallText)}>Input:</div>
                                                                     <div
@@ -449,9 +473,14 @@ function Problem() {
                                                                     </div>
                                                                 </div>
                                                                 <div
-                                                                    className={clsx(styles.problemConsoleCaseBody, 'pt-3')}
+                                                                    className={clsx(
+                                                                        styles.problemConsoleCaseBody,
+                                                                        'pt-3',
+                                                                    )}
                                                                 >
-                                                                    <div className={clsx(styles.smallText)}>Output:</div>
+                                                                    <div className={clsx(styles.smallText)}>
+                                                                        Output:
+                                                                    </div>
                                                                     <div
                                                                         className={clsx(
                                                                             styles.problemConsoleCaseBodyContent,
@@ -480,20 +509,28 @@ function Problem() {
                                                                         </div>
 
                                                                         {!!compileInfo && (
-                                                                            <pre className={styles.problemConsoleCaseBodyContent}>{compileInfo}</pre>
+                                                                            <pre
+                                                                                className={
+                                                                                    styles.problemConsoleCaseBodyContent
+                                                                                }
+                                                                            >
+                                                                                {compileInfo}
+                                                                            </pre>
                                                                         )}
                                                                     </div>
                                                                 )}
 
-                                                                {(status === 'Accepted' || status === 'Wrong answer') && (
+                                                                {(status === 'Accepted' ||
+                                                                    status === 'Wrong answer') && (
                                                                     <div>
                                                                         <div className="d-flex gap-4 align-items-center mb-4">
                                                                             <div
                                                                                 className={` problemConsoleResult
-                                                                        ${status === 'Accepted'
-                                                                                        ? 'problemConsoleResultSuccess'
-                                                                                        : 'problemConsoleResultFailure'
-                                                                                    }
+                                                                        ${
+                                                                            status === 'Accepted'
+                                                                                ? 'problemConsoleResultSuccess'
+                                                                                : 'problemConsoleResultFailure'
+                                                                        }
                                                                     `}
                                                                             >
                                                                                 {status}
@@ -513,7 +550,11 @@ function Problem() {
                                                                             {testcases.map((testcase, index) => (
                                                                                 <div
                                                                                     className={` problemConsoleCaseNum me-2
-                                                                                    ${currentCaseResult === index ? 'problemConsoleCaseNumActive' : ''}`}
+                                                                                    ${
+                                                                                        currentCaseResult === index
+                                                                                            ? 'problemConsoleCaseNumActive'
+                                                                                            : ''
+                                                                                    }`}
                                                                                     onClick={() => {
                                                                                         setCurrentCaseResult(index);
                                                                                     }}
@@ -521,11 +562,12 @@ function Problem() {
                                                                                     {currentResult &&
                                                                                         currentResult[index] && (
                                                                                             <span
-                                                                                                className={`round-result ${currentResult[index]
-                                                                                                    .success
-                                                                                                    ? 'result-success'
-                                                                                                    : 'result-failure'
-                                                                                                    }`}
+                                                                                                className={`round-result ${
+                                                                                                    currentResult[index]
+                                                                                                        .success
+                                                                                                        ? 'result-success'
+                                                                                                        : 'result-failure'
+                                                                                                }`}
                                                                                             ></span>
                                                                                         )}
                                                                                     <span>Case {index + 1}</span>
@@ -534,18 +576,29 @@ function Problem() {
                                                                             {wrongCase !== null && (
                                                                                 <div
                                                                                     className={` problemConsoleCaseNum me-2
-                                                                                    ${currentCaseResult === testcases.length ? 'problemConsoleCaseNumActive' : ''}`}
+                                                                                    ${
+                                                                                        currentCaseResult ===
+                                                                                        testcases.length
+                                                                                            ? 'problemConsoleCaseNumActive'
+                                                                                            : ''
+                                                                                    }`}
                                                                                     onClick={() => {
-                                                                                        setCurrentCaseResult(testcases.length);
+                                                                                        setCurrentCaseResult(
+                                                                                            testcases.length,
+                                                                                        );
                                                                                     }}
                                                                                 >
                                                                                     {currentResult &&
-                                                                                        currentResult[testcases.length] && (
+                                                                                        currentResult[
+                                                                                            testcases.length
+                                                                                        ] && (
                                                                                             <span
                                                                                                 className={`round-result result-failure`}
                                                                                             ></span>
                                                                                         )}
-                                                                                    <span>Case {testcases.length + 1}</span>
+                                                                                    <span>
+                                                                                        Case {testcases.length + 1}
+                                                                                    </span>
                                                                                 </div>
                                                                             )}
                                                                         </div>
@@ -567,14 +620,18 @@ function Problem() {
                                                                                     testcases[currentCaseResult].input
                                                                                         .split('\n')
                                                                                         .map((input, index) => (
-                                                                                            <div key={index}>{input}</div>
+                                                                                            <div key={index}>
+                                                                                                {input}
+                                                                                            </div>
                                                                                         ))}
                                                                                 {currentCaseResult >= 3 &&
                                                                                     wrongCase &&
                                                                                     wrongCase.input
                                                                                         .split('\n')
                                                                                         .map((input, index) => (
-                                                                                            <div key={index}>{input}</div>
+                                                                                            <div key={index}>
+                                                                                                {input}
+                                                                                            </div>
                                                                                         ))}
                                                                             </div>
                                                                         </div>
@@ -595,14 +652,18 @@ function Problem() {
                                                                                 {currentCaseResult < 3 && (
                                                                                     <span>
                                                                                         {
-                                                                                            currentResult[currentCaseResult]
-                                                                                                .output
+                                                                                            currentResult[
+                                                                                                currentCaseResult
+                                                                                            ].output
                                                                                         }
                                                                                     </span>
                                                                                 )}
-                                                                                {currentCaseResult >= 3 && wrongCase && (
-                                                                                    <span>{wrongCase.actual_output}</span>
-                                                                                )}
+                                                                                {currentCaseResult >= 3 &&
+                                                                                    wrongCase && (
+                                                                                        <span>
+                                                                                            {wrongCase.actual_output}
+                                                                                        </span>
+                                                                                    )}
                                                                             </div>
                                                                         </div>
                                                                         <div
@@ -627,9 +688,10 @@ function Problem() {
                                                                                         }
                                                                                     </span>
                                                                                 )}
-                                                                                {currentCaseResult >= 3 && wrongCase && (
-                                                                                    <span>{wrongCase.output}</span>
-                                                                                )}
+                                                                                {currentCaseResult >= 3 &&
+                                                                                    wrongCase && (
+                                                                                        <span>{wrongCase.output}</span>
+                                                                                    )}
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -653,7 +715,9 @@ function Problem() {
                                                             )}
                                                             onClick={handleToggleConsole}
                                                         >
-                                                            <div className={clsx(styles.problemConsoleToggle)}>Console</div>
+                                                            <div className={clsx(styles.problemConsoleToggle)}>
+                                                                Console
+                                                            </div>
                                                             <FontAwesomeIcon
                                                                 icon={faChevronDown}
                                                                 className={clsx(styles.iconConsole)}

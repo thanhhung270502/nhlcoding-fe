@@ -92,6 +92,35 @@ function Problems() {
 
     useEffect(() => {
         (async () => {
+            var session = localStorage.getItem('session');
+            var user_id;
+            if (session) {
+                session = JSON.parse(session);
+                user_id = session.user.id;
+                // setCurrentUser(session.user);
+            } else {
+                user_id = 'empty';
+            }
+
+            var curLevel = level ? level : 'empty';
+            var curStatus = status ? status : 'empty';
+            var curText = search ? search : 'empty';
+            var response = await getProblemForPagination(user_id, curLevel, curStatus, curText);
+            var newProblems = response.body;
+            if (status && status !== 'Todo') {
+                newProblems = response.body.filter((problem) => problem.status === status);
+            } else if (status && status === 'Todo') {
+                newProblems = response.body.filter(
+                    (problem) => problem.status !== 'Attempted' && problem.status !== 'Solved',
+                );
+            }
+            console.log(newProblems);
+            setProblems(newProblems);
+        })();
+    }, [level, search, status]);
+
+    useEffect(() => {
+        (async () => {
             const getLevels = await getAllLevels();
             setLevels(getLevels);
         })();

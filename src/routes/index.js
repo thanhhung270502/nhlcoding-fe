@@ -17,7 +17,9 @@ import AddExercise from '~/pages/Course/AddExercise';
 import Course from '~/pages/Course/Course';
 import Grades from '~/pages/Course/Grades';
 import Participants from '~/pages/Course/Participants';
+import PrivateProblem from '~/pages/Course/PrivateProblem';
 import Setting from '~/pages/Course/Setting';
+import WaitingField from '~/pages/Course/WaitingField';
 import Courses from '~/pages/Courses';
 
 // Không cần đăng nhập vẫn vào được
@@ -48,6 +50,16 @@ const publicRoutes = [
     {
         path: '/courses',
         component: Courses,
+    },
+    // http://localhost:4000/courses/:id/problems/:problem_id/view
+    {
+        path: '/courses/:id/topic_problems/:topic_problems_id/problems/:problem_id/view',
+        component: WaitingField,
+    },
+    // http://localhost:4000/courses/:id/problems/:problem_id
+    {
+        path: '/courses/:id/submissionTrackings/:submission_trackings_id/',
+        component: PrivateProblem,
     },
     // http://localhost:4000/courses/:id
     {

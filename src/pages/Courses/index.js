@@ -59,7 +59,7 @@ function Courses() {
             <div className={clsx(styles.coursesBackground)}></div>
             <div className={clsx('container')}>
                 <div className={clsx(styles.coursesBreadcrumb)}>
-                    <BreadCrumb items={['Home', 'My courses']} />
+                    <BreadCrumb items={['Home', 'My courses']} links={['/']} />
                 </div>
                 <div className={clsx(styles.title)}>MY COURSES</div>
                 <div className={clsx(styles.subTitle)}>Courses overview</div>

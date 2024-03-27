@@ -284,7 +284,7 @@ const MainChild = () => {
                                     <div className={clsx(styles.input)}>
                                         <input
                                             type="text"
-                                            className="form-control"
+                                            className={clsx('form-control', styles.formControl)}
                                             id="exampleFormControlInput1"
                                             value={title}
                                             onChange={(event) => handleChangeTitle(event.target.value)}
@@ -455,7 +455,7 @@ const MainChild = () => {
                                     <div className={clsx(styles.input)}>
                                         <input
                                             type="number"
-                                            className="form-control"
+                                            className={clsx('form-control', styles.formControl)}
                                             id="exampleFormControlInput1"
                                             value={retries}
                                             onChange={(event) => handleChangeRetries(event.target.value)}
@@ -572,7 +572,7 @@ const MainChild = () => {
                                                 <div className={clsx(styles.input)}>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
+                                                        className={clsx('form-control', styles.formControl)}
                                                         id="exampleFormControlInput1"
                                                         value={inputTestcase}
                                                         onChange={(event) =>
@@ -586,7 +586,7 @@ const MainChild = () => {
                                                 <div className={clsx(styles.input)}>
                                                     <input
                                                         type="text"
-                                                        className="form-control"
+                                                        className={clsx('form-control', styles.formControl)}
                                                         id="exampleFormControlInput1"
                                                         value={outputTestcase}
                                                         onChange={(event) =>

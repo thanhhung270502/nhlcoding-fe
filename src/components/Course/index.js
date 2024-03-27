@@ -37,7 +37,7 @@ function CourseComponent({ state, mainChild }) {
             <div className={clsx(styles.courseBackground)}></div>
             <div className={clsx('container')}>
                 <div className={clsx(styles.courseBreadcrumb)}>
-                    <BreadCrumb items={['Home', 'My courses', subjectName]} />
+                    <BreadCrumb items={['Home', 'My courses', subjectName]} links={['/', '/courses']} />
                 </div>
                 <div className={clsx(styles.title)}>{subjectName}</div>
                 <div className={clsx(styles.courseNavigation)}>

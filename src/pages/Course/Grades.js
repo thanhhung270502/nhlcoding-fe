@@ -8,6 +8,8 @@ const { default: CourseComponent } = require('~/components/Course');
 const MainChild = () => {
     const [grades, setGrades] = useState([]);
 
+    const [role, setRole] = useState('normal');
+
     const lastAccess = (thoiGianCuoiCung) => {
         var thoiGianHienTai = new Date().getTime();
         var thoiGianCuoiCungDate = new Date(thoiGianCuoiCung);

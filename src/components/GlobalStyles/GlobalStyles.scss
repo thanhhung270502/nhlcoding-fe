@@ -5,7 +5,7 @@
 
 // Color
 :root {
-    --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20);
+    --vp-home-hero-name-background: -webkit-linear-gradient(135deg, #fff 10%, #fff);
     --vp-home-title-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f38120);
     --vp-home-btn-name-background: -webkit-linear-gradient(120deg, #f38120 30%, #f3eb20);
     --vp-home-img-background: -webkit-linear-gradient(120deg, var(--blue-dark) 30%, #6dd0f1);
@@ -39,6 +39,7 @@
     --blue-white-light: #EDF2FF;
 
     --purple: #966fd6;
+    --purple-2: #bd34fe;
 
     --green-dark-2: #157347;
     --green-dark: #48bf69;
@@ -55,15 +56,18 @@
 
     --yellow: #f3eb20;
 
+    --pink: #ff3670;
+
     --gray: #d9d9d9;
     --gray-dark: #a4a4a4;
     --gray-dark-2: #696969;
     --gray-dark-3: #bdbdbd;
     --gray-light: #f0f0f0;
 
-    --navbar: var(--blue-dark);
+    --navbar: var(--blue-dark-4);
     --navbar-text: var(--white);
     --navbar-border: var(--gray);
+    --navbar-separator: var(--white);
     --primary-background: var(--white);
     --hnl-input-bg: #fff;
     --hnl-input-border: var(--gray-light);
@@ -72,7 +76,14 @@
     --hnl-box-color: var(--gray-dark-2);
     --hnl-icon-1: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20);
     --hnl-dropdown-bg: var(--white);
+    --hnl-dropdown-color: var(--black);
+    --hnl-dropdown-color2: var(--blue-dark-4);
     --hnl-dropdown-border: var(--gray-light);
+    --hnl-dropdown-avatar-border: var(--blue-dark-4);
+    --hnl-dropdown-name: var(--blue-dark-4);
+    --hnl-dropdown-divider: var(--gray);
+    --hnl-darkmode-button: var(--blue-dark-4);
+    --hnl-darkmode-icon: var(--blue-dark-4);
     --hnl-select-bg: var(--gray-light);
     --hnl-code-bg: white;
     --hnl-sample-code-bg: var(--gray);
@@ -111,10 +122,14 @@
     --hnl-problem-level-hard: var(--red);
 
     --hnl-problem-pagination-bg: var(--blue-dark-4);
+
+    --hnl-breadcrumbs-color: var(--blue-dark-4);
+    --hnl-breadcrumbs-color-active: var(--black);
     
     --hnl-courses-bg: var(--white-light);
     --hnl-courses-bg1: var(--white);
     --hnl-courses-bg2: var(--blue-dark-4);
+    --hnl-courses-title: var(--black);
     --hnl-courses-search-bg: var(--white);
     --hnl-courses-search-color: var(--blue-dark-4);
 
@@ -143,12 +158,13 @@
     --hnl-course-topic-header-edit-color: var(--orange);
 
     --hnl-course-topic-body-title-color: var(--blue-dark-4);
+    --hnl-course-topic-body-subTitle-color: var(--black);
     --hnl-course-topic-body-title-color-hover: var(--orange);
     --hnl-course-topic-body-border: var(--white-light);
     --hnl-course-topic-body-title-color-2: var(--orange);
     --hnl-course-topic-body-border2: var(--orange);
 
-    --hnl-course-participants-head-bg: var(--blue-dark-4);
+    --hnl-course-participants-head-bg: var(--black);
     --hnl-course-participants-head-color: var(--white);
 
     --hnl-course-participants-body-bg: var(--white);
@@ -188,6 +204,8 @@
 
     --hnl-course-addExercise-formTitle-color: var(--blue-dark-4);
 
+    --hnl-course-addExercise-label-color: var(--black);
+
     --hnl-course-addExercise-dropdown-header-border: var(--white-dark);
     --hnl-course-addExercise-dropdown-header-color: var(--black);
     --hnl-course-addExercise-dropdown-header-bg: var(--white);
@@ -209,8 +227,35 @@
     --hnl-course-addExercise-testcase-table-header-bg: var(--blue-dark-4);
     --hnl-course-addExercise-testcase-table-header-color: var(--white);
     --hnl-course-addExercise-testcase-table-row-border: var(--gray);
+    --hnl-course-addExercise-testcase-table-row-color: var(--black);
+
+    --hnl-course-addExercise-testcase-input-bg: var(--white);
+    --hnl-course-addExercise-testcase-input-color: var(--black);
+    --hnl-course-addExercise-testcase-input-border: var(--white-dark);
 
     --hnl-course-addExercise-error-color: var(--red);
+
+    // privateProblem
+    --hnl-privateProblem-outer-bg: var(--white-light);
+    --hnl-privateProblem-inner-bg: var(--white);
+
+    --hnl-privateProblem-header-title-color: var(--blue-dark-4);
+    --hnl-privateProblem-header-subTitle-color: var(--black);
+    
+    --hnl-privateProblem-remainingTime-color: var(--blue-dark-4);
+    --hnl-privateProblem-remainingTime-outOfTime-color: var(--red);
+
+    --hnl-waitingField-button-1-bg: var(--blue-dark-4);
+    --hnl-waitingField-button-1-color: var(--white);
+    
+    --hnl-waitingField-informationTimer-color: var(--blue-dark-4);
+    --hnl-waitingField-table-header-bg: var(--blue-dark-4);
+    --hnl-waitingField-table-header-color: var(--white);
+    --hnl-waitingField-table-body-bg: var(--blue-white-light);
+    --hnl-waitingField-table-body-color: var(--black);
+    --hnl-waitingField-table-body-language-bg: var(--gray);
+    --hnl-waitingField-table-body-language-color: var(--black);
+    
 }
 
 [data-theme='dark'] {
@@ -223,6 +268,10 @@
     --navbar: var(--blue-dark-3);
     --navbar-text: white;
     --navbar-border: var(--white);
+    --hnl-dropdown-color: var(--white);
+    --hnl-dropdown-color2: var(--pink);
+    --hnl-dropdown-name: var(--pink);
+
     --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #20c0f3 30%, #f3eb20);
     --primary-background: var(--black-2);
     --hnl-input-bg: var(--black-blue-light);
@@ -230,8 +279,12 @@
     --hnl-input-color: white;
     --hnl-box-bg: var(--black-blue-light);
     --hnl-box-color: white;
-    --hnl-dropdown-bg: var(--black-blue);
+    --hnl-dropdown-bg: var(--black-blue-light);
     --hnl-dropdown-border: var(--black-blue-light);
+    --hnl-dropdown-avatar-border: var(--pink);
+    --hnl-dropdown-divider: var(--gray-dark-2);
+    --hnl-darkmode-button: var(--pink);
+    --hnl-darkmode-icon: var(--pink);
     --hnl-select-bg: var(--black-blue-light);
     --hnl-code-bg: var(--black-blue-light-3);
     --hnl-sample-code-bg: var(--black-blue);
@@ -263,6 +316,119 @@
     --hnl-problem-level-medium: var(--orange-dark);
     --hnl-problem-level-hard: var(--red);
     --hnl-problem-pagination-bg: var(--blue-dark);
+
+    --hnl-breadcrumbs-color: var(--white);
+    --hnl-breadcrumbs-color-active: var(--white);
+
+    --hnl-courses-bg: var(--black-2);
+    --hnl-courses-bg1: var(--purple-2);
+    --hnl-courses-bg2: var(--pink);
+    --hnl-courses-title: var(--white);
+    --hnl-courses-search-bg: var(--white);
+    --hnl-courses-search-color: var(--pink);
+
+    --hnl-courses-semester-bg: var(--black-blue-light);
+    --hnl-courses-semester-color: var(--purple-2);
+    --hnl-courses-semester-header-bg: var(--white-light);
+    --hnl-courses-semester-course-border: var(--white-dark);
+    --hnl-courses-semester-course-name-hover: var(--pink);
+    --hnl-courses-semester-course-name: var(--pink);
+    --hnl-courses-semester-course-class-name: var(--black);
+
+    --hnl-course-nav-item-bg: var(--black);
+    --hnl-course-nav-item-active-bg: var(--pink);
+    --hnl-course-nav-item-color: var(--white);
+    --hnl-course-nav-item-active-color: var(--white);
+    --hnl-course-nav-item-border: var(--pink);
+
+    --hnl-course-add-topic-bg: var(--black-blue-light);
+    --hnl-course-add-topic-color: var(--gray-dark);
+    --hnl-course-add-topic-color-hover: var(--white);
+    
+    --hnl-course-topic-header-bg: var(--black);
+    --hnl-course-topic-header-color: var(--white);
+    --hnl-course-topic-header-icon-color: var(--pink);
+    --hnl-course-topic-header-title-color: var(--white);
+    --hnl-course-topic-header-edit-color: var(--purple-2);
+
+    --hnl-course-topic-body-title-color: var(--pink);
+    --hnl-course-topic-body-subTitle-color: var(--white);
+    --hnl-course-topic-body-title-color-hover: var(--white);
+    --hnl-course-topic-body-border: var(--black-2);
+    --hnl-course-topic-body-title-color-2: var(--purple-2);
+    --hnl-course-topic-body-border2: var(--purple-2);
+
+    --hnl-course-participants-head-bg: var(--black);
+    --hnl-course-participants-head-color: var(--white);
+
+    --hnl-course-participants-body-bg: var(--white);
+    --hnl-course-participants-body-odd-bg: var(--blue-white-light);
+    --hnl-course-participants-body-color: var(--black);
+    --hnl-course-participants-body-border: var(--pink);
+
+    --hnl-course-participants-body-button-border: var(--red);
+    --hnl-course-participants-body-button-color: var(--red);
+    --hnl-course-participants-body-button-hover-bg: var(--red);
+    --hnl-course-participants-body-button-hover-color: var(--white);
+    
+    --hnl-course-participants-body-page-bg: var(--pink);
+    --hnl-course-participants-body-page-color: var(--white);
+
+    --hnl-course-participants-body-dropdown-bg: var(--blue-white-light);
+    --hnl-course-participants-body-dropdown-border: var(--pink);
+    --hnl-course-participants-body-dropdown-item-hover: var(--white);
+
+    --hnl-course-grades-sortBar-button-bg: var(--white);
+    --hnl-course-grades-sortBar-button-border: var(--pink);
+    --hnl-course-grades-sortBar-button-color: var(--pink);
+
+    --hnl-course-grades-body-title-color: var(--pink);
+
+    --hnl-course-sortBar-options-bg: var(--black-blue-light);
+    --hnl-course-sortBar-options-item-bg: var(--white);
+    --hnl-course-sortBar-options-item-color: var(--white);
+    --hnl-course-sortBar-options-item-color-active: var(--pink);
+
+    // Add Exercise
+    --hnl-course-addExercise-bg: var(--black);
+    --hnl-course-addExercise-color: var(--black);
+
+    --hnl-course-addExercise-header-color: var(--purple-2);
+    --hnl-course-addExercise-header-bg: var(--black);
+
+    --hnl-course-addExercise-formTitle-color: var(--pink);
+
+    --hnl-course-addExercise-label-color: var(--white);
+
+    --hnl-course-addExercise-dropdown-header-border: var(--black-blue-light);
+    --hnl-course-addExercise-dropdown-header-color: var(--white);
+    --hnl-course-addExercise-dropdown-header-bg: var(--black-blue-light);
+
+    --hnl-course-addExercise-dropdown-body-border: var(--black-blue-light);
+    --hnl-course-addExercise-dropdown-body-color: var(--white);
+    --hnl-course-addExercise-dropdown-body-color-hover: var(--black);
+    --hnl-course-addExercise-dropdown-body-icon: var(--pink);
+    --hnl-course-addExercise-dropdown-body-bg: var(--black-blue-light);
+    --hnl-course-addExercise-dropdown-body-bg-hover: var(--gray-light);
+
+    --hnl-course-addExercise-testcase-header-bg: var(--white);
+    // --hnl-course-addExercise-testcase-header-color: var(--green-dark-2);
+    --hnl-course-addExercise-testcase-header-color: var(--white);
+
+    --hnl-course-addExercise-testcase-button-add-bg: var(--pink);
+    --hnl-course-addExercise-testcase-button-add-color: var(--white);
+    --hnl-course-addExercise-testcase-button-cancel-bg: var(--gray-dark-2);
+
+    --hnl-course-addExercise-testcase-table-header-bg: var(--pink);
+    --hnl-course-addExercise-testcase-table-header-color: var(--white);
+    --hnl-course-addExercise-testcase-table-row-border: var(--gray);
+    --hnl-course-addExercise-testcase-table-row-color: var(--white);
+
+    --hnl-course-addExercise-testcase-input-bg: var(--black-blue-light);
+    --hnl-course-addExercise-testcase-input-color: var(--white);
+    --hnl-course-addExercise-testcase-input-border: var(--black-blue-light);
+
+    --hnl-course-addExercise-error-color: var(--red);
 }
 
 * {

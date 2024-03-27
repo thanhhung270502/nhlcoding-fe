@@ -150,7 +150,7 @@
     }
     
     .courseExerciseSubTitle {
-    
+        color: var(--hnl-course-topic-body-subTitle-color);
     }
     
     .courseExerciseTitle {
@@ -195,6 +195,7 @@
         .formControl {
             // border: none;
             background-color: var(--hnl-course-topic-header-bg);
+            color: var(--hnl-course-topic-header-color);
 
             &:focus {
                 box-shadow: none;
@@ -393,6 +394,13 @@
         align-items: start;
         justify-content: space-between;
         padding-top: 1rem;
+
+    }
+    
+    .formControl {
+        background-color: var(--hnl-course-addExercise-testcase-input-bg) !important;
+        color: var(--hnl-course-addExercise-testcase-input-color) !important;
+        border-color: var(--hnl-course-addExercise-testcase-input-border);
     }
 
     .label {
@@ -400,6 +408,7 @@
         display: flex;
         justify-content: space-between;
         padding-right: 1rem;
+        color: var(--hnl-course-addExercise-label-color);
 
         span{
             color: var(--hnl-course-addExercise-error-color);
@@ -440,21 +449,22 @@
         background-color: var(--hnl-course-addExercise-dropdown-body-bg);
         z-index: 100;
     }
-    
+
+    // .dropdownItemTitle {
+    //     color: var(--hnl-course-addExercise-dropdown-body-color);
+    // }
+
     .dropdownItem {
         padding: 8px 20px;
         display: flex; 
         align-items: center;
         // justify-content: space-between;
+        color: var(--hnl-course-addExercise-dropdown-body-color);
         
         &:hover {
             background-color: var(--hnl-course-addExercise-dropdown-body-bg-hover);
-
+            color: var(--hnl-course-addExercise-dropdown-body-color-hover) !important;
         }
-    }
-
-    .dropdownItemTitle {
-
     }
 
     .dropdownItemIcon {
@@ -488,7 +498,8 @@
         align-items: center;
         // justify-content: space-between;
         color: var(--hnl-course-addExercise-testcase-header-color);
-        background-color: var(--hnl-course-addExercise-testcase-header-bg);
+        // background-color: var(--hnl-course-addExercise-testcase-header-bg);
+        background-color: transparent;
         font-weight: bold;
         cursor: pointer;
         padding-bottom: 0.5rem;
@@ -566,9 +577,257 @@
     
     .borderCol {
         border: 1px solid var(--hnl-course-addExercise-testcase-table-row-border);
+        color: var(--hnl-course-addExercise-testcase-table-row-color);
         padding: 8px 16px;
         // overflow: auto;
         word-wrap: break-word;
         overflow-wrap: break-word;
+    }
+}
+
+// Private Problem
+.privateProblem {
+    background-color: var(--hnl-privateProblem-outer-bg);
+    
+    .innerContainer {
+        height: 200vh;
+        background-color: var(--hnl-privateProblem-inner-bg);
+        padding: 1rem 2rem;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    .headerIcon {
+        font-size: 48px;
+        padding-right: 1.25rem;
+        color: var(--hnl-privateProblem-header-title-color);
+    }
+
+    .headerTitle {
+        color: var(--hnl-privateProblem-header-title-color);
+        font-weight: bold;
+    }
+    
+    .headerSubTitle {
+        color: var(--hnl-privateProblem-header-subTitle-color);
+    }
+
+    .problemConsole {
+        font-size: 14px;
+        background-color: var(--white);
+    }
+
+    .problemConsoleNav {
+        margin: 8px 0;
+        padding: 0 20px;
+        border-bottom: 1px solid var(--gray-light);
+    }
+
+    .problemConsoleFooter {
+        padding: 8px 20px;
+        border-top: 1px solid var(--gray-light);
+    }
+
+    // Nav
+    .problemConsoleNavItem {
+        padding-top: 0.25rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .problemConsoleNavItemActive {
+        border-bottom: 3px solid var(--black);
+    }
+
+    // Body
+    .problemConsoleBody {
+        padding: 16px 20px;
+        flex-grow: 1;
+    }
+
+    .problemConsoleCaseNum {
+        padding: 4px 16px;
+        border-radius: 5px;
+    }
+
+    .problemConsoleCaseNumActive {
+        background-color: var(--gray-light);
+    }
+
+    .problemConsoleCaseBodyContent {
+        background-color: var(--gray-light);
+        border-radius: 5px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+        width: 100%;
+        max-width: 80vw;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    // Footer
+
+    .iconConsole {
+        margin-left: 0.25rem;
+        margin-bottom: 0.1rem;
+        font-size: 10px;
+    }
+
+    .btnCustom {
+        padding: 4px 32px;
+        border-radius: 5px;
+        margin-left: 0.75rem;
+        border: none;
+    }
+
+    .btnSubmit {
+        background-color: var(--green-dark);
+        color: var(--white);
+    }
+
+    .hide {
+        display: none !important;
+    }
+
+    .smallText {
+        font-size: 14px;
+        color: var(--gray-dark);
+    }
+
+    .problemContent {
+        flex-grow: 1;
+        // padding-left: 50px;
+        height: 100%;
+    }
+
+    .problemCodeHeader {
+        font-size: 15px;
+    }
+
+    .dropdownCustom1 {
+        margin: 0;
+        padding: 0.6rem 1.5rem;
+    }
+
+    .dropdownMenuCustom1 {
+        transform: none !important;
+        top: 105% !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        border: none;
+    }
+
+    .remainingTimeContainer {
+        padding: 0 1rem;
+
+        span {
+            color: var(--hnl-privateProblem-remainingTime-color);
+            font-weight: bold;
+            font-size: 18px;
+            padding-left: 0.25rem;
+        }
+    }
+    .remainingRunOutOfTime {
+        color: var(--hnl-privateProblem-remainingTime-outOfTime-color) !important;
+    }
+}
+
+// Waiting Field
+.waitingField {
+    background-color: var(--hnl-privateProblem-outer-bg);
+    
+    .innerContainer {
+        min-height: 200vh;
+        background-color: var(--hnl-privateProblem-inner-bg);
+        padding: 1rem 2rem;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    .headerIcon {
+        font-size: 48px;
+        padding-right: 1.25rem;
+        color: var(--hnl-privateProblem-header-title-color);
+    }
+
+    .headerTitle {
+        color: var(--hnl-privateProblem-header-title-color);
+        font-weight: bold;
+    }
+    
+    .headerSubTitle {
+        color: var(--hnl-privateProblem-header-subTitle-color);
+    }
+
+    .buttonCustom {
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: bold;
+        margin: 1rem 0;
+        width: fit-content;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    .buttonSubmit {
+        background-color: var(--hnl-waitingField-button-1-bg);
+        color: var(--hnl-waitingField-button-1-color);
+    }
+    
+    .informationTimer {
+        padding-bottom: 0.75rem;
+        
+        span {
+            font-weight: bold;
+            color: var(--hnl-waitingField-informationTimer-color);
+        }
+    }
+
+    .submissionsField {
+        // padding: 0 1rem;/
+        padding: 1.5rem 0;
+    }
+
+    .submissionsHeader{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        background-color: var(--hnl-waitingField-table-header-bg);
+        color: var(--hnl-waitingField-table-header-color);
+        padding: 0.75rem 1.5rem;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        font-weight: bold;
+    }
+
+    .submissionsBody {
+        background-color: var(--hnl-waitingField-table-body-bg);
+        color: var(--hnl-waitingField-table-body-color);
+
+        .language {
+            color: var(--hnl-waitingField-table-body-language-color);
+            background-color: var(--hnl-waitingField-table-body-language-bg);
+            width: fit-content;
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    }
+
+    .submissionsRow {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 0.75rem 1.5rem;
     }
 }

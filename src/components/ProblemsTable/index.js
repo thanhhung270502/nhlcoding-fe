@@ -76,13 +76,24 @@ function ProblemsTable({ problems, page, level, status, search }) {
         setLimit(lim);
     };
 
+    const handleNavigateProblem = (problem_id) => {
+        navigate(`/problems/${problem_id}`);
+    };
+
     return (
         <div>
             {paginateInfo.currentItems.map((problem, index) => {
                 return (
                     <div className={clsx(styles.problemsBody)}>
-                        <div className={clsx(styles.problemsCol1, styles.textCenter)}>{problem.id}</div>
-                        <div className={clsx(styles.problemsCol5)}>{problem.title}</div>
+                        <div
+                            className={clsx(styles.problemsCol1, styles.textCenter)}
+                            onClick={() => handleNavigateProblem(problem.id)}
+                        >
+                            {problem.id}
+                        </div>
+                        <div className={clsx(styles.problemsCol5)} onClick={() => handleNavigateProblem(problem.id)}>
+                            {problem.title}
+                        </div>
                         {problem.categories.length > 2 ? (
                             <div className={clsx(styles.problemsCol3, styles.problemsCategories)}>
                                 <div className={clsx(styles.problemsCategory)}>{problem.categories[0]}</div>
@@ -118,27 +129,25 @@ function ProblemsTable({ problems, page, level, status, search }) {
                         )}
 
                         <div className={clsx(styles.problemsCol1D5)}>
-                            {problem.level === 'Easy' && (
+                            {problem.name === 'Easy' && (
                                 <div className={clsx(styles.problemsLevel, styles.problemsLevelEasy)}>
-                                    {problem.level}
+                                    {problem.name}
                                 </div>
                             )}
-                            {problem.level === 'Medium' && (
+                            {problem.name === 'Medium' && (
                                 <div className={clsx(styles.problemsLevel, styles.problemsLevelMedium)}>
-                                    {problem.level}
+                                    {problem.name}
                                 </div>
                             )}
-                            {problem.level === 'Hard' && (
+                            {problem.name === 'Hard' && (
                                 <div className={clsx(styles.problemsLevel, styles.problemsLevelHard)}>
-                                    {problem.level}
+                                    {problem.name}
                                 </div>
                             )}
                         </div>
                         <div className={clsx(styles.problemsCol1D5)}>
-                            {problem.status === 'Todo' && (
-                                <div className={clsx(styles.problemsStatus, styles.problemsStatusTodo)}>
-                                    {problem.status}
-                                </div>
+                            {(problem.status === 'Todo' || !problem.status) && (
+                                <div className={clsx(styles.problemsStatus, styles.problemsStatusTodo)}>-</div>
                             )}
                             {problem.status === 'Solved' && (
                                 <div className={clsx(styles.problemsStatus, styles.problemsStatusSolved)}>

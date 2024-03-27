@@ -46,6 +46,18 @@ export const getSubjectNameByClassID = async (class_id) => {
         });
 };
 
+// [GET]
+export const getSubmissionTracking = async (topic_problems_id) => {
+    return await axios
+        .get(`${process.env.REACT_APP_LOCAL_API_URL}/submission_trackings/${topic_problems_id}/all`, {
+            headers: getAccessToken(),
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+            return err;
+        });
+};
+
 // [POST]
 export const createTopicForClass = async (info, class_id) => {
     return await axios
@@ -67,5 +79,57 @@ export const createExercise = async (info) => {
         .then((res) => res.data)
         .catch((err) => {
             return err;
+        });
+};
+
+// [POST]
+export const createSubmissionTracking = async (info) => {
+    return await axios
+        .post(`${process.env.REACT_APP_LOCAL_API_URL}/submission_trackings`, info, {
+            headers: getAccessToken(),
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+            return err;
+        });
+};
+
+// [POST]
+export const privateProblemRunCode = async (problem_id, code, language, submission_trackings_id, datetime) => {
+    return await axios
+        .post(
+            `${process.env.REACT_APP_LOCAL_API_URL}/submission_trackings/${problem_id}/${language}/${submission_trackings_id}/run`,
+            { code, datetime },
+            {
+                headers: getAccessToken(),
+            },
+        )
+        .then(function (response) {
+            console.log(response.data);
+            return response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+            return error;
+        });
+};
+
+// [POST]
+export const privateProblemSubmitCode = async (submission_trackings_id) => {
+    return await axios
+        .post(
+            `${process.env.REACT_APP_LOCAL_API_URL}/submission_trackings/${submission_trackings_id}/submit`,
+            {},
+            {
+                headers: getAccessToken(),
+            },
+        )
+        .then(function (response) {
+            console.log(response.data);
+            return response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+            return error;
         });
 };
